@@ -1,0 +1,10 @@
+C:\Lubilus2\Program\Programação\teste\SequorChallenge\OrderManagerAPP\bin\Debug\OrderManagerAPP.exe.config
+C:\Lubilus2\Program\Programação\teste\SequorChallenge\OrderManagerAPP\bin\Debug\OrderManagerAPP.exe
+C:\Lubilus2\Program\Programação\teste\SequorChallenge\OrderManagerAPP\bin\Debug\OrderManagerAPP.pdb
+C:\Lubilus2\Program\Programação\teste\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.csproj.AssemblyReference.cache
+C:\Lubilus2\Program\Programação\teste\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.csproj.SuggestedBindingRedirects.cache
+C:\Lubilus2\Program\Programação\teste\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.Properties.Resources.resources
+C:\Lubilus2\Program\Programação\teste\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.csproj.GenerateResource.cache
+C:\Lubilus2\Program\Programação\teste\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.csproj.CoreCompileInputs.cache
+C:\Lubilus2\Program\Programação\teste\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.exe
+C:\Lubilus2\Program\Programação\teste\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.pdb

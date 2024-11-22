@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "+oK8JcDn5pkkNov41Xd23F3OlBWClLWtAFWdwRwqA7w=",
+  "Source": "ProductionOrderFlowAPI",
+  "BasePath": "_content/ProductionOrderFlowAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
