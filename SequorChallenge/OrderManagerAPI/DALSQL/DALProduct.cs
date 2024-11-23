@@ -85,6 +85,39 @@ namespace OrderManagerAPI.DALProductSQL
             }
         }
 
+        /// <summary>
+        /// Valida o codigo do produto
+        /// </summary>
+        /// <param name="code">Code Product da O.S</param>
+        /// <returns>Retorna True se o codigo do produto é valido</returns>
+        /// <exception cref="Exception"></exception>
+        public bool ValidCodeProduct(string code)
+        {
+            try
+            {
+                Connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(1) FROM [Product] WHERE [ProductCode] = @Code", Connection))
+                {
+                    cmd.Parameters.AddWithValue("@Code", code);
+
+                    //registros correspondentes
+                    int result = Convert.ToInt32(cmd.ExecuteScalar());
+                    return result > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao validar o código do produto. Verifique o código fornecido.", ex);
+            }
+            finally
+            {
+                if (Connection.State == System.Data.ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+            }
+        }
 
     }
 }

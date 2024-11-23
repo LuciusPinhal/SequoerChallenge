@@ -1,5 +1,6 @@
 using OrderManagerAPI.DALDBSQL;
 using OrderManagerAPI.DALOrderSQL;
+using OrderManagerAPI.DALProductSQL;
 using OrderManagerAPI.DALProductionSQL;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ builder.Services.AddSwaggerGen();
 //service BD
 builder.Services.AddScoped<DALOrder>();
 builder.Services.AddScoped<DALDataBase>();
+builder.Services.AddScoped<DALProduct>();
 builder.Services.AddScoped<DALProduction>();
 
 // CORS

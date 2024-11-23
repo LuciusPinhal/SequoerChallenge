@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using OrderManagerAPI.Models;
 using Microsoft.Extensions.Configuration;
 using OrderManagerAPI.DALOrderSQL;
+using OrderManagerAPI.DALProductSQL;
 
 
 namespace OrderManagerAPI.Controllers
@@ -10,13 +11,14 @@ namespace OrderManagerAPI.Controllers
     [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
-
         private readonly DALOrder _sql;
+        private readonly DALProduct _sqlProduct;
         private readonly ILogger<OrderController> _logger;
 
-        public OrderController(DALOrder sql, ILogger<OrderController> logger)
+        public OrderController(DALOrder sql, DALProduct sqlProduct, ILogger<OrderController> logger)
         {
             _sql = sql;
+            _sqlProduct = sqlProduct;
             _logger = logger;
         }
 
@@ -82,28 +84,25 @@ namespace OrderManagerAPI.Controllers
             }
         }
 
-
-        [HttpPut]
         [HttpPut("UpdateOrder")]
-        public IActionResult PutOrder([FromBody] Order model)
+        public IActionResult PutOrder([FromBody] Order order)
         {
             try
             {
-                Order FindOS = _sql.GetOrderDB(model.OS);
+                Order FindOS = _sql.GetOrderDB(order.OS);
 
-                //verificar tbm se o codigo do produto é valido - ainda nn fiz
-                if (FindOS != null)
+                if (FindOS == null)
                 {
-                   
-                    _sql.EditeOrder(FindOS);
+                    return NotFound("Order não encontrada, verifique o número!");
+                }
 
-                    return Ok("Ordem alterada com sucesso");
-                    
-                }
-                else
+                if (!_sqlProduct.ValidCodeProduct(order.ProductCode))
                 {
-                    return NotFound("Order não encontrada");
+                    return BadRequest("Erro ao validar o código do produto. Verifique o código fornecido.");
                 }
+
+                _sql.EditeOrder(order);
+                return Ok("Ordem alterada com sucesso!");
             }
             catch (Exception ex)
             {
@@ -112,16 +111,31 @@ namespace OrderManagerAPI.Controllers
             }
         }
 
-        //[HttpDelete]
-        //[HttpDelete("Delete/{DeleteId}")]
 
+        [HttpDelete("Delete/{Order}")]
+        public IActionResult DeleteLoja(string Order)
+        {
+            try
+            {
+                Order FindOS = _sql.GetOrderDB(Order);
+
+                if (FindOS == null)
+                {
+                    return NotFound("Order não encontrada, verifique o número!");
+                }
+
+                _sql.DeleteOrder(Order);
+
+                return Ok("Ordem excluída com sucesso!");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro não esperado: {ex.Message}");
+                return StatusCode(500, "Erro interno do servidor");
+            }
+
+        }
 
     }
 }
-
-
-
-
-//GetOrders
-//GetProduction
-//SetProduction
