@@ -20,16 +20,19 @@ namespace OrderManagerAPI.Controllers
             _logger = logger;
         }
 
-
+        /// <summary>
+        /// Metodo Get para Lista de O.S
+        /// </summary>
+        /// <param name="email">Email do usuario</param>
+        /// <returns>Retorna a lista de O.S </returns>
         [HttpGet]
         [Route("GetOrders")]
-        public IEnumerable<Order> Get()
+        public IEnumerable<Order> Get([FromQuery] string email)
         {
             try
             {
-                var lojas = _sql.GetOrdersDB();
-                //return lojas;
-                return null;
+                var ListOrders = _sql.GetOrdersDB(email);
+                return ListOrders;
             }
             catch (Exception ex)
             {
@@ -39,8 +42,45 @@ namespace OrderManagerAPI.Controllers
 
         }
 
-        //[HttpPost]
-        //[Route("Post")]
+        /// <summary>
+        /// Metodo Post para Criar O.S
+        /// </summary>
+        /// <param name="newOrder"></param>
+        /// <returns>Cria O.S</returns>
+        [HttpPost]
+        [Route("Post")]
+        public IActionResult CreateLoja([FromBody] Order newOrder)
+        {
+            if (newOrder == null)
+            {
+                return BadRequest("Dados inválidos para criação de loja.");
+            }
+
+            try
+            {      
+                newOrder.OS = _sql.GetLastOS();
+
+                var order = new Order
+                {
+                    OS = newOrder.OS,
+                    Quantity = newOrder.Quantity,
+                    ProductCode = newOrder.ProductCode,
+                    ProductDescription = newOrder.ProductDescription,
+                    Image = newOrder.Image,
+                    CycleTime = newOrder.CycleTime,
+                    Materials = new List<Material>()
+                };
+
+                _sql.CreateOrder(order);
+
+                return Ok("Ordem criada com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro não esperado: {ex.Message}");
+                return StatusCode(500, "Erro interno no servidor");
+            }
+        }
 
 
         //[HttpPut]

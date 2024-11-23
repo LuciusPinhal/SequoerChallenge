@@ -6,8 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// Registrar o DALSQlServer no DI
 builder.Services.AddScoped<DALSQlServer>();
 
 // CORS

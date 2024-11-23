@@ -20,14 +20,18 @@ namespace OrderManagerAPI.Controllers
             _logger = logger;
         }
 
-
+        /// <summary>
+        /// Metodo Get para pegar lista Produção
+        /// </summary>
+        /// <param name="email">Email Cliente</param>
+        /// <returns>Lista da Produção</returns>
         [HttpGet]
         [Route("GetProduction")]
-        public IEnumerable<Production> Get()
+        public IEnumerable<Production> Get([FromQuery] string email)
         {
             try
             {
-                var ListProductions = _sql.GetProductionDB();
+                var ListProductions = _sql.GetProductionDB(email);
                 return ListProductions;
             
             }

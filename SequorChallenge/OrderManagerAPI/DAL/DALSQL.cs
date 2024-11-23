@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using OrderManagerAPI.Models;
 using Microsoft.AspNetCore.DataProtection;
 using System.Data;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace OrderManagerAPI.DALSQl
 {
@@ -101,7 +102,7 @@ namespace OrderManagerAPI.DALSQl
         }
 
         /// <summary>
-        /// Executa Script de Criação de Tabelas no Banco SequorDB
+        /// Executa Script de Criação de Tabelas e PROCS no Banco SequorDB
         /// </summary>
         /// <exception cref="FileNotFoundException">Não Encontrou o Script de criação</exception>
         /// <exception cref="Exception">Erros de execução</exception>
@@ -112,21 +113,30 @@ namespace OrderManagerAPI.DALSQl
                 connection.Open();
 
                 string projectRoot = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
-
-                // Caminho do arquivo de script bin
-                string scriptPath = Path.Combine(projectRoot, "Scripts", "CreateTables.sql");
-
-                // Verifica se o arquivo existe
-                if (!File.Exists(scriptPath))
+                string createTablesScriptPath = Path.Combine(projectRoot, "Scripts", "CreateTables.sql");
+                string prcGetOrderDetailsByEmailScriptPath = Path.Combine(projectRoot, "Scripts", "PRCGetOrderDetailsByEmail.sql");
+        
+                if (!File.Exists(createTablesScriptPath))
                 {
-                    throw new FileNotFoundException($"O arquivo de script SQL não foi encontrado: {scriptPath}");
+                    throw new FileNotFoundException($"O arquivo de script SQL não foi encontrado: {createTablesScriptPath}");
+                }
+        
+                if (!File.Exists(prcGetOrderDetailsByEmailScriptPath))
+                {
+                    throw new FileNotFoundException($"O arquivo de script SQL não foi encontrado: {prcGetOrderDetailsByEmailScriptPath}");
                 }
 
-                // Lê o conteúdo do arquivo SQL
-                string script = File.ReadAllText(scriptPath);
+                // Executa CreateTables
+                string createTablesScript = File.ReadAllText(createTablesScriptPath);
+                using (var cmd = new SqlCommand(createTablesScript, connection))
+                {
+                    cmd.ExecuteNonQuery();
+                }
 
-                // Executa o script no banco
-                using (var cmd = new SqlCommand(script, connection))
+                // Executa PROCS
+                string prcGetOrderDetailsByEmailScript = File.ReadAllText(prcGetOrderDetailsByEmailScriptPath);
+
+                using (var cmd = new SqlCommand(prcGetOrderDetailsByEmailScript, connection))
                 {
                     cmd.ExecuteNonQuery();
                 }
@@ -144,109 +154,82 @@ namespace OrderManagerAPI.DALSQl
             }
         }
 
-
-        public List<Order> GetOrdersDB()
+        /// <summary>
+        /// Retorna a lista de O.S pela PROC PRCGetOrderDetailsByEmail
+        /// </summary>
+        /// <param name="email">Email do Usuario</param>
+        /// <returns>Lista de O.S com os apontamentos da SetProduction</returns>
+        /// <exception cref="Exception"></exception>
+        public List<Order> GetOrdersDB(string email)
         {
-
             List<Order> listOrders = new List<Order>();
-            Material material = null;
-            Order order = null;
 
-            //try
-            //{
-            //    connection.Open();
+            try
+            {
+                connection.Open();
 
-            //    using (SqlCommand cmd = new SqlCommand(
-            //               "SELECT loja.id, loja.nome, loja.cidade, section.nome AS nome_secao, produto.nome AS nome_produto, produto.descricao, produto.valor, section.id AS section_id " +
-            //               "FROM public.loja " +
-            //               "LEFT JOIN public.section ON loja.id = section.loja_id " +
-            //               "LEFT JOIN public.produto ON section.id = produto.section_id", connection))
-            //    {
+                using (var cmd = new SqlCommand("PRCGetOrderDetailsByEmail", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Email", email);
 
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            // Verifique se a ordem já existe na lista
+                            var existingOrder = listOrders.FirstOrDefault(o => o.OS == reader["O.S"].ToString());
 
+                            if (existingOrder == null)
+                            {
+                                // Se a ordem não existir, cria uma nova ordem
+                                existingOrder = new Order
+                                {
+                                    OS = reader["O.S"].ToString(),
+                                    Quantity = Convert.ToDouble(reader["quantity"]),
+                                    ProductCode = reader["productCode"].ToString(),
+                                    ProductDescription = reader["productDescription"].ToString(),
+                                    Image = reader["Image"] != DBNull.Value ? reader["Image"].ToString() : null,
+                                    CycleTime = reader["cycleTime"] != DBNull.Value ? Convert.ToDouble(reader["cycleTime"]) : 0,
+                                    Materials = new List<Material>()
+                                };
 
-            //        using (SqlDataReader reader = cmd.ExecuteReader())
-            //        {
-            //            while (reader.Read())
-            //            {
-            //                //int lojaId = reader.GetInt32(0);
+                                // Adiciona a ordem à lista
+                                listOrders.Add(existingOrder);
+                            }
 
-            //                //Models.Loja loja = listLoja.FirstOrDefault(l => l.Id == lojaId);
+                            // Adiciona o material à lista de materiais da ordem
+                            existingOrder.Materials.Add(new Material
+                            {
+                                MaterialCode = reader["materialCode"].ToString(),
+                                MaterialDescription = reader["materialDescription"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar dados de produção.", ex);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
 
-            //                if (order == null || order.Id != reader.GetInt32(0))
-            //                {
-            //                    order = new Order
-            //                    {
-            //                        Id = reader.GetInt32(0),
-            //                        Nome = reader.GetString(1),
-            //                        Cidade = reader.GetString(2),
-            //                        Sections = new List<Api_Store.Section>()
-            //                    };
-
-            //                    listLoja.Add(loja);
-
-            //                }
-
-            //                if (!reader.IsDBNull(3))
-            //                {
-            //                    int sectionId = reader.GetInt32(7);
-            //                    section = loja.Sections.FirstOrDefault(s => s.Id == sectionId);
-
-            //                    // Seção não encontrada pelo ID, verificar pelo nome
-            //                    if (section == null || section.Nome != reader.GetString(3))
-            //                    {
-            //                        section = loja.Sections.FirstOrDefault(s => s.Nome == reader.GetString(3));
-
-            //                        if (section == null)
-            //                        {
-            //                            section = new Api_Store.Section
-            //                            {
-            //                                Id = sectionId,
-            //                                Nome = reader.GetString(3),
-            //                                Produtos = new List<Produto>()
-            //                            };
-
-            //                            loja.Sections.Add(section);
-            //                        }
-            //                    }
-            //                }
-
-            //                if (!reader.IsDBNull(4))
-            //                {
-            //                    Produto produto = new Produto()
-            //                    {
-            //                        Nome = reader.GetString(4),
-            //                        Descricao = reader.GetString(5),
-            //                        Valor = reader.GetDouble(6),
-
-            //                    };
-
-            //                    section.Produtos.Add(produto);
-            //                }
-
-            //            }
-
-            //            return listLoja;
-            //        }
-            //    }
-            //}
-
-            //catch (Exception ex)
-            //{
-
-            //    throw;
-            //}
-            //finally
-            //{
-            //    if (connection.State == System.Data.ConnectionState.Open)
-            //    {
-            //        connection.Close();
-            //    }
-            //}
-            return null;
+            return listOrders;
         }
 
-        public List<Production> GetProductionDB()
+        /// <summary>
+        /// Retorna a tabela de Produção
+        /// </summary>
+        /// <param name="email">Email User</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public List<Production> GetProductionDB(string email)
         {
             List<Production> productions = new List<Production>();
 
@@ -262,26 +245,32 @@ namespace OrderManagerAPI.DALSQl
                             Production.Quantity, 
                             Production.MaterialCode, 
                             Production.CycleTime 
-                        FROM Production";
+                        FROM Production
+                        WHERE[Email] = @Email";
 
                 using (SqlCommand cmd = new SqlCommand(query, connection))
-                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    while (reader.Read())
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        var production = new Production
-                        {
-                            Email = reader.GetString(0),
-                            Order = reader.GetString(1),
-                            ProductionDate = reader.GetDateTime(2).ToString("yyyy-MM-dd"), 
-                            ProductionTime = reader.GetDateTime(2).ToString("HH:mm:ss"), 
-                            Quantity = (double)reader.GetDecimal(3),
-                            materialCode = reader.GetString(4),
-                            CycleTime = (double)reader.GetDecimal(5)
-                        };
 
-                        productions.Add(production); 
+                        while (reader.Read())
+                        {
+                            var production = new Production
+                            {
+                                Email = reader.GetString(0),
+                                Order = reader.GetString(1),
+                                ProductionDate = reader.GetDateTime(2).ToString("yyyy-MM-dd"), 
+                                ProductionTime = reader.GetDateTime(2).ToString("HH:mm:ss"), 
+                                Quantity = (double)reader.GetDecimal(3),
+                                materialCode = reader.GetString(4),
+                                CycleTime = (double)reader.GetDecimal(5)
+                            };
+
+                            productions.Add(production); 
+                        }
                     }
+
                 }
             }
             catch (Exception ex)
@@ -300,9 +289,129 @@ namespace OrderManagerAPI.DALSQl
             return productions;
         }
 
+        /// <summary>
+        /// Pega último número da O.S
+        /// </summary>
+        /// <returns>Acrescentar +1 || retorna valor padrão</returns>
+        /// <exception cref="Exception"></exception>
+        public string GetLastOS()
+        {
+            try
+            {
+                connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand(
+                    "SELECT MAX([Order]) FROM [Order]", connection))
+                {
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != null && result != DBNull.Value)
+                    {                    
+                        string lastOS = result.ToString();
+                        string numericPart = lastOS.Substring(1); 
+                        int nextNumber = int.Parse(numericPart) + 1;
+
+                       // Mantém o formato string
+                        return $"O{nextNumber:D3}"; 
+                    }
+                    else
+                    {
+                        // valor padrão
+                        return "O001";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao obter a última ordem.", ex);
+            }
+            finally
+            {
+                if (connection.State == System.Data.ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Criando O.S
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public bool CreateOrder(Order order)
+        {
+            int linhasAfetadas = 0;
+
+            try
+            {
+                connection.Open();
+
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Order
+                        using (SqlCommand cmdOrder = new SqlCommand(
+                            "INSERT INTO [Order] ([Order], Quantity, ProductCode) VALUES (@Order, @Quantity, @ProductCode)",
+                            connection,
+                            transaction))
+                        {
+                            cmdOrder.Parameters.AddWithValue("@Order", order.OS);
+                            cmdOrder.Parameters.AddWithValue("@Quantity", order.Quantity);
+                            cmdOrder.Parameters.AddWithValue("@ProductCode", order.ProductCode);
+
+                            linhasAfetadas += cmdOrder.ExecuteNonQuery();
+                        }
+
+                        // Product
+                        using (SqlCommand cmdProduct = new SqlCommand(
+                            "INSERT INTO Product (ProductCode, ProductDescription, Image, CycleTime) " +
+                            "VALUES (@ProductCode, @ProductDescription, @Image, @CycleTime);",
+                            connection,
+                            transaction))
+                        {
+                            cmdProduct.Parameters.AddWithValue("@productCode", order.ProductCode);
+                            cmdProduct.Parameters.AddWithValue("@productDescription", order.ProductDescription);
+                            cmdProduct.Parameters.AddWithValue("@Image", order.Image);
+                            cmdProduct.Parameters.AddWithValue("@cycleTime", order.CycleTime);
+
+                            linhasAfetadas += cmdProduct.ExecuteNonQuery();
+                        }
+                        
+
+                        transaction.Commit();
+
+                        return linhasAfetadas == 2; 
+                    }
+                    catch
+                    {           
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao criar a ordem no banco de dados.", ex);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+
+
+        /// <summary>
+        /// Libera conexão se existir
+        /// </summary>
         public void Dispose()
         {
-            // Liberando a conexão com o banco de dados, se existir
             if (connection != null)
             {
                 connection.Dispose();
