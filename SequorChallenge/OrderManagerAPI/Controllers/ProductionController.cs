@@ -47,40 +47,40 @@ namespace OrderManagerAPI.Controllers
 
         }
 
-        //[HttpPost]
-        //[Route("SetProduction")]
-        //public IActionResult CreateOrder([FromBody] Order newOrder)
-        //{
-        //    if (newOrder == null)
-        //    {
-        //        return BadRequest("Dados inválidos para criação de loja.");
-        //    }
+        [HttpPost]
+        [Route("SetProduction")]
+        public IActionResult CreateOrder([FromBody] Order newOrder)
+        {
+            if (newOrder == null)
+            {
+                return BadRequest("Dados inválidos para criação de loja.");
+            }
 
-        //    try
-        //    {
-        //        newOrder.OS = _sql.GetLastOS();
+            try
+            {
+                newOrder.OS = _sql.GetLastOS();
 
-        //        var order = new Order
-        //        {
-        //            OS = newOrder.OS,
-        //            Quantity = newOrder.Quantity,
-        //            ProductCode = newOrder.ProductCode,
-        //            ProductDescription = newOrder.ProductDescription,
-        //            Image = newOrder.Image,
-        //            CycleTime = newOrder.CycleTime,
-        //            Materials = new List<Material>()
-        //        };
+                var order = new Order
+                {
+                    OS = newOrder.OS,
+                    Quantity = newOrder.Quantity,
+                    ProductCode = newOrder.ProductCode,
+                    ProductDescription = newOrder.ProductDescription,
+                    Image = newOrder.Image,
+                    CycleTime = newOrder.CycleTime,
+                    Materials = new List<Material>()
+                };
 
-        //        _sql.CreateOrderDB(order);
+                _sql.CreateOrderDB(order);
 
-        //        return Ok("Ordem criada com sucesso!");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Erro não esperado: {ex.Message}");
-        //        return StatusCode(500, "Erro interno no servidor");
-        //    }
-        //}
+                return Ok("Ordem criada com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro não esperado: {ex.Message}");
+                return StatusCode(500, "Erro interno no servidor");
+            }
+        }
 
 
         //[HttpPut]
@@ -91,7 +91,3 @@ namespace OrderManagerAPI.Controllers
     }
 }
 
-
-
-//    GetProduction
-//            SetProduction

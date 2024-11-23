@@ -16,7 +16,7 @@ namespace OrderManagerAPI.DALOrderSQL
         public DALOrder(IConfiguration configuration) : base(configuration) { }
 
         /// <summary>
-        /// Retorna a lista de O.S pela PROC PRCGetOrderDetailsByEmail
+        /// Recupera uma ou mais ordens pela PROC PRCGetOrderDetailsByEmail
         /// </summary>
         /// <param name="email">Email do Usuario</param>
         /// <returns>Lista de O.S com os apontamentos da SetProduction</returns>

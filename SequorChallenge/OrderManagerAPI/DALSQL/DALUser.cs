@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿
+
+
+
+using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Configuration;
 using OrderManagerAPI.Models;
@@ -8,21 +12,21 @@ using System.Data;
 using System;
 using System.Collections.Generic;
 
-namespace OrderManagerAPI.DALProductSQL
+namespace OrderManagerAPI.DALUserSQL
 {
-    public class DALProduct : DALBase
+    public class DALUser : DALBase
     {
-        public DALProduct(IConfiguration configuration) : base(configuration) { }
+        public DALUser(IConfiguration configuration) : base(configuration) { }
 
         /// <summary>
-        /// ajustar - Cria uma nova Produto no banco de dados.
+        /// ajustar - Cria uma nova User no banco de dados.
         /// </summary>
+        /// <param name="order">Objeto <see cref="Order"/> contendo os dados da User a ser criada.</param>
         /// <returns>
-        /// Retorna <c>true</c> se a Produto for criada com sucesso; 
+        /// Retorna <c>true</c> se a User for criada com sucesso; 
         /// caso contrário, <c>false</c> se ocorrer um erro durante a criação.
         /// </returns>
-        /// ajustar ainda n ta pronto
-        public bool CreateProductDB(Order order)
+        public bool CreateUserDB(Order order)
         {
             int linhasAfetadas = 0;
 
@@ -36,31 +40,31 @@ namespace OrderManagerAPI.DALProductSQL
                     {
                         // Order
                         using (SqlCommand cmdOrder = new SqlCommand(
-                            "INSERT INTO [Order] ([Order], Quantity, ProductCode) VALUES (@Order, @Quantity, @ProductCode)",
+                            "INSERT INTO [Order] ([Order], Quantity, UserCode) VALUES (@Order, @Quantity, @UserCode)",
                             Connection,
                             transaction))
                         {
                             cmdOrder.Parameters.AddWithValue("@Order", order.OS);
                             cmdOrder.Parameters.AddWithValue("@Quantity", order.Quantity);
-                            cmdOrder.Parameters.AddWithValue("@ProductCode", order.ProductCode);
+                            cmdOrder.Parameters.AddWithValue("@UserCode", order);
 
                             linhasAfetadas += cmdOrder.ExecuteNonQuery();
                         }
 
-                        // Product
-                        using (SqlCommand cmdProduct = new SqlCommand(
-                            "INSERT INTO Product (ProductCode, ProductDescription, Image, CycleTime) " +
-                            "VALUES (@ProductCode, @ProductDescription, @Image, @CycleTime);",
+                        // User
+                        using (SqlCommand cmdUser = new SqlCommand(
+                            "INSERT INTO User (UserCode, UserDescription, Image, CycleTime) " +
+                            "VALUES (@UserCode, @UserDescription, @Image, @CycleTime);",
                             Connection,
                             transaction))
                         {
                             //ajustar o produto code, n pode estar repedito
-                            cmdProduct.Parameters.AddWithValue("@productCode", order.ProductCode);
-                            cmdProduct.Parameters.AddWithValue("@productDescription", order.ProductDescription);
-                            cmdProduct.Parameters.AddWithValue("@Image", order.Image);
-                            cmdProduct.Parameters.AddWithValue("@cycleTime", order.CycleTime);
+                            cmdUser.Parameters.AddWithValue("@UserCode", order.UserCode);
+                            cmdUser.Parameters.AddWithValue("@UserDescription", order.UserDescription);
+                            cmdUser.Parameters.AddWithValue("@Image", order.Image);
+                            cmdUser.Parameters.AddWithValue("@cycleTime", order.CycleTime);
 
-                            linhasAfetadas += cmdProduct.ExecuteNonQuery();
+                            linhasAfetadas += cmdUser.ExecuteNonQuery();
                         }
 
                         transaction.Commit();
@@ -90,23 +94,17 @@ namespace OrderManagerAPI.DALProductSQL
         /// <summary>
         /// Valida o codigo do produto
         /// </summary>
-        /// <param name="code">Code Product da O.S</param>
-        /// <returns>
-        ///  Retorna <c>true</c> se a Produto for Valido; 
-        /// caso contrário, <c>false</c> se o produto não existir.
-        /// </returns>
-        /// <exception cref="Exception"></exception>
-        public bool ValidCodeProduct(string code)
+        /// <param name="code">Code User da O.S</param>
+        /// <returns>Retorna True se o codigo do produto é valido</returns>
+        public bool ValidCodeUser(string code)
         {
             try
             {
                 Connection.Open();
 
-                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(1) FROM [Product] WHERE [ProductCode] = @Code", Connection))
+                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(1) FROM [User] WHERE [UserCode] = @Code", Connection))
                 {
                     cmd.Parameters.AddWithValue("@Code", code);
-
-                    //registros correspondentes
                     int result = Convert.ToInt32(cmd.ExecuteScalar());
                     return result > 0;
                 }
