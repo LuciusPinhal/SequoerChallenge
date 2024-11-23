@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OrderManagerAPI.Models;
 using Microsoft.Extensions.Configuration;
-using OrderManagerAPI.DALSQl;
+using OrderManagerAPI.DALOrderSQL;
 
 
 namespace OrderManagerAPI.Controllers
@@ -11,10 +11,10 @@ namespace OrderManagerAPI.Controllers
     public class OrderController : ControllerBase
     {
 
-        private readonly DALSQlServer _sql;
+        private readonly DALOrder _sql;
         private readonly ILogger<OrderController> _logger;
 
-        public OrderController(DALSQlServer sql, ILogger<OrderController> logger)
+        public OrderController(DALOrder sql, ILogger<OrderController> logger)
         {
             _sql = sql;
             _logger = logger;
@@ -48,8 +48,8 @@ namespace OrderManagerAPI.Controllers
         /// <param name="newOrder"></param>
         /// <returns>Cria O.S</returns>
         [HttpPost]
-        [Route("Post")]
-        public IActionResult CreateLoja([FromBody] Order newOrder)
+        [Route("SetOrder")]
+        public IActionResult CreateOrder([FromBody] Order newOrder)
         {
             if (newOrder == null)
             {
@@ -71,7 +71,7 @@ namespace OrderManagerAPI.Controllers
                     Materials = new List<Material>()
                 };
 
-                _sql.CreateOrder(order);
+                _sql.CreateOrderDB(order);
 
                 return Ok("Ordem criada com sucesso!");
             }
@@ -83,8 +83,34 @@ namespace OrderManagerAPI.Controllers
         }
 
 
-        //[HttpPut]
-        //[HttpPut("Put")]
+        [HttpPut]
+        [HttpPut("UpdateOrder")]
+        public IActionResult PutOrder([FromBody] Order model)
+        {
+            try
+            {
+                Order FindOS = _sql.GetOrderDB(model.OS);
+
+                //verificar tbm se o codigo do produto é valido - ainda nn fiz
+                if (FindOS != null)
+                {
+                   
+                    _sql.EditeOrder(FindOS);
+
+                    return Ok("Ordem alterada com sucesso");
+                    
+                }
+                else
+                {
+                    return NotFound("Order não encontrada");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro não esperado: {ex.Message}");
+                return StatusCode(500, "Erro interno do servidor");
+            }
+        }
 
         //[HttpDelete]
         //[HttpDelete("Delete/{DeleteId}")]
@@ -97,5 +123,5 @@ namespace OrderManagerAPI.Controllers
 
 
 //GetOrders
-//    GetProduction
-//            SetProduction
+//GetProduction
+//SetProduction

@@ -1,4 +1,6 @@
-using OrderManagerAPI.DALSQl;
+using OrderManagerAPI.DALDBSQL;
+using OrderManagerAPI.DALOrderSQL;
+using OrderManagerAPI.DALProductionSQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,7 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<DALSQlServer>();
+
+//service BD
+builder.Services.AddScoped<DALOrder>();
+builder.Services.AddScoped<DALDataBase>();
+builder.Services.AddScoped<DALProduction>();
 
 // CORS
 builder.Services.AddCors(options =>
@@ -28,8 +34,8 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
-        var dalSqlServer = services.GetRequiredService<DALSQlServer>();
-        dalSqlServer.DatabaseExists(); // Chama o método para verificar/criar o banco de dados
+        var dalSqlServer = services.GetRequiredService<DALDataBase>();
+        dalSqlServer.DatabaseExists(); 
         Console.WriteLine("Fim da validação concluída.");
     }
     catch (Exception ex)
