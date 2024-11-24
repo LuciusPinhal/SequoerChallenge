@@ -8,11 +8,11 @@ using System.Data;
 using System;
 using System.Collections.Generic;
 
-namespace OrderManagerAPI.DALUserSQL
+namespace OrderManagerAPI.DALMaterialSQL
 {
-    public class DALUser : DALBase
+    public class DALMaterial : DALBase
     {
-        public DALUser(IConfiguration configuration) : base(configuration) { }
+        public DALMaterial(IConfiguration configuration) : base(configuration) { }
 
         /// <summary>
         /// ajustar - Cria uma nova User no banco de dados.
@@ -88,19 +88,19 @@ namespace OrderManagerAPI.DALUserSQL
         //}
 
         /// <summary>
-        /// Valida o codigo do produto
+        /// Valida o codigo do Material
         /// </summary>
-        /// <param name="code">Code User da O.S</param>
-        /// <returns>Retorna True se o codigo do produto é valido</returns>
-        public bool validateEmailUser(string Email)
+        /// <param name="MaterialCode">Codigo do Material</param>
+        /// <returns>Retorna True se o codigo do Material é valido</returns>
+        public bool validateMaterialCode(string MaterialCode)
         {
             try
             {
                 Connection.Open();
 
-                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(1) FROM [User] WHERE [Email] = @Email", Connection))
+                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(1) FROM [Material] WHERE [MaterialCode] = @MaterialCode", Connection))
                 {
-                    cmd.Parameters.AddWithValue("@Email", Email);
+                    cmd.Parameters.AddWithValue("@MaterialCode", MaterialCode);
                     int result = Convert.ToInt32(cmd.ExecuteScalar());
                     return result > 0;
                 }

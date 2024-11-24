@@ -96,7 +96,7 @@ namespace OrderManagerAPI.DALProductSQL
         /// caso contrário, <c>false</c> se o produto não existir.
         /// </returns>
         /// <exception cref="Exception"></exception>
-        public bool ValidCodeProduct(string code)
+        public bool validateCodeProduct(string code)
         {
             try
             {
@@ -122,6 +122,56 @@ namespace OrderManagerAPI.DALProductSQL
                     Connection.Close();
                 }
             }
+        }
+
+
+
+        /// <summary>
+        /// Retorna o produto
+        /// </summary>
+        /// <param name="ProductCode">codigo do produto</param>
+        /// <exception cref="Exception"></exception>
+        public Order GetProdutoDB(string ProductCode)
+        {
+            Order? order = null;
+
+            try
+            {
+                Connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM [Product] WHERE [ProductCode] = @ProductCode", Connection))
+                {
+                    cmd.Parameters.AddWithValue("@ProductCode", ProductCode);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            order = new()
+                            {
+                                ProductCode = reader.GetString(0),
+                                ProductDescription = reader.GetString(1),
+                                Image = reader.GetString(2),
+                                CycleTime = Convert.ToDouble(reader.GetDecimal(3)),
+
+                            };
+                            reader.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao encontrar Produto, verifique o Codigo do produto", ex);
+            }
+            finally
+            {
+                if (Connection.State == System.Data.ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+            }
+            return order;
         }
 
     }

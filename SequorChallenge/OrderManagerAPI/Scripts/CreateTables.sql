@@ -32,7 +32,8 @@ CREATE TABLE ProductMaterial (
 CREATE TABLE [User] (
     Email VARCHAR(100) PRIMARY KEY,
     Name VARCHAR(50),
-    InitialDate DATETIME
+    InitialDate DATETIME,
+    EndDate DATETIME
 );
 
 -- Tabela Production

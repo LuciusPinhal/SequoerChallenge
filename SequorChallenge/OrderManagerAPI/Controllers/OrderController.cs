@@ -29,16 +29,16 @@ namespace OrderManagerAPI.Controllers
         /// <returns>Retorna a lista de O.S </returns>
         [HttpGet]
         [Route("GetOrders")]
-        public IEnumerable<Order> Get([FromQuery] string email)
+        public IEnumerable<Order> Get()
         {
             try
             {
-                var ListOrders = _sql.GetOrdersDB(email);
+                List<Order> ListOrders = _sql.GetOrdersDB();
                 return ListOrders;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Erro ao obter a lista de lojas: {ex.Message}");
+                _logger.LogError($"Erro ao obter a lista de Ordem: {ex.Message}");
                 return null;
             }
 
@@ -55,7 +55,7 @@ namespace OrderManagerAPI.Controllers
         {
             if (newOrder == null)
             {
-                return BadRequest("Dados inválidos para criação de loja.");
+                return BadRequest("Dados inválidos para criação de Ordem.");
             }
 
             try
@@ -89,14 +89,12 @@ namespace OrderManagerAPI.Controllers
         {
             try
             {
-                Order FindOS = _sql.GetOrderDB(order.OS);
-
-                if (FindOS == null)
+                if (!_sql.VerifyOrderDB(order.OS))
                 {
                     return NotFound("Order não encontrada, verifique o número!");
                 }
 
-                if (!_sqlProduct.ValidCodeProduct(order.ProductCode))
+                if (!_sqlProduct.validateCodeProduct(order.ProductCode))
                 {
                     return BadRequest("Erro ao validar o código do produto. Verifique o código fornecido.");
                 }
@@ -113,13 +111,11 @@ namespace OrderManagerAPI.Controllers
 
 
         [HttpDelete("Delete/{Order}")]
-        public IActionResult DeleteLoja(string Order)
+        public IActionResult DeleteOrdem(string Order)
         {
             try
             {
-                Order FindOS = _sql.GetOrderDB(Order);
-
-                if (FindOS == null)
+                if (!_sql.VerifyOrderDB(Order))
                 {
                     return NotFound("Order não encontrada, verifique o número!");
                 }

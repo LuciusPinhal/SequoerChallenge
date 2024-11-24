@@ -1,19 +1,23 @@
 using OrderManagerAPI.DALDBSQL;
+using OrderManagerAPI.DALUserSQL;
 using OrderManagerAPI.DALOrderSQL;
 using OrderManagerAPI.DALProductSQL;
+using OrderManagerAPI.DALMaterialSQL;
 using OrderManagerAPI.DALProductionSQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
 
 //service BD
+builder.Services.AddScoped<DALUser>();
 builder.Services.AddScoped<DALOrder>();
-builder.Services.AddScoped<DALDataBase>();
 builder.Services.AddScoped<DALProduct>();
+builder.Services.AddScoped<DALMaterial>();
+builder.Services.AddScoped<DALDataBase>();
 builder.Services.AddScoped<DALProduction>();
 
 // CORS

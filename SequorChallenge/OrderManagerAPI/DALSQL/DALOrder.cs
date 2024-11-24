@@ -21,18 +21,31 @@ namespace OrderManagerAPI.DALOrderSQL
         /// <param name="email">Email do Usuario</param>
         /// <returns>Lista de O.S com os apontamentos da SetProduction</returns>
         /// <exception cref="Exception"></exception>
-        public List<Order> GetOrdersDB(string email)
+        public List<Order> GetOrdersDB(string? email = null)
         {
             List<Order> listOrders = new List<Order>();
 
             try
             {
+
                 Connection.Open();
 
-                using (var cmd = new SqlCommand("PRCGetOrderDetailsByEmail", Connection))
+                using (var cmd = new SqlCommand())
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@Email", email);
+
+                    cmd.Connection = Connection;
+
+                    if (!string.IsNullOrEmpty(email))
+                    {
+                        cmd.CommandText = "PRCGetOrderDetailsByEmail"; 
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@Email", email);
+                    }
+                    else
+                    {
+                        cmd.CommandText = "PRCGetOrderDetails";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                    }
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -71,7 +84,7 @@ namespace OrderManagerAPI.DALOrderSQL
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro ao buscar dados de produção.", ex);
+                throw new Exception("Erro ao buscar dados da ordem.", ex);
             }
             finally
             {
@@ -184,11 +197,43 @@ namespace OrderManagerAPI.DALOrderSQL
             }
         }
 
-       /// <summary>
-       /// Pegar a OS pelo número
-       /// </summary>
-       /// <param name="OS">Número da OS</param>
-       /// <returns>Retorna a OS</returns>
+        /// <summary>
+        /// Verifica se a OS é valida
+        /// </summary>
+        /// <param name="OS">Número da OS</param>
+        /// <returns>Retorna a OS</returns>
+        public bool VerifyOrderDB(string OS)
+        {     
+            try
+            {
+                Connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(1) FROM [Order] WHERE [order] = @os", Connection))
+                {
+                    cmd.Parameters.AddWithValue("@os", OS);
+                    int result = Convert.ToInt32(cmd.ExecuteScalar());
+                    return result > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao encontrar Order, verifique o número", ex);
+            }
+            finally
+            {
+                if (Connection.State == System.Data.ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Pegar a OS pelo número
+        /// </summary>
+        /// <param name="OS">Número da OS</param>
+        /// <returns>Retorna a OS</returns>
         public Order GetOrderDB(string OS)
         {
             Order? order = null;
@@ -207,8 +252,8 @@ namespace OrderManagerAPI.DALOrderSQL
                         {
                             order = new()
                             {
-                                OS          = reader.GetString(0),
-                                Quantity    = (double)reader.GetDecimal(1),
+                                OS = reader.GetString(0),
+                                Quantity = (double)reader.GetDecimal(1),
                                 ProductCode = reader.GetString(2)
 
                             };
@@ -231,6 +276,7 @@ namespace OrderManagerAPI.DALOrderSQL
             }
             return order;
         }
+
 
         /// <summary>
         /// Atualiza os dados de uma ordem no banco de dados.
