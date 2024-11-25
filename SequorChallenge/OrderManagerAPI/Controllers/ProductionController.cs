@@ -67,7 +67,7 @@ namespace OrderManagerAPI.Controllers
                     return badRequestResult;
                 }
 
-                _sql.CreateOrderDB(newProduction);
+                _sql.CreateProductionDB(newProduction);
 
                 if (validationResult is OkObjectResult okResult)
                 {

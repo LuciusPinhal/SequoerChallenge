@@ -22,11 +22,6 @@ namespace OrderManagerAPI.Controllers
 
         //Nao finalizada
 
-        /// <summary>
-        /// Metodo Get para Lista de O.S
-        /// </summary>
-        /// <param name="email">Email do usuario</param>
-        /// <returns>Retorna a lista de O.S </returns>
         [HttpGet]
         [Route("GetProduct")]
         public IEnumerable<Order> Get()
@@ -45,89 +40,94 @@ namespace OrderManagerAPI.Controllers
         }
 
 
-        //[HttpPost]
-        //[Route("SetOrder")]
-        //public IActionResult CreateOrder([FromBody] Order newOrder)
-        //{
-        //    if (newOrder == null)
-        //    {
-        //        return BadRequest("Dados inválidos para criação de Ordem.");
-        //    }
+        [HttpPost]
+        [Route("SetProduct")]
+        public IActionResult CreateProduct([FromBody] Order newOrder)
+        {
+            if (newOrder == null)
+            {
+                return BadRequest("Dados inválidos para criação do Produto.");
+            }
+            if (newOrder.CycleTime <= 0)
+            {
+                return BadRequest("O tempo de ciclo tem que ser superior a 0.");
+            }
 
-        //    try
-        //    {      
-        //        newOrder.OS = _sql.GetLastOS();
+            try
+            {
+                newOrder.ProductCode = _sql.GetLastProduct();
 
-        //        var order = new Order
-        //        {
-        //            OS = newOrder.OS,
-        //            Quantity = newOrder.Quantity,
-        //            ProductCode = newOrder.ProductCode,
-        //            ProductDescription = newOrder.ProductDescription,
-        //            Image = newOrder.Image,
-        //            CycleTime = newOrder.CycleTime,
-        //            Materials = new List<Material>()
-        //        };
+                var order = new Order
+                {                      
+                    ProductCode = newOrder.ProductCode,
+                    ProductDescription = newOrder.ProductDescription,
+                    Image = newOrder.Image,
+                    CycleTime = newOrder.CycleTime,
+     
+                };
 
-        //        _sql.CreateOrderDB(order);
+                _sql.CreateProductDB(order);
 
-        //        return Ok("Ordem criada com sucesso!");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Erro não esperado: {ex.Message}");
-        //        return StatusCode(500, "Erro interno no servidor");
-        //    }
-        //}
+                return Ok("Produto criado com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro não esperado: {ex.Message}");
+                return StatusCode(500, "Erro interno no servidor");
+            }
+        }
 
-        //[HttpPut("UpdateOrder")]
-        //public IActionResult PutOrder([FromBody] Order order)
-        //{
-        //    try
-        //    {
-        //        if (!_sql.VerifyOrderDB(order.OS))
-        //        {
-        //            return NotFound("Order não encontrada, verifique o número!");
-        //        }
+        [HttpPut("UpdateProduct")]
+        public IActionResult PutProduct([FromBody] Order order)
+        {
+            try
+            {
+                if (order == null)
+                {
+                    return BadRequest("Dados inválidos para criação do Produto.");
+                }
+                if (order.CycleTime <= 0)
+                {
+                    return BadRequest("O tempo de ciclo tem que ser superior a 0.");
+                }
 
-        //        if (!_sqlProduct.validateCodeProduct(order.ProductCode))
-        //        {
-        //            return BadRequest("Erro ao validar o código do produto. Verifique o código fornecido.");
-        //        }
+                if (!_sql.validateCodeProduct(order.ProductCode))
+                {
+                    return NotFound("Erro ao validar o código do produto. Verifique o código fornecido.");
+                }
 
-        //        _sql.EditeOrder(order);
-        //        return Ok("Ordem alterada com sucesso!");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Erro não esperado: {ex.Message}");
-        //        return StatusCode(500, "Erro interno do servidor");
-        //    }
-        //}
+                _sql.EditeProduct(order);
+                return Ok("Produto alterado com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro não esperado: {ex.Message}");
+                return StatusCode(500, "Erro interno do servidor");
+            }
+        }
 
 
-        //[HttpDelete("Delete/{Order}")]
-        //public IActionResult DeleteOrdem(string Order)
-        //{
-        //    try
-        //    {
-        //        if (!_sql.VerifyOrderDB(Order))
-        //        {
-        //            return NotFound("Order não encontrada, verifique o número!");
-        //        }
+        [HttpDelete("Delete/{ProductCode}")]
+        public IActionResult DeleteOrdem(string ProductCode)
+        {
+            try
+            {
+                if (!_sql.validateCodeProduct(ProductCode))
+                {
+                    return BadRequest("Erro ao validar o código do produto. Verifique o código fornecido.");
+                }
 
-        //        _sql.DeleteOrder(Order);
+                _sql.DeleteProduct(ProductCode);
 
-        //        return Ok("Ordem excluída com sucesso!");
+                return Ok("Produto excluído com sucesso!");
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Erro não esperado: {ex.Message}");
-        //        return StatusCode(500, "Erro interno do servidor");
-        //    }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro não esperado: {ex.Message}");
+                return StatusCode(500, "Erro interno do servidor");
+            }
 
-        //}
-
+        }
     }
 }

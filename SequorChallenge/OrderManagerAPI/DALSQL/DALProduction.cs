@@ -89,7 +89,7 @@ namespace OrderManagerAPI.DALProductionSQL
         /// </summary>
         /// <param name="order">Objeto <see cref="Order"/> contendo os dados da nova Produção a ser criada.</param
         /// <exception cref="Exception">Lançada quando ocorre um erro ao executar o comando SQL, como falhas de conexão ou violação de restrições.</exception>
-        public bool CreateOrderDB(Production production)
+        public bool CreateProductionDB(Production production)
         {
             int linhasAfetadas = 0;
 
