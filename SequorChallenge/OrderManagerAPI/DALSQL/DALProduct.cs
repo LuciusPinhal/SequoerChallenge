@@ -280,7 +280,7 @@ namespace OrderManagerAPI.DALProductSQL
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro na edição da Ordem: {ex.Message}");
+                Console.WriteLine($"Erro na edição do Produto: {ex.Message}");
                 return false;
             }
             finally
