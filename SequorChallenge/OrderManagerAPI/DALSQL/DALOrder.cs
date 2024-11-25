@@ -228,7 +228,6 @@ namespace OrderManagerAPI.DALOrderSQL
             }
         }
 
-
         /// <summary>
         /// Pegar a OS pelo número
         /// </summary>
@@ -276,7 +275,6 @@ namespace OrderManagerAPI.DALOrderSQL
             }
             return order;
         }
-
 
         /// <summary>
         /// Atualiza os dados de uma ordem no banco de dados.
@@ -346,8 +344,7 @@ namespace OrderManagerAPI.DALOrderSQL
 
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro na deleção da Ordem: {ex.Message}");
-                throw;
+                throw new Exception("Erro na deleção da Ordem.", ex);
             }
             finally
             {

@@ -124,8 +124,6 @@ namespace OrderManagerAPI.DALProductSQL
             }
         }
 
-
-
         /// <summary>
         /// Retorna o produto
         /// </summary>

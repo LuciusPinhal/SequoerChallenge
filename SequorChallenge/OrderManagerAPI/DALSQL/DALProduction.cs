@@ -103,13 +103,17 @@ namespace OrderManagerAPI.DALProductionSQL
                     {
                         // Order
                         using (SqlCommand cmdOrder = new SqlCommand(
-                            "INSERT INTO [production] ([Email], [Order], Date, Quantity, MaterialCode, CycleTime) VALUES (@Email, @Order, @Date, @Quantity, @MaterialCode, @CycleTime )",
-                            Connection,
-                            transaction))
+                            "INSERT INTO [production] ([Email], [Order], Date, Quantity, MaterialCode, CycleTime) " +
+                            "VALUES (@Email, @Order, @Date, @Quantity, @MaterialCode, @CycleTime )",
+                            Connection, transaction))
                         {
+
+                            string productionDateTime = $"{production.ProductionDate} {production.ProductionTime}";
+                            DateTime dateTimeValue = DateTime.ParseExact(productionDateTime, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+
                             cmdOrder.Parameters.AddWithValue("@Email", production.Email);
                             cmdOrder.Parameters.AddWithValue("@Order", production.Order);
-                            cmdOrder.Parameters.AddWithValue("@Date", DateTime.Now);
+                            cmdOrder.Parameters.AddWithValue("@Date", dateTimeValue);
                             cmdOrder.Parameters.AddWithValue("@Quantity", production.Quantity);
                             cmdOrder.Parameters.AddWithValue("@MaterialCode", production.materialCode);
                             cmdOrder.Parameters.AddWithValue("@CycleTime", production.CycleTime);
@@ -224,11 +228,14 @@ namespace OrderManagerAPI.DALProductionSQL
                     "UPDATE Production SET Email = @Email, [Order] = @OS, Date = @Date, Quantity = @Quantity, MaterialCode = @MaterialCode, CycleTime = @CycleTime" +
                     " WHERE ID = @ID", Connection))
                 {
-                             
+
+                    string productionDateTime = $"{production.ProductionDate} {production.ProductionTime}";
+                    DateTime dateTimeValue = DateTime.ParseExact(productionDateTime, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+
                     cmd.Parameters.AddWithValue("ID", production.Id);         
                     cmd.Parameters.AddWithValue("@Email", production.Email);
                     cmd.Parameters.AddWithValue("@OS", production.Order);
-                    cmd.Parameters.AddWithValue("@Date", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@Date", dateTimeValue);
                     cmd.Parameters.AddWithValue("@Quantity", production.Quantity);
                     cmd.Parameters.AddWithValue("@MaterialCode", production.materialCode);
                     cmd.Parameters.AddWithValue("@CycleTime", production.CycleTime);
@@ -251,6 +258,43 @@ namespace OrderManagerAPI.DALProductionSQL
                 }
             }
         }
-      
+
+        /// <summary>
+        /// Remove a Production do banco de dados com base ID.
+        /// </summary>
+        /// <returns>
+        /// Retorna <c>true</c> se a Production foi removida com sucesso; 
+        /// caso contrário, <c>false</c> se a remoção falhar.
+        /// </returns>
+        public bool DeleteProduction(long ID)
+        {
+            int linhasAfetadas = 0;
+            try
+            {
+                Connection.Open();
+                using (SqlCommand cmd = new SqlCommand(
+                    "DELETE FROM [PRODUCTION] WHERE [ID] = @ID", Connection))
+                {
+                    cmd.Parameters.AddWithValue("@ID", ID);
+
+                    linhasAfetadas = cmd.ExecuteNonQuery();
+                }
+                return linhasAfetadas > 0;
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception("Erro na deleção da Produção:", ex);
+            }
+            finally
+            {
+                if (Connection.State == System.Data.ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+            }
+
+        }
+
     }
 }

@@ -11,6 +11,7 @@ using OrderManagerAPI.DALProductionSQL;
 using System.Collections.Generic;
 using Microsoft.VisualBasic;
 using System.Diagnostics.Metrics;
+using System.Globalization;
 
 //boa sorte lucius do futuro pq eu n sei essa merda :)
 
@@ -38,11 +39,6 @@ namespace OrderManagerAPI.Controllers
             _logger      = logger;
         }
 
-        /// <summary>
-        /// Metodo Get para pegar lista Produção
-        /// </summary>
-        /// <param name="email">Email Cliente</param>
-        /// <returns>Lista da Produção</returns>
         [HttpGet]
         [Route("GetProduction")]
         public IEnumerable<Production> Get([FromQuery] string email)
@@ -89,7 +85,6 @@ namespace OrderManagerAPI.Controllers
             }
         }
 
-
         [HttpPut("UpdateProduction")]
         public IActionResult PutProduction([FromBody] Production newProduction)
         {
@@ -119,6 +114,30 @@ namespace OrderManagerAPI.Controllers
             }
         }
 
+        [HttpDelete("Delete/{ID}")]
+        public IActionResult DeleteProduction(long ID)
+        {
+            try
+            {
+                Production production = _sql.FindProduction(ID);
+                if (production == null)
+                {
+                    return NotFound("Order não encontrada, verifique o número!");
+                }
+
+                _sql.DeleteProduction(ID);
+
+                return Ok("Ordem excluída com sucesso!");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro não esperado: {ex.Message}");
+                return StatusCode(500, "Erro interno do servidor");
+            }
+
+        }
+
         /// <summary>
         /// Valida os dados de uma nova produção e retorna o resultado da validação.
         /// </summary>
@@ -134,15 +153,26 @@ namespace OrderManagerAPI.Controllers
             var validationErrors = new List<string>();
             var infoMessages = new List<string>();
 
-            ValidateEmail(newProduction.Email, validationErrors);
+            User findUser = ValidateEmail(newProduction.Email, validationErrors);
             Order order = ValidateOrder(newProduction.Order, validationErrors);
 
-            if (order != null)
-            {
-                ValidateProductionDate(newProduction.ProductionDate, validationErrors);
-                ValidateQuantity(newProduction, order, validationErrors, infoMessages);
-                ValidateMaterialCode(newProduction.materialCode, validationErrors);
-                ValidateCycleTime(newProduction, order, newProduction.CycleTime, validationErrors, infoMessages);
+            switch (order, findUser)
+            {          
+                case (null, _):
+                    validationErrors.Add("Erro: A Ordem não foi encontrada. Verifique se o número da Ordem está correto.");
+                    break;
+
+              
+                case (_, null):
+                    validationErrors.Add("Erro: O Usuário não foi encontrado. Verifique se o Email está correto.");
+                    break;
+            
+                case (_, _):
+                    ValidateProductionDate(newProduction, findUser, validationErrors, infoMessages);
+                    ValidateQuantity(newProduction, order, validationErrors, infoMessages);
+                    ValidateMaterialCode(newProduction.materialCode, validationErrors);
+                    ValidateCycleTime(newProduction, order, newProduction.CycleTime, validationErrors, infoMessages);
+                    break;
             }
 
             if (validationErrors.Any())
@@ -163,12 +193,14 @@ namespace OrderManagerAPI.Controllers
         /// </summary>
         /// <param name="email">E-mail do usuário a ser validado.</param>
         /// <param name="validationErrors">Lista de erros de validação para preenchimento.</param>
-        private void ValidateEmail(string email, List<string> validationErrors)
+        private User ValidateEmail(string email, List<string> validationErrors)
         {
-            if (!_sqlUser.validateEmailUser(email))
+            User newUser = _sqlUser.FindUser(email);
+            if (newUser.Email == null)
             {
                 validationErrors.Add("Erro ao validar o Email do Usuario. Verifique o Email fornecido.");
             }
+            return newUser;
         }
 
         /// <summary>
@@ -194,11 +226,50 @@ namespace OrderManagerAPI.Controllers
         /// </summary>
         /// <param name="productionDate">Data da produção a ser validada.</param>
         /// <param name="validationErrors">Lista de erros de validação para preenchimento.</param>
-        private void ValidateProductionDate(string productionDate, List<string> validationErrors)
+        private void ValidateProductionDate(Production newProduction, User user, List<string> validationErrors, List<string> infoMessages)
         {
-            if (!string.IsNullOrEmpty(productionDate))
+
+            if (string.IsNullOrWhiteSpace(newProduction.ProductionDate) || string.IsNullOrWhiteSpace(newProduction.ProductionTime))
             {
-                // Adicione a lógica de validação para a data, se necessário
+                validationErrors.Add("Erro: A data ou a hora está vazia ou nula.");
+                return;
+            }
+
+            string productionDateTime = $"{newProduction.ProductionDate} {newProduction.ProductionTime}";
+            DateTime dateTimeValue = DateTime.ParseExact(productionDateTime, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+
+            switch (dateTimeValue)
+            {
+                case var _ when dateTimeValue < user.InitialDate:
+                    validationErrors.Add($"Data {dateTimeValue} é inferior ao dia inicial do usuário: {user.InitialDate}");
+                    break;  
+
+                case var _ when dateTimeValue < DateTime.Now:
+                    infoMessages.Add($"Data {dateTimeValue} é inferior ao dia atual.");
+                    break;  
+   
+            }
+
+            if (dateTimeValue > user.EndDate)
+            {
+                infoMessages.Add($"Data {dateTimeValue} passou da data limite: {user.EndDate}");
+            }
+
+            if (newProduction.Id > 0)
+            {
+                var oldProduction = _sql.FindProduction(newProduction.Id);
+                if (oldProduction != null)
+                {
+                    string OldproductionDateTime = $"{oldProduction.ProductionDate} {oldProduction.ProductionTime}";
+                    DateTime OlddateTimeValue = DateTime.ParseExact(productionDateTime, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+
+                    if (dateTimeValue > OlddateTimeValue)
+                    {
+                        infoMessages.Add($"Data {dateTimeValue} é inferior à data lançada anteriormente: {OlddateTimeValue} ");
+                    }
+                }
+
+
             }
         }
 
@@ -225,9 +296,12 @@ namespace OrderManagerAPI.Controllers
             {
                 var oldProduction = _sql.FindProduction(newProduction.Id);
 
-                if (oldProduction.Quantity > newProduction.Quantity)
+                if (oldProduction != null)
                 {
-                    infoMessages.Add($"A quantidade anterior era maior que a quantidade atual. Quantidade anterior: {oldProduction.Quantity}");
+                    if (oldProduction.Quantity > newProduction.Quantity)
+                    {
+                        infoMessages.Add($"A quantidade anterior era maior que a quantidade atual. Quantidade anterior: {oldProduction.Quantity}");
+                    }
                 }
             }
         }
@@ -254,31 +328,26 @@ namespace OrderManagerAPI.Controllers
         {
             order = _sqlProduct.GetProdutoDB(order.ProductCode);
 
-            if (order == null)
-            {
-                validationErrors.Add("Erro ao carregar informações do produto com o código fornecido.");
-                
-            } 
-            else
+            if (order != null)
             {
                 if (cycleTime <= 0)
                 {
                     validationErrors.Add("O tempo de ciclo tem que ser superior a 0.");
                 }
+
                 if (newProduction.CycleTime > order.CycleTime)
                 {
                     infoMessages.Add($"O tempo de ciclo informado é superior ao tempo de ciclo estimado para o produto. Tempo informado na OS: {order.CycleTime}");
                 }
-            }
 
+                return;
+            } 
+          
+            validationErrors.Add("Erro ao carregar informações do produto com o código fornecido, Verifique o Codigo do Produto: " + order.ProductCode);
+                
+        
         }
-
-
-
-        //Production FindProduction = _sql.FindProduction(newProduction);
-
-        //[HttpDelete]
-        //[HttpDelete("Delete/{DeleteId}")]
+  
     }
 }
 

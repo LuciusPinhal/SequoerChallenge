@@ -118,5 +118,60 @@ namespace OrderManagerAPI.DALUserSQL
             }
         }
 
+        /// <summary>
+        /// Busca um usuario específica no banco de dados com base nos dados fornecidos.
+        /// </summary>
+        /// <returns>
+        /// Um objeto do tipo <see cref="User"/> representando os detalhes da usuario encontrada no banco de dados. 
+        /// Retorna <c>null</c> se nenhum usario correspondente for encontrada.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Lançada para outros tipos de erros não relacionados ao banco de dados.
+        /// </exception>
+        public User FindUser(string email)
+        {
+            User newUser = null;
+
+            try
+            {
+                Connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand(
+                "SELECT * FROM [User] WHERE EMAIL = @Email", Connection))
+                {
+                    cmd.Parameters.AddWithValue("@Email", email);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            newUser = new User
+                            {  
+                                Email = reader.GetString(reader.GetOrdinal("Email")),
+                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                                InitialDate = reader.GetDateTime("InitialDate"),
+                                EndDate = reader.GetDateTime("EndDate"),
+                               
+                            };
+                            reader.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar dados de produção.", ex);
+            }
+            finally
+            {
+                if (Connection.State == System.Data.ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+            }
+
+            return newUser;
+
+        }
     }
 }
