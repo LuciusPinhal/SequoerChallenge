@@ -15,10 +15,10 @@ namespace OrderManagerAPI.DALUserSQL
         public DALUser(IConfiguration configuration) : base(configuration) { }
 
         /// <summary>
-        /// Valida o codigo do produto
+        /// Valida o codigo do usuario
         /// </summary>
         /// <param name="code">Code User da O.S</param>
-        /// <returns>Retorna True se o codigo do produto é valido</returns>
+        /// <returns>Retorna True se o codigo do usuario é valido</returns>
         public bool validateEmailUser(string Email)
         {
             try
@@ -34,7 +34,7 @@ namespace OrderManagerAPI.DALUserSQL
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro ao validar o código do produto. Verifique o código fornecido.", ex);
+                throw new Exception("Erro ao validar o código do usuario. Verifique o código fornecido.", ex);
             }
             finally
             {
@@ -204,6 +204,89 @@ namespace OrderManagerAPI.DALUserSQL
                     Connection.Close();
                 }
             }
+        }
+
+        /// <summary>
+        /// Atualiza os dados de um usario no banco de dados.
+        /// </summary>
+        /// <param name="User">Objeto <see cref="User"/> contendo os novos dados do usuario a serem atualizados.</param>
+        /// <returns>
+        /// Retorna <c>true</c> se o usuario foi atualizada com sucesso; 
+        /// caso contrário, <c>false</c> se a atualização falhar.
+        /// </returns>
+        public bool EditeUserDB(User user)
+        {
+            int linhasAfetadas = 0;
+
+            try
+            {
+                Connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand(
+                    "UPDATE [USER] SET EMAIL = @EMAIL, NAME = @NAME, InitialDate = @InitialDate, EndDate = @EndDate " +
+                    "WHERE [EMAIL] = @EMAIL", Connection))
+                {
+         
+                    cmd.Parameters.AddWithValue("@EMAIL", user.Email);
+                    cmd.Parameters.AddWithValue("@NAME", user.Name);
+                    cmd.Parameters.AddWithValue("@InitialDate", user.InitialDate);
+                    cmd.Parameters.AddWithValue("@EndDate", user.EndDate);
+
+                    linhasAfetadas = cmd.ExecuteNonQuery();
+                }
+
+                return linhasAfetadas > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro na edição do Usuario: {ex.Message}");
+                return false;
+            }
+            finally
+            {
+                if (Connection.State == System.Data.ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Remove um usuario do banco de dados com base no número da ordem (OS).
+        /// </summary>
+        /// <param name="Email">O número identificador único do usuario que será removida.</param>
+        /// <returns>
+        /// Retorna <c>true</c> se o usuario foi removido com sucesso; 
+        /// caso contrário, <c>false</c> se a remoção falhar.
+        /// </returns>
+        public bool DeleteUser(string Email)
+        {
+            int linhasAfetadas = 0;
+            try
+            {
+                Connection.Open();
+                using (SqlCommand cmd = new SqlCommand(
+                    "DELETE FROM [USER] WHERE [EMAIL] = @EMAIL", Connection))
+                {
+                    cmd.Parameters.AddWithValue("@EMAIL", Email);
+
+                    linhasAfetadas = cmd.ExecuteNonQuery();
+                }
+                return linhasAfetadas > 0;
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception("Erro na deleção do usuario.", ex);
+            }
+            finally
+            {
+                if (Connection.State == System.Data.ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+            }
+
         }
     }
 }

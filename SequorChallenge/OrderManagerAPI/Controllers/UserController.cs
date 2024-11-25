@@ -66,6 +66,56 @@ namespace OrderManagerAPI.Controllers
             }
         }
 
+        [HttpPut("UpdateUser")]
+        public IActionResult Putuser([FromBody] User user)
+        {
+            try
+            {
+                var validationResult = ValidateUser(user, false);
+                if (validationResult is BadRequestObjectResult badRequestResult)
+                {
+                    return badRequestResult;
+                }
+
+                _sql.EditeUserDB(user);
+
+                if (validationResult is OkObjectResult okResult)
+                {
+                    return okResult;
+                }
+
+                return Ok("Usuario editado com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro não esperado: {ex.Message}");
+                return StatusCode(500, "Erro interno do servidor");
+            }
+        }
+
+        [HttpDelete("Delete/{Email}")]
+        public IActionResult DeleteUser(string Email)
+        {
+            try
+            {
+                if (!_sql.validateEmailUser(Email))
+                {
+                    return NotFound("E-mail não encontrado, verifique E-mail informado");
+                }
+
+                _sql.DeleteUser(Email);
+
+                return Ok("Usuario excluído com sucesso!");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro não esperado: {ex.Message}");
+                return StatusCode(500, "Erro interno do servidor");
+            }
+
+        }
+
         /// <summary>
         /// Valida os dados de uma nova usuario e retorna o resultado da validação.
         /// </summary>
@@ -105,7 +155,6 @@ namespace OrderManagerAPI.Controllers
 
             return Ok(new { message = "usuário validado com sucesso." });
         }
-
 
         /// <summary>
         /// Valida o e-mail do usuário.
@@ -164,7 +213,7 @@ namespace OrderManagerAPI.Controllers
 
                     if(user.EndDate > FindOldUser.EndDate)
                     {
-                        infoMessages.Add($"Data final {user.EndDate} é maior que a data cadastrada: {FindOldUser.EndDate}");
+                        infoMessages.Add($"Data final atual {user.EndDate} é maior que a data anterior cadastrada: {FindOldUser.EndDate}");
                     }
                 }
             }
