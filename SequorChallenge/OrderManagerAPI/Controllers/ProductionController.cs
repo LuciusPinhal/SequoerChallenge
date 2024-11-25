@@ -13,8 +13,6 @@ using Microsoft.VisualBasic;
 using System.Diagnostics.Metrics;
 using System.Globalization;
 
-//boa sorte lucius do futuro pq eu n sei essa merda :)
-
 namespace OrderManagerAPI.Controllers
 {
     [ApiController]

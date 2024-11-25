@@ -172,5 +172,46 @@ namespace OrderManagerAPI.DALProductSQL
             return order;
         }
 
+        public List<Order> GetListProdutoDB()
+        {
+            var listOrders = new List<Order>();
+
+            try
+            {
+                Connection.Open();
+
+                using (var cmd = new SqlCommand("SELECT * FROM [Product]", Connection))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var order = new Order
+                            {
+                                ProductCode = reader.GetString(0),
+                                ProductDescription = reader.GetString(1),
+                                Image = reader.GetString(2),
+                                CycleTime = (double)reader.GetDecimal(3)
+                            };
+
+                            listOrders.Add(order);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar produtos. Verifique se tem produtos cadastrado no banco de dados", ex);
+            }
+            finally
+            {
+                if (Connection.State == System.Data.ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+            }
+
+            return listOrders;
+        }
     }
 }

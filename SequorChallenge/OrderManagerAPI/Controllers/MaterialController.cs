@@ -9,19 +9,26 @@ namespace OrderManagerAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class OrderController : ControllerBase
+    public class MaterialController : ControllerBase
     {
         private readonly DALOrder _sql;
         private readonly DALProduct _sqlProduct;
-        private readonly ILogger<OrderController> _logger;
+        private readonly ILogger<MaterialController> _logger;
 
-        public OrderController(DALOrder sql, DALProduct sqlProduct, ILogger<OrderController> logger)
+        public MaterialController(DALOrder sql, DALProduct sqlProduct, ILogger<MaterialController> logger)
         {
             _sql = sql;
             _sqlProduct = sqlProduct;
             _logger = logger;
         }
 
+        //Nao finalizada
+
+        /// <summary>
+        /// Metodo Get para Lista de O.S
+        /// </summary>
+        /// <param name="email">Email do usuario</param>
+        /// <returns>Retorna a lista de O.S </returns>
         [HttpGet]
         [Route("GetOrders")]
         public IEnumerable<Order> Get()
@@ -39,6 +46,11 @@ namespace OrderManagerAPI.Controllers
 
         }
 
+        /// <summary>
+        /// Metodo Post para Criar O.S
+        /// </summary>
+        /// <param name="newOrder"></param>
+        /// <returns>Cria O.S</returns>
         [HttpPost]
         [Route("SetOrder")]
         public IActionResult CreateOrder([FromBody] Order newOrder)
@@ -98,6 +110,7 @@ namespace OrderManagerAPI.Controllers
                 return StatusCode(500, "Erro interno do servidor");
             }
         }
+
 
         [HttpDelete("Delete/{Order}")]
         public IActionResult DeleteOrdem(string Order)
