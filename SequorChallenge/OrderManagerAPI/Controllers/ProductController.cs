@@ -20,8 +20,6 @@ namespace OrderManagerAPI.Controllers
             _logger = logger;
         }
 
-        //Nao finalizada
-
         [HttpGet]
         [Route("GetProduct")]
         public IEnumerable<Order> Get()
@@ -38,7 +36,6 @@ namespace OrderManagerAPI.Controllers
             }
 
         }
-
 
         [HttpPost]
         [Route("SetProduct")]
@@ -105,7 +102,6 @@ namespace OrderManagerAPI.Controllers
                 return StatusCode(500, "Erro interno do servidor");
             }
         }
-
 
         [HttpDelete("Delete/{ProductCode}")]
         public IActionResult DeleteOrdem(string ProductCode)

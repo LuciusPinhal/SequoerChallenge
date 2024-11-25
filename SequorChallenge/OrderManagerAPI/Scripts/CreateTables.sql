@@ -33,7 +33,7 @@ CREATE TABLE [User] (
     Email VARCHAR(100) PRIMARY KEY,
     Name VARCHAR(50),
     InitialDate DATETIME,
-    EndDate DATETIME
+    InitialDate DATETIME
 );
 
 -- Tabela Production

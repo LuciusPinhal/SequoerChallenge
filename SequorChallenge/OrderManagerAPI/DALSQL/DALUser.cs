@@ -15,79 +15,6 @@ namespace OrderManagerAPI.DALUserSQL
         public DALUser(IConfiguration configuration) : base(configuration) { }
 
         /// <summary>
-        /// ajustar - Cria uma nova User no banco de dados.
-        /// </summary>
-        /// <param name="order">Objeto <see cref="Order"/> contendo os dados da User a ser criada.</param>
-        /// <returns>
-        /// Retorna <c>true</c> se a User for criada com sucesso; 
-        /// caso contrário, <c>false</c> se ocorrer um erro durante a criação.
-        /// </returns>
-        //public bool CreateUserDB(Order order)
-        //{
-        //    int linhasAfetadas = 0;
-
-        //    try
-        //    {
-        //        Connection.Open();
-
-        //        using (var transaction = Connection.BeginTransaction())
-        //        {
-        //            try
-        //            {
-        //                // Order
-        //                using (SqlCommand cmdOrder = new SqlCommand(
-        //                    "INSERT INTO [Order] ([Order], Quantity, UserCode) VALUES (@Order, @Quantity, @UserCode)",
-        //                    Connection,
-        //                    transaction))
-        //                {
-        //                    cmdOrder.Parameters.AddWithValue("@Order", order.OS);
-        //                    cmdOrder.Parameters.AddWithValue("@Quantity", order.Quantity);
-        //                    cmdOrder.Parameters.AddWithValue("@UserCode", order);
-
-        //                    linhasAfetadas += cmdOrder.ExecuteNonQuery();
-        //                }
-
-        //                // User
-        //                using (SqlCommand cmdUser = new SqlCommand(
-        //                    "INSERT INTO User (UserCode, UserDescription, Image, CycleTime) " +
-        //                    "VALUES (@UserCode, @UserDescription, @Image, @CycleTime);",
-        //                    Connection,
-        //                    transaction))
-        //                {
-        //                    //ajustar o produto code, n pode estar repedito
-        //                    cmdUser.Parameters.AddWithValue("@UserCode", order.UserCode);
-        //                    cmdUser.Parameters.AddWithValue("@UserDescription", order.UserDescription);
-        //                    cmdUser.Parameters.AddWithValue("@Image", order.Image);
-        //                    cmdUser.Parameters.AddWithValue("@cycleTime", order.CycleTime);
-
-        //                    linhasAfetadas += cmdUser.ExecuteNonQuery();
-        //                }
-
-        //                transaction.Commit();
-
-        //                return linhasAfetadas == 2;
-        //            }
-        //            catch
-        //            {
-        //                transaction.Rollback();
-        //                throw;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("Erro ao criar a ordem no banco de dados.", ex);
-        //    }
-        //    finally
-        //    {
-        //        if (Connection.State == ConnectionState.Open)
-        //        {
-        //            Connection.Close();
-        //        }
-        //    }
-        //}
-
-        /// <summary>
         /// Valida o codigo do produto
         /// </summary>
         /// <param name="code">Code User da O.S</param>
@@ -172,6 +99,111 @@ namespace OrderManagerAPI.DALUserSQL
 
             return newUser;
 
+        }
+
+        /// <summary>
+        /// Recupera os Usuario do banco de dados.
+        /// </summary>
+        /// <returns>
+        /// Retorna uma lista de objetos <see cref="User"/> contendo os Usuario encontradas. 
+        /// Se nenhuma user for encontrada, retorna uma lista vazia.
+        /// </returns>
+        public List<User> GetListUserDB()
+        {
+            var listUsers = new List<User>();
+
+            try
+            {
+                Connection.Open();
+
+                using (var cmd = new SqlCommand("SELECT * FROM [USER]", Connection))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var user = new User
+                            {
+                                Email = reader.GetString(0),
+                                Name = reader.GetString(1),
+                                InitialDate = reader.GetDateTime(2),
+                                EndDate = reader.GetDateTime(3)
+                            };
+
+                            listUsers.Add(user);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar Usuarios. Verifique se tem Usuarios cadastrado no banco de dados", ex);
+            }
+            finally
+            {
+                if (Connection.State == System.Data.ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+            }
+
+            return listUsers;
+        }
+
+        /// <summary>
+        ///  Insere uma novo usuario no banco de dados.
+        /// </summary>
+        /// <param name="USer">Objeto <see cref="User"/> contendo os dados da novo usario a ser criada.</param
+        /// <exception cref="Exception">Lançada quando ocorre um erro ao executar o comando SQL, como falhas de conexão ou violação de restrições.</exception>
+        public bool CreateUserDB(User user)
+        {
+            int linhasAfetadas = 0;
+
+            try
+            {
+                Connection.Open();
+
+                using (var transaction = Connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Order
+                        using (SqlCommand cmdOrder = new SqlCommand(
+                            "INSERT INTO [USER] ([EMAIL], NAME, InitialDate, EndDate) VALUES (@EMAIL, @NAME, @InitialDate, @EndDate)",
+                            Connection,
+                            transaction))
+                        {
+                            cmdOrder.Parameters.AddWithValue("@EMAIL", user.Email);
+                            cmdOrder.Parameters.AddWithValue("@NAME", user.Name);
+                            cmdOrder.Parameters.AddWithValue("@InitialDate", user.InitialDate);
+                            cmdOrder.Parameters.AddWithValue("@EndDate", user.EndDate);
+
+                            linhasAfetadas = cmdOrder.ExecuteNonQuery();
+                        }
+
+
+                        transaction.Commit();
+
+                        return linhasAfetadas > 0;
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw new Exception("Erro ao criar usuario.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao criar o usuario no banco de dados.", ex);
+            }
+            finally
+            {
+                if (Connection.State == ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+            }
         }
     }
 }

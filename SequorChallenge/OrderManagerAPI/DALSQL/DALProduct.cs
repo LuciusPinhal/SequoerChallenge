@@ -124,7 +124,7 @@ namespace OrderManagerAPI.DALProductSQL
         /// </summary>
         /// <returns>
         /// Retorna uma lista de objetos <see cref="Order"/> contendo os Produtos encontradas. 
-        /// Se nenhuma ordem for encontrada, retorna uma lista vazia.
+        /// Se nenhum Produto for encontrado, retorna uma lista vazia.
         /// </returns>
         public List<Order> GetListProdutoDB()
         {
