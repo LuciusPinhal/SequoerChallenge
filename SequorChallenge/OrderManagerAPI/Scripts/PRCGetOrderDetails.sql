@@ -9,7 +9,8 @@ BEGIN
         PRT.ProductDescription AS [productDescription],
         PRT.Image AS [image],
         PRT.CycleTime AS [cycleTime],
-        PRD.MaterialCode AS [materialCode],  
+        /* or PRD*/
+        PM.MaterialCode AS [materialCode],  
         M.MaterialDescription AS [materialDescription]  
     FROM 
         [Order] OS
@@ -21,6 +22,6 @@ BEGIN
         Material M ON M.MaterialCode = PM.MaterialCode 
     INNER JOIN
         Production PRD ON PRD.[Order] = OS.[Order]
-    GROUP BY 
-        OS.[Order], PRT.ProductCode, PRT.ProductDescription, PRT.Image, PRT.CycleTime, PRD.MaterialCode, M.MaterialDescription;
+    GROUP BY                                                                          /* or PRD*/
+        OS.[Order], PRT.ProductCode, PRT.ProductDescription, PRT.Image, PRT.CycleTime, PM.MaterialCode, M.MaterialDescription;
 END;

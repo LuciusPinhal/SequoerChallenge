@@ -4,6 +4,7 @@ using OrderManagerAPI.DALOrderSQL;
 using OrderManagerAPI.DALProductSQL;
 using OrderManagerAPI.DALMaterialSQL;
 using OrderManagerAPI.DALProductionSQL;
+using OrderManagerAPI.DALProductMaterialSQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.Services.AddScoped<DALProduct>();
 builder.Services.AddScoped<DALMaterial>();
 builder.Services.AddScoped<DALDataBase>();
 builder.Services.AddScoped<DALProduction>();
+builder.Services.AddScoped<DALProductMaterial>();
 
 // CORS
 builder.Services.AddCors(options =>

@@ -3,6 +3,7 @@ using OrderManagerAPI.Models;
 using Microsoft.Extensions.Configuration;
 using OrderManagerAPI.DALOrderSQL;
 using OrderManagerAPI.DALProductSQL;
+using OrderManagerAPI.DALProductMaterialSQL;
 
 
 namespace OrderManagerAPI.Controllers
@@ -12,12 +13,14 @@ namespace OrderManagerAPI.Controllers
     public class ProductController : ControllerBase
     {
         private readonly DALProduct _sql;
+        private readonly DALProductMaterial _sqlProductMaterial;
         private readonly ILogger<ProductController> _logger;
 
-        public ProductController(DALProduct sql, ILogger<ProductController> logger)
+        public ProductController(DALProduct sql, DALProductMaterial sqlProductMaterial, ILogger<ProductController> logger)
         {
-            _sql = sql;
-            _logger = logger;
+            _sql                = sql;
+            _sqlProductMaterial = sqlProductMaterial;
+            _logger             = logger;
         }
 
         [HttpGet]
@@ -60,11 +63,17 @@ namespace OrderManagerAPI.Controllers
                     ProductDescription = newOrder.ProductDescription,
                     Image = newOrder.Image,
                     CycleTime = newOrder.CycleTime,
-     
+                    Materials = newOrder.Materials.ToList()
+
                 };
 
                 _sql.CreateProductDB(order);
 
+                if (order?.Materials != null && order.Materials.Any())
+                {
+                    _sqlProductMaterial.CreateProductMaterial(new List<Order> { order });
+                }
+              
                 return Ok("Produto criado com sucesso!");
             }
             catch (Exception ex)
@@ -112,6 +121,8 @@ namespace OrderManagerAPI.Controllers
                 {
                     return BadRequest("Erro ao validar o código do produto. Verifique o código fornecido.");
                 }
+
+                _sqlProductMaterial.DeleteProductMaterial(null, ProductCode);
 
                 _sql.DeleteProduct(ProductCode);
 

@@ -3,6 +3,7 @@ using OrderManagerAPI.Models;
 using Microsoft.Extensions.Configuration;
 using OrderManagerAPI.DALMaterialSQL;
 using OrderManagerAPI.DALProductSQL;
+using OrderManagerAPI.DALProductMaterialSQL;
 
 
 namespace OrderManagerAPI.Controllers
@@ -12,12 +13,14 @@ namespace OrderManagerAPI.Controllers
     public class MaterialController : ControllerBase
     {
         private readonly DALMaterial _sql;
+        private readonly DALProductMaterial _sqlProductMaterial;
         private readonly ILogger<MaterialController> _logger;
 
-        public MaterialController(DALMaterial sql, ILogger<MaterialController> logger)
+        public MaterialController(DALMaterial sql, DALProductMaterial sqlProductMaterial, ILogger<MaterialController> logger)
         {
-            _sql = sql;
-            _logger = logger;
+            _sql                = sql;
+            _sqlProductMaterial = sqlProductMaterial;
+            _logger             = logger;
         }
 
         [HttpGet]
@@ -39,7 +42,7 @@ namespace OrderManagerAPI.Controllers
 
         [HttpPost]
         [Route("SetMaterial")]
-        public IActionResult CreateMaterialt([FromBody] Material newMaterial)
+        public IActionResult CreateMaterialt([FromBody] List<Order> newMaterial)
         {
             if (newMaterial == null)
             {
@@ -48,15 +51,28 @@ namespace OrderManagerAPI.Controllers
 
             try
             {
-                newMaterial.MaterialCode = _sql.GetLastMaterial();
+                var GetIdMaterial = _sql.GetLastMaterial();
 
+                foreach (var item in newMaterial)
+                {
+                    foreach(var materialAdd in item.Materials)
+                    {
+                        materialAdd.MaterialCode = GetIdMaterial;
+                    }
+                }
+                             
                 var material = new Material
                 {
-                    MaterialCode        = newMaterial.MaterialCode,
-                    MaterialDescription = newMaterial.MaterialDescription
+                    MaterialCode        = newMaterial[0].Materials[0].MaterialCode,
+                    MaterialDescription = newMaterial[0].Materials[0].MaterialDescription
                 };
 
                 _sql.CreateMaterialDB(material);
+
+                if (newMaterial[0].ProductCode != null)
+                {
+                    _sqlProductMaterial.CreateProductMaterial(newMaterial);
+                }
 
                 return Ok("Material criado com sucesso!");
             }
@@ -102,6 +118,8 @@ namespace OrderManagerAPI.Controllers
                     return NotFound("Erro ao validar o código do Material. Verifique o código fornecido.");
                 }
 
+                _sqlProductMaterial.DeleteProductMaterial(MaterialCode);
+
                 _sql.DeleteMaterial(MaterialCode);
 
                 return Ok("Material excluído com sucesso!");
@@ -114,5 +132,6 @@ namespace OrderManagerAPI.Controllers
             }
 
         }
+
     }
 }
