@@ -6,20 +6,31 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace OrderManagerAPP
 {
     public partial class Frm_Main : Form
     {
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern bool ReleaseCapture();
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
+
+        private const int WM_NCLBUTTONDOWN = 0xA1;
+        private const int HTCAPTION = 0x2;
         public Frm_Main()
         {
             InitializeComponent();
             SelectButton(BtnOrder);
+            TLPnlTop.MouseDown += TLPnlTop_MouseDown;
         }
+
         private void SelectButton(Button selectedButton)
         {
-            UC_Page UC_Page = new UC_Page();
             PnlPage.Controls.Clear();
 
             Color defaultColor = Color.FromArgb(83, 126, 235);
@@ -40,9 +51,42 @@ namespace OrderManagerAPP
             selectedButton.BackColor = selectedColor;
             PnlNav.Top = selectedButton.Top;
             PnlNav.Height = selectedButton.Height;
-            PnlNav.Location = new Point(selectedButton.Location.X, selectedButton.Location.Y + 66);
-            UC_Page.Title = selectedButton.Tag.ToString();
-            PnlPage.Controls.Add(UC_Page);
+            PnlNav.Location = new Point(selectedButton.Location.X, selectedButton.Location.Y + 65);
+
+            Form selectedForm = null;
+            switch (selectedButton.Name)
+            {
+                case "BtnOrder":
+                    selectedForm = new Frm_Order();
+                    break;
+                //case "BtnProduction":
+                //    selectedForm = new Frm_Production(); 
+                //    break;
+                //case "BtnProduct":
+                //    selectedForm = new Frm_Product(); 
+                //    break;
+                //case "BtnMaterial":
+                //    selectedForm = new Frm_Material(); 
+                //    break;
+                case "BtnUser":
+                    selectedForm = new Frm_User();
+                    break;
+            }
+
+            if (selectedForm != null)
+            {
+                selectedForm.TopLevel = false;  
+                selectedForm.FormBorderStyle = FormBorderStyle.None;  
+                selectedForm.Dock = DockStyle.Fill;
+
+                if (selectedForm is Base baseForm)
+                {
+                    baseForm.Title = selectedButton.Tag?.ToString() ?? "Sem título";
+                }
+
+                PnlPage.Controls.Add(selectedForm);
+                selectedForm.Show();  
+            }
 
         }
 
@@ -91,6 +135,24 @@ namespace OrderManagerAPP
         private void BtnUser_Click(object sender, EventArgs e)
         {
             SelectButton(BtnUser);
+        }
+
+        private void TLPnlTop_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+        private void TLPnlTop_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(this.Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+            }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

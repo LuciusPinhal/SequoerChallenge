@@ -74,11 +74,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Base.Designer.cs">
+      <DependentUpon>Base.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frm_Main.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Frm_Main.Designer.cs">
       <DependentUpon>Frm_Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frm_Order.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm_Order.Designer.cs">
+      <DependentUpon>Frm_Order.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frm_User.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm_User.Designer.cs">
+      <DependentUpon>Frm_User.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Material.cs" />
     <Compile Include="Models\Order.cs" />
@@ -92,30 +110,21 @@
     <Compile Include="Teste.Designer.cs">
       <DependentUpon>Teste.cs</DependentUpon>
     </Compile>
-    <Compile Include="UC_Page.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UC_Page.Designer.cs">
-      <DependentUpon>UC_Page.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="Frm_Main.resx">
       <DependentUpon>Frm_Main.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Frm_Order.resx">
+      <DependentUpon>Frm_Order.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm_User.resx">
+      <DependentUpon>Frm_User.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="Teste.resx">
       <DependentUpon>Teste.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UC_Page.resx">
-      <DependentUpon>UC_Page.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -131,44 +140,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <None Include="Resources\botãoOrdem.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Max.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Close.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Min.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\OrdemProdução.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\botãoProduto.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BotãoMaterial.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BotaoUser.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Order.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\producao.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\produto.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Material.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\User.png" />
+    <None Include="Resources\Frame 99.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

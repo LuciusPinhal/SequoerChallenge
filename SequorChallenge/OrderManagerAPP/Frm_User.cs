@@ -10,23 +10,21 @@ using System.Windows.Forms;
 
 namespace OrderManagerAPP
 {
-    public partial class UC_Page : UserControl
+    public partial class Frm_User : Base
     {
-        public UC_Page()
+        public Frm_User()
         {
             InitializeComponent();
         }
 
-        public string Title
+        private void Frm_User_Load(object sender, EventArgs e)
         {
-            get 
-            { 
-                return TitleLabel.Text; 
-            }
-            set
-            {
-                TitleLabel.Text = value;
-            }
+
+        }
+
+        private void TitleLabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

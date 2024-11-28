@@ -29,4 +29,5 @@ C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\Ord
 C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\bin\Debug\System.ValueTuple.xml
 C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\ProductionOrderFlowAPP.csproj.CopyComplete
 C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.Frm_Main.resources
-C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.UC_Page.resources
+C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.Frm_User.resources
+C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.Frm_Order.resources
