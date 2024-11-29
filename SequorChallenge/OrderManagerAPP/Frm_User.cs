@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace OrderManagerAPP
 {
@@ -23,7 +24,10 @@ namespace OrderManagerAPP
         public Frm_User()
         {
             InitializeComponent();
+
             btnEdit.Enabled = false;
+            btnDelete.Enabled = false;
+
             messageTimer = new Timer();
             messageTimer.Interval = 5000;
             messageTimer.Tick += MessageTimer_Tick;
@@ -63,7 +67,7 @@ namespace OrderManagerAPP
         {
             if (!painelAberto)
             {
-                Timer.Start();
+                Timer.Start();         
             }
         }
 
@@ -101,6 +105,7 @@ namespace OrderManagerAPP
         private void BtnExit_Click(object sender, EventArgs e)
         {
             Timer.Start();
+            ClearText();
         }
         private async void Frm_User_Load(object sender, EventArgs e)
         {
@@ -127,10 +132,12 @@ namespace OrderManagerAPP
         private void BtnCancelar_Click(object sender, EventArgs e)
         {
             Timer.Start();
+            ClearText();
         }
 
         private void BtnAdd_Click(object sender, EventArgs e)
         {
+            ClearText();
             AbrirPainel();
             TitlePainel = "Adicionar";
 
@@ -149,7 +156,6 @@ namespace OrderManagerAPP
             TxtNameUser.Text = NameSelect;
             DateInitial.Text = DateInitSelect;
             EndDate.Text = EndDateSelect;
-
         }
 
         private void Grid_Users_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -172,6 +178,7 @@ namespace OrderManagerAPP
                 else
                 {
                     btnEdit.Enabled = false;
+                    btnDelete.Enabled = false;
                 }
             }
         }
@@ -182,7 +189,11 @@ namespace OrderManagerAPP
             btnEdit.BackColor = Color.FromArgb(83, 126, 235);
             btnEdit.Cursor = Cursors.Hand;
 
-            TxtMensagem.Text = "Usuario Selecionado: " + NameSelect;
+            btnDelete.Enabled = true;
+            btnDelete.BackColor = Color.FromArgb(83, 126, 235);
+            btnDelete.Cursor = Cursors.Hand;
+
+            TxtMensagem.Text = "Usuário Selecionado: " + NameSelect;
             TxtMensagem.Visible = true;
             Messagem.Visible = true;
             messageTimer.Start();
@@ -253,9 +264,24 @@ namespace OrderManagerAPP
             if (TxtPainel.Text == "Adicionar")
             {
                 await AddUserAsync();
+                ClearText();
+
+            } else if (TxtPainel.Text == "Editar")
+            {
+                await EditUserAsync();
             }
 
+            //fechar modal
+            //Timer.Start();
+           
             await LoadOrdersAsync();
+        }
+        private void ClearText()
+        {
+            textEmail.Text = "";
+            TxtNameUser.Text = "";
+            DateInitial.Value = DateTime.Now;
+            EndDate.Value = DateTime.Now;
         }
 
         private async Task AddUserAsync()
@@ -317,6 +343,63 @@ namespace OrderManagerAPP
 
         }
 
+        private async Task EditUserAsync()
+        {
+            User user = new User
+            {
+                Email = textEmail.Text,
+                Name = TxtNameUser.Text,
+                InitialDate = DateInitial.Value,
+                EndDate = EndDate.Value
+            };
+
+            string jsonContent = JsonSerializer.Serialize(user);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.PutAsync("http://localhost:5178/api/User/UpdateUser", content);
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    string errorMessages = "";
+                    string infoMessages = "";
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseObject = JsonSerializer.Deserialize<JsonElement>(responseContent);
+                        if (responseObject.TryGetProperty("message", out JsonElement messageElement))
+                        {
+                            string message = messageElement.GetString();
+                            if (message != "usuário atualizado com sucesso." && message != "usuário validado com sucesso.")
+                            {
+                                ProcessResponseMessages(responseObject, ref errorMessages, ref infoMessages);
+                                UpdateMessageLabel(errorMessages, infoMessages);
+                            }
+                        }
+
+                        TxtMensagem.Text = "Usuário Atualizado: " + user.Name;
+                        TxtMensagem.Visible = true;
+                        Messagem.Visible = true;
+                        messageTimer.Start();
+                    }
+                    else
+                    {
+                        var responseObject = JsonSerializer.Deserialize<JsonElement>(responseContent);
+                        ProcessResponseMessages(responseObject, ref errorMessages, ref infoMessages);
+
+                        UpdateMessageLabel(errorMessages, infoMessages);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                UpdateMessageLabel($"Ocorreu um erro: {ex.Message}", "");
+            }
+        }
+
+
         private void ProcessResponseMessages(JsonElement responseObject, ref string errorMessages, ref string infoMessages)
         {
             if (responseObject.TryGetProperty("errors", out JsonElement errors) && errors.GetArrayLength() > 0)
@@ -350,6 +433,62 @@ namespace OrderManagerAPP
             messageTimer.Start();
         }
 
-     
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            ModalCancel(true);
+            textDelInfo.Text = NameSelect;
+
+        }
+
+        private void bntCancelDel_Click(object sender, EventArgs e)
+        {
+            ModalCancel(false);
+        }
+
+        private void ModalCancel(bool Active)
+        {
+            pnlDel.Visible = Active;
+            pictureDel.Visible = Active;
+            textDel.Visible = Active;
+            textDelInfo.Visible = Active;
+            bntCancelDel.Visible = Active;
+            bntConfirmDel.Visible = Active;
+        }
+        private async void bntConfirmDel_Click(object sender, EventArgs e)
+        {
+
+            string apiUrl = $"http://localhost:5178/api/User/Delete/{EmailSelect}";
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.DeleteAsync(apiUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        TxtMensagem.Text = "Usuário deletado com sucesso: " + NameSelect;
+                        TxtMensagem.Visible = true;
+                        Messagem.Visible = true;
+                        messageTimer.Start();                    
+                    }
+                    else
+                    {
+                        string responseContent = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show($"Erro ao deletar o usuário: {responseContent}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro: {ex.Message}");
+            }
+
+            await LoadOrdersAsync();
+
+            ModalCancel(false);
+        }
+
+
     }
 }

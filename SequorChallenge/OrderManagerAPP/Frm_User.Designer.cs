@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm_User));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.TlPnlTop = new System.Windows.Forms.TableLayoutPanel();
             this.btnEdit = new System.Windows.Forms.Button();
             this.PnlSearch = new System.Windows.Forms.Panel();
@@ -54,10 +54,17 @@
             this.label1 = new System.Windows.Forms.Label();
             this.TxtName = new System.Windows.Forms.Label();
             this.EndDate = new System.Windows.Forms.DateTimePicker();
+            this.TxtNameUser = new System.Windows.Forms.TextBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.Timer = new System.Windows.Forms.Timer(this.components);
             this.PnlGrid = new System.Windows.Forms.Panel();
+            this.pnlDel = new System.Windows.Forms.Panel();
+            this.textDelInfo = new System.Windows.Forms.TextBox();
+            this.bntConfirmDel = new System.Windows.Forms.Button();
+            this.bntCancelDel = new System.Windows.Forms.Button();
+            this.pictureDel = new System.Windows.Forms.PictureBox();
+            this.textDel = new System.Windows.Forms.TextBox();
             this.Messagem = new System.Windows.Forms.Panel();
             this.TxtMensagem = new System.Windows.Forms.TextBox();
             this.Grid_Users = new System.Windows.Forms.DataGridView();
@@ -65,7 +72,6 @@
             this.Email = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.InitialDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DateEnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TxtNameUser = new System.Windows.Forms.TextBox();
             this.TlPnlTop.SuspendLayout();
             this.PnlSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSearch)).BeginInit();
@@ -73,6 +79,8 @@
             this.panel4.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.PnlGrid.SuspendLayout();
+            this.pnlDel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureDel)).BeginInit();
             this.Messagem.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Grid_Users)).BeginInit();
             this.SuspendLayout();
@@ -95,7 +103,7 @@
             this.TlPnlTop.Controls.Add(this.BtnAdd, 1, 1);
             this.TlPnlTop.Controls.Add(this.btnDelete, 5, 1);
             this.TlPnlTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.TlPnlTop.Location = new System.Drawing.Point(2, 2);
+            this.TlPnlTop.Location = new System.Drawing.Point(2, 62);
             this.TlPnlTop.Margin = new System.Windows.Forms.Padding(0);
             this.TlPnlTop.Name = "TlPnlTop";
             this.TlPnlTop.RowCount = 2;
@@ -202,6 +210,7 @@
             this.btnDelete.Size = new System.Drawing.Size(120, 40);
             this.btnDelete.TabIndex = 10;
             this.btnDelete.UseVisualStyleBackColor = false;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // ContainerPainel
             // 
@@ -214,10 +223,10 @@
             this.ContainerPainel.Controls.Add(this.panel3);
             this.ContainerPainel.Controls.Add(this.panel2);
             this.ContainerPainel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ContainerPainel.Location = new System.Drawing.Point(1366, 62);
+            this.ContainerPainel.Location = new System.Drawing.Point(1366, 122);
             this.ContainerPainel.Margin = new System.Windows.Forms.Padding(40);
             this.ContainerPainel.Name = "ContainerPainel";
-            this.ContainerPainel.Size = new System.Drawing.Size(350, 891);
+            this.ContainerPainel.Size = new System.Drawing.Size(350, 831);
             this.ContainerPainel.TabIndex = 9;
             // 
             // TextInfo
@@ -424,11 +433,21 @@
             this.EndDate.Size = new System.Drawing.Size(286, 26);
             this.EndDate.TabIndex = 20;
             // 
+            // TxtNameUser
+            // 
+            this.TxtNameUser.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tableLayoutPanel1.SetColumnSpan(this.TxtNameUser, 2);
+            this.TxtNameUser.Location = new System.Drawing.Point(3, 53);
+            this.TxtNameUser.Name = "TxtNameUser";
+            this.TxtNameUser.Size = new System.Drawing.Size(286, 26);
+            this.TxtNameUser.TabIndex = 28;
+            this.TxtNameUser.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TxtNameUser_MouseClick);
+            // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.White;
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(0, 881);
+            this.panel3.Location = new System.Drawing.Point(0, 821);
             this.panel3.Margin = new System.Windows.Forms.Padding(0);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(350, 10);
@@ -450,15 +469,112 @@
             // 
             // PnlGrid
             // 
+            this.PnlGrid.Controls.Add(this.pnlDel);
             this.PnlGrid.Controls.Add(this.Messagem);
             this.PnlGrid.Controls.Add(this.Grid_Users);
             this.PnlGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PnlGrid.Location = new System.Drawing.Point(2, 62);
+            this.PnlGrid.Location = new System.Drawing.Point(2, 122);
             this.PnlGrid.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.PnlGrid.Name = "PnlGrid";
             this.PnlGrid.Padding = new System.Windows.Forms.Padding(40, 59, 60, 10);
-            this.PnlGrid.Size = new System.Drawing.Size(1364, 891);
+            this.PnlGrid.Size = new System.Drawing.Size(1364, 831);
             this.PnlGrid.TabIndex = 10;
+            // 
+            // pnlDel
+            // 
+            this.pnlDel.AutoSize = true;
+            this.pnlDel.BackColor = System.Drawing.Color.White;
+            this.pnlDel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pnlDel.Controls.Add(this.textDelInfo);
+            this.pnlDel.Controls.Add(this.bntConfirmDel);
+            this.pnlDel.Controls.Add(this.bntCancelDel);
+            this.pnlDel.Controls.Add(this.pictureDel);
+            this.pnlDel.Controls.Add(this.textDel);
+            this.pnlDel.Location = new System.Drawing.Point(560, 157);
+            this.pnlDel.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlDel.Name = "pnlDel";
+            this.pnlDel.Size = new System.Drawing.Size(488, 310);
+            this.pnlDel.TabIndex = 12;
+            this.pnlDel.Visible = false;
+            // 
+            // textDelInfo
+            // 
+            this.textDelInfo.BackColor = System.Drawing.Color.White;
+            this.textDelInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textDelInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textDelInfo.ForeColor = System.Drawing.Color.Black;
+            this.textDelInfo.Location = new System.Drawing.Point(10, 178);
+            this.textDelInfo.Margin = new System.Windows.Forms.Padding(10);
+            this.textDelInfo.Name = "textDelInfo";
+            this.textDelInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textDelInfo.Size = new System.Drawing.Size(456, 22);
+            this.textDelInfo.TabIndex = 16;
+            this.textDelInfo.Text = "Defaut";
+            this.textDelInfo.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textDelInfo.Visible = false;
+            // 
+            // bntConfirmDel
+            // 
+            this.bntConfirmDel.BackColor = System.Drawing.Color.Red;
+            this.bntConfirmDel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("bntConfirmDel.BackgroundImage")));
+            this.bntConfirmDel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.bntConfirmDel.FlatAppearance.BorderSize = 0;
+            this.bntConfirmDel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(43)))), ((int)(((byte)(40)))));
+            this.bntConfirmDel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bntConfirmDel.Location = new System.Drawing.Point(268, 237);
+            this.bntConfirmDel.Margin = new System.Windows.Forms.Padding(0);
+            this.bntConfirmDel.Name = "bntConfirmDel";
+            this.bntConfirmDel.Size = new System.Drawing.Size(140, 40);
+            this.bntConfirmDel.TabIndex = 15;
+            this.bntConfirmDel.UseVisualStyleBackColor = false;
+            this.bntConfirmDel.Visible = false;
+            this.bntConfirmDel.Click += new System.EventHandler(this.bntConfirmDel_Click);
+            // 
+            // bntCancelDel
+            // 
+            this.bntCancelDel.BackColor = System.Drawing.Color.White;
+            this.bntCancelDel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("bntCancelDel.BackgroundImage")));
+            this.bntCancelDel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.bntCancelDel.FlatAppearance.BorderSize = 0;
+            this.bntCancelDel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.bntCancelDel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bntCancelDel.Location = new System.Drawing.Point(96, 237);
+            this.bntCancelDel.Margin = new System.Windows.Forms.Padding(0);
+            this.bntCancelDel.Name = "bntCancelDel";
+            this.bntCancelDel.Size = new System.Drawing.Size(139, 40);
+            this.bntCancelDel.TabIndex = 14;
+            this.bntCancelDel.UseVisualStyleBackColor = false;
+            this.bntCancelDel.Visible = false;
+            this.bntCancelDel.Click += new System.EventHandler(this.bntCancelDel_Click);
+            // 
+            // pictureDel
+            // 
+            this.pictureDel.BackColor = System.Drawing.Color.Transparent;
+            this.pictureDel.Image = ((System.Drawing.Image)(resources.GetObject("pictureDel.Image")));
+            this.pictureDel.InitialImage = null;
+            this.pictureDel.Location = new System.Drawing.Point(205, 14);
+            this.pictureDel.Name = "pictureDel";
+            this.pictureDel.Size = new System.Drawing.Size(81, 81);
+            this.pictureDel.TabIndex = 3;
+            this.pictureDel.TabStop = false;
+            this.pictureDel.Visible = false;
+            // 
+            // textDel
+            // 
+            this.textDel.BackColor = System.Drawing.Color.White;
+            this.textDel.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textDel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textDel.ForeColor = System.Drawing.Color.Black;
+            this.textDel.Location = new System.Drawing.Point(18, 117);
+            this.textDel.Margin = new System.Windows.Forms.Padding(10);
+            this.textDel.Multiline = true;
+            this.textDel.Name = "textDel";
+            this.textDel.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textDel.Size = new System.Drawing.Size(456, 51);
+            this.textDel.TabIndex = 2;
+            this.textDel.Text = "Você tem certeza que deseja \r\nexcluir este registro?";
+            this.textDel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textDel.Visible = false;
             // 
             // Messagem
             // 
@@ -495,14 +611,14 @@
             this.Grid_Users.BackgroundColor = System.Drawing.Color.White;
             this.Grid_Users.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.Grid_Users.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(126)))), ((int)(((byte)(235)))));
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(126)))), ((int)(((byte)(235)))));
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Grid_Users.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(126)))), ((int)(((byte)(235)))));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(126)))), ((int)(((byte)(235)))));
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Grid_Users.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.Grid_Users.ColumnHeadersHeight = 54;
             this.Grid_Users.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.Grid_Users.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -531,7 +647,7 @@
             this.Grid_Users.RowTemplate.DividerHeight = 3;
             this.Grid_Users.RowTemplate.Height = 40;
             this.Grid_Users.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.Grid_Users.Size = new System.Drawing.Size(1264, 822);
+            this.Grid_Users.Size = new System.Drawing.Size(1264, 762);
             this.Grid_Users.TabIndex = 0;
             this.Grid_Users.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Grid_Users_CellClick);
             // 
@@ -558,16 +674,6 @@
             this.DateEnd.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.DateEnd.HeaderText = "Data Final";
             this.DateEnd.Name = "DateEnd";
-            // 
-            // TxtNameUser
-            // 
-            this.TxtNameUser.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel1.SetColumnSpan(this.TxtNameUser, 2);
-            this.TxtNameUser.Location = new System.Drawing.Point(3, 53);
-            this.TxtNameUser.Name = "TxtNameUser";
-            this.TxtNameUser.Size = new System.Drawing.Size(286, 26);
-            this.TxtNameUser.TabIndex = 28;
-            this.TxtNameUser.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TxtNameUser_MouseClick);
             // 
             // Frm_User
             // 
@@ -596,6 +702,9 @@
             this.tableLayoutPanel1.PerformLayout();
             this.PnlGrid.ResumeLayout(false);
             this.PnlGrid.PerformLayout();
+            this.pnlDel.ResumeLayout(false);
+            this.pnlDel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureDel)).EndInit();
             this.Messagem.ResumeLayout(false);
             this.Messagem.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Grid_Users)).EndInit();
@@ -639,5 +748,11 @@
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.RichTextBox TextInfo;
         private System.Windows.Forms.TextBox TxtNameUser;
+        private System.Windows.Forms.Panel pnlDel;
+        private System.Windows.Forms.TextBox textDel;
+        private System.Windows.Forms.PictureBox pictureDel;
+        private System.Windows.Forms.TextBox textDelInfo;
+        private System.Windows.Forms.Button bntConfirmDel;
+        private System.Windows.Forms.Button bntCancelDel;
     }
 }
