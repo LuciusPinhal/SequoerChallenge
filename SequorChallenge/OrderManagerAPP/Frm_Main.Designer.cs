@@ -32,18 +32,18 @@
             this.label1 = new System.Windows.Forms.Label();
             this.TLPnlMenu = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.TLPnlTop = new System.Windows.Forms.TableLayoutPanel();
+            this.PnlNav = new System.Windows.Forms.Label();
+            this.PnlFill = new System.Windows.Forms.Panel();
+            this.PnlPage = new System.Windows.Forms.Panel();
             this.BtnOrder = new System.Windows.Forms.Button();
             this.BtnProduction = new System.Windows.Forms.Button();
             this.BtnProduct = new System.Windows.Forms.Button();
             this.BtnMaterial = new System.Windows.Forms.Button();
             this.BtnUser = new System.Windows.Forms.Button();
-            this.TLPnlTop = new System.Windows.Forms.TableLayoutPanel();
             this.BtnMinimize = new System.Windows.Forms.Button();
             this.BtnMaximize = new System.Windows.Forms.Button();
             this.BtnExit = new System.Windows.Forms.Button();
-            this.PnlNav = new System.Windows.Forms.Label();
-            this.PnlFill = new System.Windows.Forms.Panel();
-            this.PnlPage = new System.Windows.Forms.Panel();
             this.TLPnlMenu.SuspendLayout();
             this.TLPnlTop.SuspendLayout();
             this.PnlFill.SuspendLayout();
@@ -97,93 +97,6 @@
             this.panel1.Size = new System.Drawing.Size(166, 2);
             this.panel1.TabIndex = 0;
             // 
-            // BtnOrder
-            // 
-            this.BtnOrder.BackColor = System.Drawing.Color.Transparent;
-            this.BtnOrder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnOrder.BackgroundImage")));
-            this.BtnOrder.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnOrder.FlatAppearance.BorderSize = 0;
-            this.BtnOrder.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
-            this.BtnOrder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnOrder.ForeColor = System.Drawing.Color.Transparent;
-            this.BtnOrder.ImageIndex = 2;
-            this.BtnOrder.Location = new System.Drawing.Point(5, 7);
-            this.BtnOrder.Margin = new System.Windows.Forms.Padding(5);
-            this.BtnOrder.Name = "BtnOrder";
-            this.BtnOrder.Size = new System.Drawing.Size(156, 146);
-            this.BtnOrder.TabIndex = 14;
-            this.BtnOrder.Tag = "Order";
-            this.BtnOrder.UseVisualStyleBackColor = false;
-            this.BtnOrder.Click += new System.EventHandler(this.BtnOrder_Click);
-            // 
-            // BtnProduction
-            // 
-            this.BtnProduction.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnProduction.BackgroundImage")));
-            this.BtnProduction.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnProduction.FlatAppearance.BorderSize = 0;
-            this.BtnProduction.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
-            this.BtnProduction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnProduction.ImageIndex = 2;
-            this.BtnProduction.Location = new System.Drawing.Point(5, 163);
-            this.BtnProduction.Margin = new System.Windows.Forms.Padding(5);
-            this.BtnProduction.Name = "BtnProduction";
-            this.BtnProduction.Size = new System.Drawing.Size(156, 146);
-            this.BtnProduction.TabIndex = 13;
-            this.BtnProduction.Tag = "Produção";
-            this.BtnProduction.UseVisualStyleBackColor = true;
-            this.BtnProduction.Click += new System.EventHandler(this.BtnProduction_Click);
-            // 
-            // BtnProduct
-            // 
-            this.BtnProduct.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnProduct.BackgroundImage")));
-            this.BtnProduct.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnProduct.FlatAppearance.BorderSize = 0;
-            this.BtnProduct.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
-            this.BtnProduct.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnProduct.ImageIndex = 2;
-            this.BtnProduct.Location = new System.Drawing.Point(5, 319);
-            this.BtnProduct.Margin = new System.Windows.Forms.Padding(5);
-            this.BtnProduct.Name = "BtnProduct";
-            this.BtnProduct.Size = new System.Drawing.Size(156, 146);
-            this.BtnProduct.TabIndex = 12;
-            this.BtnProduct.Tag = "Produto";
-            this.BtnProduct.UseVisualStyleBackColor = true;
-            this.BtnProduct.Click += new System.EventHandler(this.BtnProduct_Click);
-            // 
-            // BtnMaterial
-            // 
-            this.BtnMaterial.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnMaterial.BackgroundImage")));
-            this.BtnMaterial.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnMaterial.FlatAppearance.BorderSize = 0;
-            this.BtnMaterial.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
-            this.BtnMaterial.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnMaterial.ImageIndex = 2;
-            this.BtnMaterial.Location = new System.Drawing.Point(5, 475);
-            this.BtnMaterial.Margin = new System.Windows.Forms.Padding(5);
-            this.BtnMaterial.Name = "BtnMaterial";
-            this.BtnMaterial.Size = new System.Drawing.Size(156, 146);
-            this.BtnMaterial.TabIndex = 11;
-            this.BtnMaterial.Tag = "Material";
-            this.BtnMaterial.UseVisualStyleBackColor = true;
-            this.BtnMaterial.Click += new System.EventHandler(this.BtnMaterial_Click);
-            // 
-            // BtnUser
-            // 
-            this.BtnUser.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnUser.BackgroundImage")));
-            this.BtnUser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnUser.FlatAppearance.BorderSize = 0;
-            this.BtnUser.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
-            this.BtnUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnUser.ImageIndex = 2;
-            this.BtnUser.Location = new System.Drawing.Point(5, 631);
-            this.BtnUser.Margin = new System.Windows.Forms.Padding(5);
-            this.BtnUser.Name = "BtnUser";
-            this.BtnUser.Size = new System.Drawing.Size(156, 146);
-            this.BtnUser.TabIndex = 10;
-            this.BtnUser.Tag = "Usuário";
-            this.BtnUser.UseVisualStyleBackColor = true;
-            this.BtnUser.Click += new System.EventHandler(this.BtnUser_Click);
-            // 
             // TLPnlTop
             // 
             this.TLPnlTop.ColumnCount = 8;
@@ -208,51 +121,6 @@
             this.TLPnlTop.Size = new System.Drawing.Size(1904, 64);
             this.TLPnlTop.TabIndex = 0;
             this.TLPnlTop.Paint += new System.Windows.Forms.PaintEventHandler(this.TLPnlTop_Paint);
-            // 
-            // BtnMinimize
-            // 
-            this.BtnMinimize.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnMinimize.BackgroundImage")));
-            this.BtnMinimize.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnMinimize.FlatAppearance.BorderSize = 0;
-            this.BtnMinimize.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
-            this.BtnMinimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnMinimize.Location = new System.Drawing.Point(1753, 0);
-            this.BtnMinimize.Margin = new System.Windows.Forms.Padding(0);
-            this.BtnMinimize.Name = "BtnMinimize";
-            this.BtnMinimize.Size = new System.Drawing.Size(50, 64);
-            this.BtnMinimize.TabIndex = 4;
-            this.BtnMinimize.UseVisualStyleBackColor = true;
-            this.BtnMinimize.Click += new System.EventHandler(this.BtnMinimize_Click);
-            // 
-            // BtnMaximize
-            // 
-            this.BtnMaximize.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnMaximize.BackgroundImage")));
-            this.BtnMaximize.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnMaximize.FlatAppearance.BorderSize = 0;
-            this.BtnMaximize.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
-            this.BtnMaximize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnMaximize.Location = new System.Drawing.Point(1803, 0);
-            this.BtnMaximize.Margin = new System.Windows.Forms.Padding(0);
-            this.BtnMaximize.Name = "BtnMaximize";
-            this.BtnMaximize.Size = new System.Drawing.Size(50, 64);
-            this.BtnMaximize.TabIndex = 3;
-            this.BtnMaximize.UseVisualStyleBackColor = true;
-            this.BtnMaximize.Click += new System.EventHandler(this.BtnMaximize_Click);
-            // 
-            // BtnExit
-            // 
-            this.BtnExit.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnExit.BackgroundImage")));
-            this.BtnExit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BtnExit.FlatAppearance.BorderSize = 0;
-            this.BtnExit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
-            this.BtnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnExit.Location = new System.Drawing.Point(1853, 0);
-            this.BtnExit.Margin = new System.Windows.Forms.Padding(0);
-            this.BtnExit.Name = "BtnExit";
-            this.BtnExit.Size = new System.Drawing.Size(51, 64);
-            this.BtnExit.TabIndex = 2;
-            this.BtnExit.UseVisualStyleBackColor = true;
-            this.BtnExit.Click += new System.EventHandler(this.BtnExit_Click);
             // 
             // PnlNav
             // 
@@ -281,6 +149,146 @@
             this.PnlPage.Name = "PnlPage";
             this.PnlPage.Size = new System.Drawing.Size(1738, 977);
             this.PnlPage.TabIndex = 0;
+            // 
+            // BtnOrder
+            // 
+            this.BtnOrder.BackColor = System.Drawing.Color.Transparent;
+            this.BtnOrder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnOrder.BackgroundImage")));
+            this.BtnOrder.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnOrder.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnOrder.FlatAppearance.BorderSize = 0;
+            this.BtnOrder.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.BtnOrder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnOrder.ForeColor = System.Drawing.Color.Transparent;
+            this.BtnOrder.ImageIndex = 2;
+            this.BtnOrder.Location = new System.Drawing.Point(5, 7);
+            this.BtnOrder.Margin = new System.Windows.Forms.Padding(5);
+            this.BtnOrder.Name = "BtnOrder";
+            this.BtnOrder.Size = new System.Drawing.Size(156, 146);
+            this.BtnOrder.TabIndex = 14;
+            this.BtnOrder.Tag = "Order";
+            this.BtnOrder.UseVisualStyleBackColor = false;
+            this.BtnOrder.Click += new System.EventHandler(this.BtnOrder_Click);
+            // 
+            // BtnProduction
+            // 
+            this.BtnProduction.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnProduction.BackgroundImage")));
+            this.BtnProduction.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnProduction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnProduction.FlatAppearance.BorderSize = 0;
+            this.BtnProduction.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.BtnProduction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnProduction.ImageIndex = 2;
+            this.BtnProduction.Location = new System.Drawing.Point(5, 163);
+            this.BtnProduction.Margin = new System.Windows.Forms.Padding(5);
+            this.BtnProduction.Name = "BtnProduction";
+            this.BtnProduction.Size = new System.Drawing.Size(156, 146);
+            this.BtnProduction.TabIndex = 13;
+            this.BtnProduction.Tag = "Produção";
+            this.BtnProduction.UseVisualStyleBackColor = true;
+            this.BtnProduction.Click += new System.EventHandler(this.BtnProduction_Click);
+            // 
+            // BtnProduct
+            // 
+            this.BtnProduct.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnProduct.BackgroundImage")));
+            this.BtnProduct.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnProduct.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnProduct.FlatAppearance.BorderSize = 0;
+            this.BtnProduct.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.BtnProduct.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnProduct.ImageIndex = 2;
+            this.BtnProduct.Location = new System.Drawing.Point(5, 319);
+            this.BtnProduct.Margin = new System.Windows.Forms.Padding(5);
+            this.BtnProduct.Name = "BtnProduct";
+            this.BtnProduct.Size = new System.Drawing.Size(156, 146);
+            this.BtnProduct.TabIndex = 12;
+            this.BtnProduct.Tag = "Produto";
+            this.BtnProduct.UseVisualStyleBackColor = true;
+            this.BtnProduct.Click += new System.EventHandler(this.BtnProduct_Click);
+            // 
+            // BtnMaterial
+            // 
+            this.BtnMaterial.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnMaterial.BackgroundImage")));
+            this.BtnMaterial.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnMaterial.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnMaterial.FlatAppearance.BorderSize = 0;
+            this.BtnMaterial.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.BtnMaterial.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnMaterial.ImageIndex = 2;
+            this.BtnMaterial.Location = new System.Drawing.Point(5, 475);
+            this.BtnMaterial.Margin = new System.Windows.Forms.Padding(5);
+            this.BtnMaterial.Name = "BtnMaterial";
+            this.BtnMaterial.Size = new System.Drawing.Size(156, 146);
+            this.BtnMaterial.TabIndex = 11;
+            this.BtnMaterial.Tag = "Material";
+            this.BtnMaterial.UseVisualStyleBackColor = true;
+            this.BtnMaterial.Click += new System.EventHandler(this.BtnMaterial_Click);
+            // 
+            // BtnUser
+            // 
+            this.BtnUser.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnUser.BackgroundImage")));
+            this.BtnUser.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnUser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnUser.FlatAppearance.BorderSize = 0;
+            this.BtnUser.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.BtnUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnUser.ImageIndex = 2;
+            this.BtnUser.Location = new System.Drawing.Point(5, 631);
+            this.BtnUser.Margin = new System.Windows.Forms.Padding(5);
+            this.BtnUser.Name = "BtnUser";
+            this.BtnUser.Size = new System.Drawing.Size(156, 146);
+            this.BtnUser.TabIndex = 10;
+            this.BtnUser.Tag = "Usuário";
+            this.BtnUser.UseVisualStyleBackColor = true;
+            this.BtnUser.Click += new System.EventHandler(this.BtnUser_Click);
+            // 
+            // BtnMinimize
+            // 
+            this.BtnMinimize.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnMinimize.BackgroundImage")));
+            this.BtnMinimize.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnMinimize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnMinimize.FlatAppearance.BorderSize = 0;
+            this.BtnMinimize.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.BtnMinimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnMinimize.Location = new System.Drawing.Point(1753, 0);
+            this.BtnMinimize.Margin = new System.Windows.Forms.Padding(0);
+            this.BtnMinimize.Name = "BtnMinimize";
+            this.BtnMinimize.Size = new System.Drawing.Size(50, 64);
+            this.BtnMinimize.TabIndex = 4;
+            this.BtnMinimize.UseVisualStyleBackColor = true;
+            this.BtnMinimize.Click += new System.EventHandler(this.BtnMinimize_Click);
+            // 
+            // BtnMaximize
+            // 
+            this.BtnMaximize.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnMaximize.BackgroundImage")));
+            this.BtnMaximize.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnMaximize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnMaximize.FlatAppearance.BorderSize = 0;
+            this.BtnMaximize.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.BtnMaximize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnMaximize.Location = new System.Drawing.Point(1803, 0);
+            this.BtnMaximize.Margin = new System.Windows.Forms.Padding(0);
+            this.BtnMaximize.Name = "BtnMaximize";
+            this.BtnMaximize.Size = new System.Drawing.Size(50, 64);
+            this.BtnMaximize.TabIndex = 3;
+            this.BtnMaximize.UseVisualStyleBackColor = true;
+            this.BtnMaximize.Click += new System.EventHandler(this.BtnMaximize_Click);
+            // 
+            // BtnExit
+            // 
+            this.BtnExit.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BtnExit.BackgroundImage")));
+            this.BtnExit.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BtnExit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnExit.FlatAppearance.BorderSize = 0;
+            this.BtnExit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
+            this.BtnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnExit.Location = new System.Drawing.Point(1853, 0);
+            this.BtnExit.Margin = new System.Windows.Forms.Padding(0);
+            this.BtnExit.Name = "BtnExit";
+            this.BtnExit.Size = new System.Drawing.Size(51, 64);
+            this.BtnExit.TabIndex = 2;
+            this.BtnExit.UseVisualStyleBackColor = true;
+            this.BtnExit.Click += new System.EventHandler(this.BtnExit_Click);
             // 
             // Frm_Main
             // 
