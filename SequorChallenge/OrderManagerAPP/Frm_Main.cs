@@ -65,9 +65,9 @@ namespace OrderManagerAPP
                 //case "BtnProduct":
                 //    selectedForm = new Frm_Product(); 
                 //    break;
-                //case "BtnMaterial":
-                //    selectedForm = new Frm_Material(); 
-                //    break;
+                case "BtnMaterial":
+                    selectedForm = new Frm_Material();
+                    break;
                 case "BtnUser":
                     selectedForm = new Frm_User();
                     break;

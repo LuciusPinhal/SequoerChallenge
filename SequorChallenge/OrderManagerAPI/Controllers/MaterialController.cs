@@ -74,7 +74,7 @@ namespace OrderManagerAPI.Controllers
                     _sqlProductMaterial.CreateProductMaterial(newMaterial);
                 }
 
-                return Ok("Material criado com sucesso!");
+                return StatusCode(200, "Material criado com sucesso!");
             }
             catch (Exception ex)
             {

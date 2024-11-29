@@ -8,7 +8,6 @@ C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\Ord
 C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\ProductionOrderFlowAPP.csproj.CoreCompileInputs.cache
 C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.exe
 C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.pdb
-C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.Teste.resources
 C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\bin\Debug\System.Buffers.dll
 C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\bin\Debug\System.Memory.dll
@@ -32,3 +31,5 @@ C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\Ord
 C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.Frm_User.resources
 C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.Frm_Order.resources
 C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.Base.resources
+C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.Frm_Material.resources
+C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.Frm_Product.resources

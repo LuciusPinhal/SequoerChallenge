@@ -12,16 +12,22 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace OrderManagerAPP
 {
-    public partial class Frm_User : Base
+    public partial class Frm_Material : Base
     {
         private bool painelAberto = false;
         private Timer messageTimer;
 
-        public Frm_User()
+
+        private string VarCodeMaterial = null;
+        private string VarDescription = null;
+        private List<Order> order = new List<Order>();
+
+        public Frm_Material()
         {
             InitializeComponent();
 
@@ -52,7 +58,7 @@ namespace OrderManagerAPP
             Color selectedColor = Color.FromArgb(185, 205, 255);
 
 
-            TextBox[] textBoxes = { TxtNameUser, textEmail };
+            TextBox[] textBoxes = { TxtDescriptionL };
 
 
             foreach (TextBox Txt in textBoxes)
@@ -96,12 +102,9 @@ namespace OrderManagerAPP
         }
         private void TxtNameUser_MouseClick(object sender, MouseEventArgs e)
         {
-            SelectTxt(TxtNameUser);
+            SelectTxt(TxtDescriptionL);
         }
-        private void textEmail_MouseClick(object sender, MouseEventArgs e)
-        {
-            SelectTxt(textEmail);
-        }
+
         private void BtnExit_Click(object sender, EventArgs e)
         {
             Timer.Start();
@@ -135,27 +138,24 @@ namespace OrderManagerAPP
             ClearText();
         }
 
-        private void BtnAdd_Click(object sender, EventArgs e)
+        private async void BtnAdd_Click(object sender, EventArgs e)
         {
             ClearText();
+            await LoadProductAsync();
             AbrirPainel();
             TitlePainel = "Adicionar";
+            txtProductRelated.Visible = true;
+            ListProductCheck.Visible = true;
 
         }
-        private string EmailSelect = null;
-        private string NameSelect = null;
-        private string DateInitSelect = null;
-        private string EndDateSelect = null;
-
-
         private void btnEdit_Click(object sender, EventArgs e)
         {
             AbrirPainel();
-            TitlePainel = "Editar";
-            textEmail.Text = EmailSelect;
-            TxtNameUser.Text = NameSelect;
-            DateInitial.Text = DateInitSelect;
-            EndDate.Text = EndDateSelect;
+            TitlePainel = "Editar "+ VarCodeMaterial;
+            TxtDescriptionL.Text = VarDescription;
+            ListProductCheck.Visible = false;
+            txtProductRelated.Visible = false;
+
         }
 
         private void Grid_Users_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -165,13 +165,12 @@ namespace OrderManagerAPP
 
                 DataGridViewRow row = Grid_Users.Rows[e.RowIndex];
 
-                EmailSelect = row.Cells["Email"].Value?.ToString();
-                NameSelect = row.Cells["NameUser"].Value?.ToString();
-                DateInitSelect = row.Cells["InitialDate"].Value?.ToString();
-                EndDateSelect = row.Cells["DateEnd"].Value?.ToString();
+                VarCodeMaterial = row.Cells["CodeMaterial"].Value?.ToString();
+                VarDescription = row.Cells["Description"].Value?.ToString();
+            
 
 
-                if (!string.IsNullOrEmpty(EmailSelect))
+                if (!string.IsNullOrEmpty(VarCodeMaterial))
                 {
                     ReadyButtons();
                 }
@@ -193,7 +192,7 @@ namespace OrderManagerAPP
             btnDelete.BackColor = Color.FromArgb(83, 126, 235);
             btnDelete.Cursor = Cursors.Hand;
 
-            TxtMensagem.Text = "Usuário Selecionado: " + NameSelect;
+            TxtMensagem.Text = "Material Selecionado: " + VarCodeMaterial;
             TxtMensagem.Visible = true;
             Messagem.Visible = true;
             messageTimer.Start();
@@ -202,40 +201,31 @@ namespace OrderManagerAPP
         {
             string searchValue = TxtSearch.Text.Trim().ToLower();
 
-            // Verifica se o campo está vazio ou contém apenas "pesquisar"
             if (string.IsNullOrEmpty(searchValue) || searchValue == "pesquisar")
             {
-                // Torna todas as linhas visíveis
                 foreach (DataGridViewRow row in Grid_Users.Rows)
                 {
-                    if (!row.IsNewRow) // Ignorar a nova linha não confirmada
+                    if (!row.IsNewRow) 
                         row.Visible = true;
                 }
-                return; // Finaliza o método para evitar aplicar o filtro
+                return; 
             }
 
-            // Aplica o filtro caso contrário
             foreach (DataGridViewRow row in Grid_Users.Rows)
             {
                 if (row.IsNewRow)
                     continue;
 
-                // Verifica se alguma célula contém o texto buscado
-                bool visible = row.Cells["Email"].Value?.ToString().ToLower().Contains(searchValue) == true ||
-                               row.Cells["NameUser"].Value?.ToString().ToLower().Contains(searchValue) == true ||
-                               row.Cells["InitialDate"].Value?.ToString().ToLower().Contains(searchValue) == true ||
-                               row.Cells["DateEnd"].Value?.ToString().ToLower().Contains(searchValue) == true;
+                bool visible = row.Cells["CodeMaterial"].Value?.ToString().ToLower().Contains(searchValue) == true ||
+                               row.Cells["Description"].Value?.ToString().ToLower().Contains(searchValue) == true;
 
-                // Define a visibilidade da linha com base na busca
                 row.Visible = visible;
             }
         }
 
-
-
         private async Task LoadOrdersAsync()
         {
-            string apiUrl = "http://localhost:5178/api/User/GetUser";
+            string apiUrl = "http://localhost:5178/api/Material/GetMaterial";
 
             try
             {
@@ -248,19 +238,58 @@ namespace OrderManagerAPP
                     {
                         string jsonResponse = await response.Content.ReadAsStringAsync();
 
-                        var Users = JsonSerializer.Deserialize<List<User>>(jsonResponse, new JsonSerializerOptions
+                        var Materials = JsonSerializer.Deserialize<List<Material>>(jsonResponse, new JsonSerializerOptions
                         {
                             PropertyNameCaseInsensitive = true
                         });
                   
-                        foreach (var user in Users)
+                        foreach (var material in Materials)
                         {
-                            Grid_Users.Rows.Add(user.Name, user.Email, user.InitialDate, user.EndDate);
+                            Grid_Users.Rows.Add(material.MaterialCode, material.MaterialDescription);
                         }
                     }
                     else
                     {
-                        MessageBox.Show("Erro ao buscar os pedidos: " + response.ReasonPhrase);
+                        MessageBox.Show("Erro ao buscar os Materiais: " + response.ReasonPhrase);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+        private async Task LoadProductAsync()
+        {
+            string apiUrl = "http://localhost:5178/api/Product/GetProduct";
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = await response.Content.ReadAsStringAsync();
+
+                        // Supondo que a resposta seja uma lista de objetos com "materialCode"
+                        var orders = JsonSerializer.Deserialize<List<Order>>(jsonResponse, new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        });
+
+                        ListProductCheck.Items.Clear();
+
+                        foreach (var os in orders)
+                        {
+                            ListProductCheck.Items.Add(os.ProductCode);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Erro ao carregar materiais: " + response.ReasonPhrase);
                     }
                 }
             }
@@ -277,35 +306,37 @@ namespace OrderManagerAPP
                 await AddUserAsync();
                 ClearText();
 
-            } else if (TxtPainel.Text == "Editar")
+            } else if (TxtPainel.Text.Contains("Editar"))
             {
                 await EditUserAsync();
             }
 
             //fechar modal
             //Timer.Start();
-           
+            order = new List<Order>();
+            UncheckAllItems();
             await LoadOrdersAsync();
         }
         private void ClearText()
-        {
-            textEmail.Text = "";
-            TxtNameUser.Text = "";
-            DateInitial.Value = DateTime.Now;
-            EndDate.Value = DateTime.Now;
+        {       
+            TxtDescriptionL.Text = "";         
         }
 
         private async Task AddUserAsync()
         {
-            User user = new User
+            Material material = new Material
             {
-                Email = textEmail.Text,
-                Name = TxtNameUser.Text,
-                InitialDate = DateInitial.Value,
-                EndDate = EndDate.Value
+                MaterialCode = "",
+                MaterialDescription = TxtDescriptionL.Text
             };
 
-            string jsonContent = JsonSerializer.Serialize(user);
+           foreach(var existingOrder in order)
+           {
+               existingOrder.Materials.Add(material);
+           }
+ 
+
+            string jsonContent = JsonSerializer.Serialize(order);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
             try
@@ -313,114 +344,70 @@ namespace OrderManagerAPP
                 using (HttpClient client = new HttpClient())
                 {
 
-                    HttpResponseMessage response = await client.PostAsync("http://localhost:5178/api/User/SetUser", content);
-                    string responseContent = await response.Content.ReadAsStringAsync();
-
-                    string errorMessages = "";
-                    string infoMessages = "";
-
+                    HttpResponseMessage response = await client.PostAsync("http://localhost:5178/api/Material/SetMaterial", content);
                     if (response.IsSuccessStatusCode)
                     {
-                        var responseObject = JsonSerializer.Deserialize<JsonElement>(responseContent);
-                        if (responseObject.TryGetProperty("message", out JsonElement messageElement))
-                        {
-                            string message = messageElement.GetString();
-                            if (message != "usuário validado com sucesso.")
-                            {
-                                ProcessResponseMessages(responseObject, ref errorMessages, ref infoMessages);
-                                UpdateMessageLabel(errorMessages, infoMessages);
-                            }
-                        }
-                      
-
-                        TxtMensagem.Text = "Usuário Criado: " + user.Name;
+                        // Caso a resposta seja bem-sucedida, pode tratar a resposta aqui
+                        string responseContent = await response.Content.ReadAsStringAsync();
+                    
+                        TxtMensagem.Text = "Material Criado: " + TxtDescriptionL.Text;
                         TxtMensagem.Visible = true;
                         Messagem.Visible = true;
                         messageTimer.Start();
                     }
                     else
                     {
-                        var responseObject = JsonSerializer.Deserialize<JsonElement>(responseContent);
-                        ProcessResponseMessages(responseObject, ref errorMessages, ref infoMessages);
-
-                        UpdateMessageLabel(errorMessages, infoMessages);
+                        // Caso a resposta não seja bem-sucedida
+                        string errorContent = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show($"Erro ao adicionar materiais: {errorContent}");
                     }
                 }
+                   
             }
             catch (Exception ex)
             {
                 UpdateMessageLabel($"Ocorreu um erro: {ex.Message}", "");
             }
-
         }
 
         private async Task EditUserAsync()
         {
-            User user = new User
+            Material material = new Material
             {
-                Email = textEmail.Text,
-                Name = TxtNameUser.Text,
-                InitialDate = DateInitial.Value,
-                EndDate = EndDate.Value
+                MaterialCode = VarCodeMaterial,
+                MaterialDescription = TxtDescriptionL.Text
             };
 
-            string jsonContent = JsonSerializer.Serialize(user);
+            string jsonContent = JsonSerializer.Serialize(material);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    HttpResponseMessage response = await client.PutAsync("http://localhost:5178/api/User/UpdateUser", content);
-                    string responseContent = await response.Content.ReadAsStringAsync();
-
-                    string errorMessages = "";
-                    string infoMessages = "";
-
+                    HttpResponseMessage response = await client.PutAsync("http://localhost:5178/api/Material/UpdateMaterial", content);
                     if (response.IsSuccessStatusCode)
                     {
-                        var responseObject = JsonSerializer.Deserialize<JsonElement>(responseContent);
-                        if (responseObject.TryGetProperty("message", out JsonElement messageElement))
-                        {
-                            string message = messageElement.GetString();
-                            if (message != "usuário atualizado com sucesso." && message != "usuário validado com sucesso.")
-                            {
-                                ProcessResponseMessages(responseObject, ref errorMessages, ref infoMessages);
-                                UpdateMessageLabel(errorMessages, infoMessages);
-                            }
-                        }
+                        // Caso a resposta seja bem-sucedida, pode tratar a resposta aqui
+                        string responseContent = await response.Content.ReadAsStringAsync();
 
-                        TxtMensagem.Text = "Usuário Atualizado: " + user.Name;
+                        TxtMensagem.Text = "Material Atualizado: " + TxtDescriptionL.Text;
                         TxtMensagem.Visible = true;
                         Messagem.Visible = true;
                         messageTimer.Start();
                     }
                     else
                     {
-                        var responseObject = JsonSerializer.Deserialize<JsonElement>(responseContent);
-                        ProcessResponseMessages(responseObject, ref errorMessages, ref infoMessages);
-
-                        UpdateMessageLabel(errorMessages, infoMessages);
+                        // Caso a resposta não seja bem-sucedida
+                        string errorContent = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show($"Erro ao Editar materiais: {errorContent}");
                     }
+
                 }
             }
             catch (Exception ex)
             {
                 UpdateMessageLabel($"Ocorreu um erro: {ex.Message}", "");
-            }
-        }
-
-
-        private void ProcessResponseMessages(JsonElement responseObject, ref string errorMessages, ref string infoMessages)
-        {
-            if (responseObject.TryGetProperty("errors", out JsonElement errors) && errors.GetArrayLength() > 0)
-            {
-                errorMessages = "Erros:\n" + string.Join("\n", errors.EnumerateArray().Select(e => e.GetString())) + "\n";
-            }
-
-            if (responseObject.TryGetProperty("info", out JsonElement info) && info.GetArrayLength() > 0)
-            {
-                infoMessages = "Informações:\n" + string.Join("\n", info.EnumerateArray().Select(e => e.GetString())) + "\n";
             }
         }
 
@@ -447,7 +434,7 @@ namespace OrderManagerAPP
         private void btnDelete_Click(object sender, EventArgs e)
         {
             ModalCancel(true);
-            textDelInfo.Text = NameSelect;
+            textDelInfo.Text = VarCodeMaterial;
 
         }
 
@@ -468,7 +455,7 @@ namespace OrderManagerAPP
         private async void bntConfirmDel_Click(object sender, EventArgs e)
         {
 
-            string apiUrl = $"http://localhost:5178/api/User/Delete/{EmailSelect}";
+            string apiUrl = $"http://localhost:5178/api/Material/Delete/{VarCodeMaterial}";
 
             try
             {
@@ -478,10 +465,10 @@ namespace OrderManagerAPP
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TxtMensagem.Text = "Usuário deletado com sucesso: " + NameSelect;
+                        TxtMensagem.Text = "Material deletado com sucesso: " + VarCodeMaterial;
                         TxtMensagem.Visible = true;
                         Messagem.Visible = true;
-                        messageTimer.Start();                    
+                        messageTimer.Start();
                     }
                     else
                     {
@@ -498,6 +485,45 @@ namespace OrderManagerAPP
             await LoadOrdersAsync();
 
             ModalCancel(false);
+        }
+
+        private void ListProductCheck_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            GetSelectedProduct();
+        }
+
+        private void GetSelectedProduct()
+        {
+            foreach (var item in ListProductCheck.CheckedItems)
+            {
+                string productCode = item.ToString();        
+                bool productExists = order.Any(o => o.ProductCode == productCode);
+                
+                if (!productExists)
+                {
+                    Order newOrder = new Order()
+                    {
+                        OS = "",
+                        Quantity = 0,
+                        ProductCode = productCode,
+                        ProductDescription = "",
+                        Image = "",
+                        CycleTime = 0,
+                        Materials = new List<Material>()
+                    };
+
+                   
+                    order.Add(newOrder);
+                }
+            }
+        }
+
+        private void UncheckAllItems()
+        {
+            for (int i = 0; i < ListProductCheck.Items.Count; i++)
+            {
+                ListProductCheck.SetItemChecked(i, false); 
+            }
         }
 
 

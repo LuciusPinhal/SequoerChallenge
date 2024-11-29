@@ -16,12 +16,12 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace OrderManagerAPP
 {
-    public partial class Frm_User : Base
+    public partial class Frm_Product : Base
     {
         private bool painelAberto = false;
         private Timer messageTimer;
 
-        public Frm_User()
+        public Frm_Product()
         {
             InitializeComponent();
 
@@ -202,36 +202,25 @@ namespace OrderManagerAPP
         {
             string searchValue = TxtSearch.Text.Trim().ToLower();
 
-            // Verifica se o campo está vazio ou contém apenas "pesquisar"
-            if (string.IsNullOrEmpty(searchValue) || searchValue == "pesquisar")
+            if (searchValue != "" && searchValue != null && searchValue.ToLower() != "pesquisar")
             {
-                // Torna todas as linhas visíveis
                 foreach (DataGridViewRow row in Grid_Users.Rows)
                 {
-                    if (!row.IsNewRow) // Ignorar a nova linha não confirmada
-                        row.Visible = true;
+                    // Ignorar a nova linha não confirmada
+                    if (row.IsNewRow)
+                        continue;
+
+                    // Verifique se alguma célula contém o texto buscado
+                    bool visible = row.Cells["Email"].Value?.ToString().ToLower().Contains(searchValue) == true ||
+                                   row.Cells["NameUser"].Value?.ToString().ToLower().Contains(searchValue) == true ||
+                                   row.Cells["InitialDate"].Value?.ToString().ToLower().Contains(searchValue) == true ||
+                                   row.Cells["DateEnd"].Value?.ToString().ToLower().Contains(searchValue) == true;
+
+                    // Define a visibilidade da linha com base na busca
+                    row.Visible = visible;
                 }
-                return; // Finaliza o método para evitar aplicar o filtro
-            }
-
-            // Aplica o filtro caso contrário
-            foreach (DataGridViewRow row in Grid_Users.Rows)
-            {
-                if (row.IsNewRow)
-                    continue;
-
-                // Verifica se alguma célula contém o texto buscado
-                bool visible = row.Cells["Email"].Value?.ToString().ToLower().Contains(searchValue) == true ||
-                               row.Cells["NameUser"].Value?.ToString().ToLower().Contains(searchValue) == true ||
-                               row.Cells["InitialDate"].Value?.ToString().ToLower().Contains(searchValue) == true ||
-                               row.Cells["DateEnd"].Value?.ToString().ToLower().Contains(searchValue) == true;
-
-                // Define a visibilidade da linha com base na busca
-                row.Visible = visible;
             }
         }
-
-
 
         private async Task LoadOrdersAsync()
         {
