@@ -97,7 +97,7 @@
             this.TlPnlTop.Controls.Add(this.BtnAdd, 1, 1);
             this.TlPnlTop.Controls.Add(this.btnDelete, 5, 1);
             this.TlPnlTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.TlPnlTop.Location = new System.Drawing.Point(2, 2);
+            this.TlPnlTop.Location = new System.Drawing.Point(2, 62);
             this.TlPnlTop.Margin = new System.Windows.Forms.Padding(0);
             this.TlPnlTop.Name = "TlPnlTop";
             this.TlPnlTop.RowCount = 2;
@@ -217,10 +217,10 @@
             this.ContainerPainel.Controls.Add(this.panel3);
             this.ContainerPainel.Controls.Add(this.panel2);
             this.ContainerPainel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ContainerPainel.Location = new System.Drawing.Point(1366, 62);
+            this.ContainerPainel.Location = new System.Drawing.Point(1366, 122);
             this.ContainerPainel.Margin = new System.Windows.Forms.Padding(40);
             this.ContainerPainel.Name = "ContainerPainel";
-            this.ContainerPainel.Size = new System.Drawing.Size(350, 891);
+            this.ContainerPainel.Size = new System.Drawing.Size(350, 831);
             this.ContainerPainel.TabIndex = 9;
             // 
             // TextInfo
@@ -396,7 +396,7 @@
             // 
             this.panel3.BackColor = System.Drawing.Color.White;
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(0, 881);
+            this.panel3.Location = new System.Drawing.Point(0, 821);
             this.panel3.Margin = new System.Windows.Forms.Padding(0);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(350, 10);
@@ -422,11 +422,11 @@
             this.PnlGrid.Controls.Add(this.Messagem);
             this.PnlGrid.Controls.Add(this.Grid_Users);
             this.PnlGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PnlGrid.Location = new System.Drawing.Point(2, 62);
+            this.PnlGrid.Location = new System.Drawing.Point(2, 122);
             this.PnlGrid.Margin = new System.Windows.Forms.Padding(0, 0, 2, 2);
             this.PnlGrid.Name = "PnlGrid";
             this.PnlGrid.Padding = new System.Windows.Forms.Padding(40, 59, 60, 10);
-            this.PnlGrid.Size = new System.Drawing.Size(1364, 891);
+            this.PnlGrid.Size = new System.Drawing.Size(1364, 831);
             this.PnlGrid.TabIndex = 10;
             // 
             // pnlDel
@@ -594,7 +594,7 @@
             this.Grid_Users.RowTemplate.DividerHeight = 3;
             this.Grid_Users.RowTemplate.Height = 40;
             this.Grid_Users.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.Grid_Users.Size = new System.Drawing.Size(1264, 822);
+            this.Grid_Users.Size = new System.Drawing.Size(1264, 762);
             this.Grid_Users.TabIndex = 0;
             this.Grid_Users.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Grid_Users_CellClick);
             // 
