@@ -581,7 +581,8 @@ namespace OrderManagerAPP
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 PicProduct.ImageLocation = openFileDialog.FileName; 
-                VarImage = openFileDialog.FileName; 
+                VarImage = openFileDialog.FileName;
+                PicProduct.SizeMode = PictureBoxSizeMode.Zoom;
             }
         }
 
@@ -593,6 +594,7 @@ namespace OrderManagerAPP
             {
                 PicProduct.ImageLocation = openFileDialog.FileName;
                 VarImage = openFileDialog.FileName;
+                PicProduct.SizeMode = PictureBoxSizeMode.Zoom;
             }
         }
 
