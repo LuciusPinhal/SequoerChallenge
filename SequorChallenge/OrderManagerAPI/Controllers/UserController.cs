@@ -37,6 +37,36 @@ namespace OrderManagerAPI.Controllers
 
         }
 
+
+        [HttpGet]
+        [Route("GetEmail/{email}")]
+        public IActionResult GetEmail(string email)
+        {
+            try
+            {
+                // Obtém o usuário com base no email
+                User newUser = _sql.FindUser(email);
+
+                // Verifica se o usuário foi encontrado
+                if (newUser == null || string.IsNullOrEmpty(newUser.Email))
+                {
+                    return NotFound("Erro ao validar o email do usuário. Verifique o email fornecido.");
+                }
+
+                // Retorna o usuário encontrado
+                return Ok(newUser);
+            }
+            catch (Exception ex)
+            {
+                // Loga o erro
+                _logger.LogError($"Erro ao obter o usuário pelo email: {ex.Message}");
+
+                // Retorna um erro interno
+                return StatusCode(500, "Ocorreu um erro ao processar sua solicitação.");
+            }
+        }
+
+
         [HttpPost]
         [Route("SetUser")]
         public IActionResult CreateUser([FromBody] User newUser)

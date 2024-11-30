@@ -130,7 +130,12 @@ namespace OrderManagerAPP
         }
         private async void Frm_User_Load(object sender, EventArgs e)
         {
-            ContainerPainel.Width = 0;
+            ContainerPainel.Width = 0; 
+
+            if (!string.IsNullOrEmpty(EmailUsuario))
+            {
+                EmailSelect = EmailUsuario; 
+            }
             await LoadOrdersAsync();
         }
         private void TxtSearch_MouseClick(object sender, MouseEventArgs e)
@@ -288,12 +293,9 @@ namespace OrderManagerAPP
             }
         }
 
-
-
         private async Task LoadOrdersAsync()
         {
-            string email = "user1@example.com";
-            string apiUrl = $"http://localhost:5178/api/Production/GetProduction?email={email}";
+            string apiUrl = $"http://localhost:5178/api/Production/GetProduction?email={EmailSelect}";
 
             try
             {

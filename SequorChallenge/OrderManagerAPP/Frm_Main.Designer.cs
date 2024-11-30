@@ -44,6 +44,7 @@
             this.PnlNav = new System.Windows.Forms.Label();
             this.PnlFill = new System.Windows.Forms.Panel();
             this.PnlPage = new System.Windows.Forms.Panel();
+            this.LbEmail = new System.Windows.Forms.Label();
             this.TLPnlMenu.SuspendLayout();
             this.TLPnlTop.SuspendLayout();
             this.PnlFill.SuspendLayout();
@@ -52,21 +53,24 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label1.Font = new System.Drawing.Font("Sans Serif Collection", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.label1.Location = new System.Drawing.Point(33, 5);
             this.label1.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
             this.label1.Name = "label1";
             this.label1.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
-            this.label1.Size = new System.Drawing.Size(199, 36);
+            this.label1.Size = new System.Drawing.Size(274, 59);
             this.label1.TabIndex = 1;
             this.label1.Text = "Challenge Sequor";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // TLPnlMenu
             // 
             this.TLPnlMenu.ColumnCount = 1;
             this.TLPnlMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.TLPnlMenu.Controls.Add(this.LbEmail, 0, 6);
             this.TLPnlMenu.Controls.Add(this.panel1, 0, 0);
             this.TLPnlMenu.Controls.Add(this.BtnOrder, 0, 1);
             this.TLPnlMenu.Controls.Add(this.BtnProduction, 0, 2);
@@ -194,9 +198,9 @@
             this.TLPnlTop.ColumnCount = 8;
             this.TLPnlTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.TLPnlTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.TLPnlTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80F));
-            this.TLPnlTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.TLPnlTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+            this.TLPnlTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 280F));
+            this.TLPnlTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.TLPnlTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.TLPnlTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.TLPnlTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.TLPnlTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
@@ -210,7 +214,6 @@
             this.TLPnlTop.Name = "TLPnlTop";
             this.TLPnlTop.RowCount = 1;
             this.TLPnlTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.TLPnlTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.TLPnlTop.Size = new System.Drawing.Size(1904, 64);
             this.TLPnlTop.TabIndex = 0;
             this.TLPnlTop.Paint += new System.Windows.Forms.PaintEventHandler(this.TLPnlTop_Paint);
@@ -223,7 +226,7 @@
             this.BtnMinimize.FlatAppearance.BorderSize = 0;
             this.BtnMinimize.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
             this.BtnMinimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnMinimize.Location = new System.Drawing.Point(1753, 0);
+            this.BtnMinimize.Location = new System.Drawing.Point(1754, 0);
             this.BtnMinimize.Margin = new System.Windows.Forms.Padding(0);
             this.BtnMinimize.Name = "BtnMinimize";
             this.BtnMinimize.Size = new System.Drawing.Size(50, 64);
@@ -239,7 +242,7 @@
             this.BtnMaximize.FlatAppearance.BorderSize = 0;
             this.BtnMaximize.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
             this.BtnMaximize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnMaximize.Location = new System.Drawing.Point(1803, 0);
+            this.BtnMaximize.Location = new System.Drawing.Point(1804, 0);
             this.BtnMaximize.Margin = new System.Windows.Forms.Padding(0);
             this.BtnMaximize.Name = "BtnMaximize";
             this.BtnMaximize.Size = new System.Drawing.Size(50, 64);
@@ -255,10 +258,10 @@
             this.BtnExit.FlatAppearance.BorderSize = 0;
             this.BtnExit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.BtnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnExit.Location = new System.Drawing.Point(1853, 0);
+            this.BtnExit.Location = new System.Drawing.Point(1854, 0);
             this.BtnExit.Margin = new System.Windows.Forms.Padding(0);
             this.BtnExit.Name = "BtnExit";
-            this.BtnExit.Size = new System.Drawing.Size(51, 64);
+            this.BtnExit.Size = new System.Drawing.Size(50, 64);
             this.BtnExit.TabIndex = 2;
             this.BtnExit.UseVisualStyleBackColor = true;
             this.BtnExit.Click += new System.EventHandler(this.BtnExit_Click);
@@ -284,12 +287,25 @@
             // PnlPage
             // 
             this.PnlPage.BackColor = System.Drawing.Color.White;
-            this.PnlPage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PnlPage.Location = new System.Drawing.Point(0, 0);
             this.PnlPage.Margin = new System.Windows.Forms.Padding(0);
             this.PnlPage.Name = "PnlPage";
             this.PnlPage.Size = new System.Drawing.Size(1738, 977);
             this.PnlPage.TabIndex = 0;
+            // 
+            // LbEmail
+            // 
+            this.LbEmail.AutoSize = true;
+            this.LbEmail.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LbEmail.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LbEmail.ForeColor = System.Drawing.Color.White;
+            this.LbEmail.Location = new System.Drawing.Point(3, 782);
+            this.LbEmail.Name = "LbEmail";
+            this.LbEmail.Padding = new System.Windows.Forms.Padding(0, 0, 0, 20);
+            this.LbEmail.Size = new System.Drawing.Size(160, 195);
+            this.LbEmail.TabIndex = 15;
+            this.LbEmail.Text = "DefaultEmail";
+            this.LbEmail.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             // 
             // Frm_Main
             // 
@@ -305,7 +321,9 @@
             this.Name = "Frm_Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Frm_Main";
+            this.Load += new System.EventHandler(this.Frm_Main_Load);
             this.TLPnlMenu.ResumeLayout(false);
+            this.TLPnlMenu.PerformLayout();
             this.TLPnlTop.ResumeLayout(false);
             this.TLPnlTop.PerformLayout();
             this.PnlFill.ResumeLayout(false);
@@ -319,7 +337,6 @@
         private System.Windows.Forms.TableLayoutPanel TLPnlTop;
         private System.Windows.Forms.Button BtnMinimize;
         private System.Windows.Forms.Button BtnMaximize;
-        private System.Windows.Forms.Button BtnExit;
         private System.Windows.Forms.Button BtnProduct;
         private System.Windows.Forms.Button BtnMaterial;
         private System.Windows.Forms.Button BtnUser;
@@ -329,5 +346,7 @@
         private System.Windows.Forms.Panel PnlFill;
         private System.Windows.Forms.Panel PnlPage;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button BtnExit;
+        private System.Windows.Forms.Label LbEmail;
     }
 }

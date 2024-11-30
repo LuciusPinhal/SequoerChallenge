@@ -39,6 +39,8 @@ namespace OrderManagerAPP
             set => titleLabel.Text = value;
         }
 
-      
+        public string EmailUsuario { get; set; }
+
+
     }
 }

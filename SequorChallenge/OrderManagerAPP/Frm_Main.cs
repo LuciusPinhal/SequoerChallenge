@@ -8,6 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Net.Http;
+using System.Text.Json;
+using OrderManagerAPP.Models;
 
 namespace OrderManagerAPP
 {
@@ -19,7 +22,7 @@ namespace OrderManagerAPP
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-
+        public string EmailUsuario { get; set; }
 
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HTCAPTION = 0x2;
@@ -46,7 +49,6 @@ namespace OrderManagerAPP
             foreach (Button btn in buttons)
             {
                 btn.BackColor = defaultColor;
-    
             }
 
             // Ajusta apenas o botão selecionado
@@ -62,7 +64,10 @@ namespace OrderManagerAPP
                     selectedForm = new Frm_Order(this);
                     break;
                 case "BtnProduction":
-                    selectedForm = new Frm_Production();
+                    selectedForm = new Frm_Production
+                    {
+                        EmailUsuario = EmailUsuario 
+                    };
                     break;
                 case "BtnProduct":
                     selectedForm = new Frm_Product();
@@ -174,5 +179,56 @@ namespace OrderManagerAPP
         {
 
         }
+
+        private void Frm_Main_Load(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(EmailUsuario))
+            {
+                GetNameEmail();         
+            }
+        }
+
+        private async void GetNameEmail()
+        {
+            string apiUrl = $"http://localhost:5178/api/User/GetEmail/{EmailUsuario}";
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = await response.Content.ReadAsStringAsync();
+
+                        var user = JsonSerializer.Deserialize<User>(jsonResponse, new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        });
+
+                   
+                        if (user != null && !string.IsNullOrEmpty(user.Email))
+                        {
+                            LbEmail.Text = user.Name;
+                        }
+                        else
+                        {
+                            MessageBox.Show("E-mail não encontrado. Verifique o e-mail fornecido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Erro ao validar o e-mail: " + response.ReasonPhrase, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao se conectar ao servidor: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
     }
 }
