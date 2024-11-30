@@ -97,6 +97,54 @@ namespace OrderManagerAPI.DALOrderSQL
             return listOrders;
         }
 
+        public List<Order> GetOSDB()
+        {
+            List<Order> listOrders = new List<Order>();
+
+            try
+            {
+                Connection.Open();
+
+                using (var cmd = new SqlCommand("SELECT * FROM [ORDER]", Connection))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var order = new Order
+                            {
+
+                                OS = reader["Order"].ToString(),
+                                Quantity = Convert.ToDouble(reader["quantity"]),
+                                ProductCode = reader["productCode"].ToString(),
+                                ProductDescription = "",
+                                Image = "",
+                                CycleTime =  0,
+                                Materials = new List<Material>()
+
+
+                            };
+
+                            listOrders.Add(order);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar Ordens. Verifique se tem Ordens cadastrada no banco de dados", ex);
+            }
+            finally
+            {
+                if (Connection.State == System.Data.ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+            }
+
+            return listOrders;
+        }
+
         /// <summary>
         /// Pega último número da O.S
         /// </summary>

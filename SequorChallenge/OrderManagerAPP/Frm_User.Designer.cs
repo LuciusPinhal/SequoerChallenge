@@ -350,7 +350,7 @@
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.DateInitial, 2);
             this.DateInitial.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.DateInitial.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.DateInitial.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.DateInitial.Location = new System.Drawing.Point(3, 253);
             this.DateInitial.Name = "DateInitial";
             this.DateInitial.Size = new System.Drawing.Size(286, 26);
@@ -426,7 +426,7 @@
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.EndDate, 2);
             this.EndDate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.EndDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.EndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.EndDate.Location = new System.Drawing.Point(3, 353);
             this.EndDate.Name = "EndDate";
             this.tableLayoutPanel1.SetRowSpan(this.EndDate, 2);

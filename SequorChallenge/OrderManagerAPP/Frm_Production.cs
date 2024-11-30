@@ -156,12 +156,17 @@ namespace OrderManagerAPP
             ClearText();
         }
 
-        private async void BtnAdd_Click(object sender, EventArgs e)
+        public async void BtnAdd_Click(object sender, EventArgs e)
         {
             stopwatch.Reset();
             stopwatch.Start();
-
             ClearText();
+
+            if(OrderSelect != null)
+            {
+                TxtOrdem.Text = OrderSelect;
+            }
+
             AbrirPainel();
             TitlePainel = "Adicionar";
             await LoadMaterialAsync();
@@ -699,5 +704,30 @@ namespace OrderManagerAPP
             }
              
         }
+        public void SimulateBtnAddClick()
+        {
+
+            if (BtnAdd.InvokeRequired)
+            {
+                BtnAdd.Invoke(new Action(SimulateBtnAddClick)); 
+            }
+            else
+            {
+                BtnAdd.PerformClick();  
+            }
+        }
+
+        public void SetOrder(string order)
+        {
+            if (TxtOrdem.InvokeRequired)
+            {
+                TxtOrdem.Invoke(new Action(() => TxtOrdem.Text = order));
+            }
+            else
+            {
+                OrderSelect = order;
+            }
+        }
+
     }
 }

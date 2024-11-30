@@ -138,6 +138,13 @@ namespace OrderManagerAPP
         private void BtnAdd_Click(object sender, EventArgs e)
         {
             ClearText();
+
+            DateInitial.Format = DateTimePickerFormat.Custom;
+            DateInitial.CustomFormat = "dd/MM/yyyy HH:mm:ss";
+
+            EndDate.Format = DateTimePickerFormat.Custom;
+            EndDate.CustomFormat = "dd/MM/yyyy HH:mm:ss";
+
             AbrirPainel();
             TitlePainel = "Adicionar";
 
@@ -150,6 +157,12 @@ namespace OrderManagerAPP
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            DateInitial.Format = DateTimePickerFormat.Custom;
+            DateInitial.CustomFormat = "dd/MM/yyyy HH:mm:ss";
+
+            EndDate.Format = DateTimePickerFormat.Custom;
+            EndDate.CustomFormat = "dd/MM/yyyy HH:mm:ss";
+
             AbrirPainel();
             TitlePainel = "Editar";
             textEmail.Text = EmailSelect;

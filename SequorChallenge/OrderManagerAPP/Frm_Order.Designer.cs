@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm_Order));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.TlPnlTop = new System.Windows.Forms.TableLayoutPanel();
+            this.btnProduct = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.PnlSearch = new System.Windows.Forms.Panel();
             this.LineSearch = new System.Windows.Forms.Label();
@@ -46,15 +47,10 @@
             this.TxtPainel = new System.Windows.Forms.Label();
             this.BtnCancelar = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.PicProduct = new System.Windows.Forms.PictureBox();
-            this.TxtTimeCycle = new System.Windows.Forms.Label();
-            this.TxtImge = new System.Windows.Forms.Label();
-            this.textCycleTime = new System.Windows.Forms.TextBox();
-            this.TxtDescriptionL = new System.Windows.Forms.TextBox();
-            this.txtProductRelated = new System.Windows.Forms.Label();
-            this.TxtDescription = new System.Windows.Forms.Label();
             this.ListProductCheck = new System.Windows.Forms.CheckedListBox();
-            this.picOpen = new System.Windows.Forms.Button();
+            this.TxtQuantity = new System.Windows.Forms.TextBox();
+            this.LbProductCode = new System.Windows.Forms.Label();
+            this.LbQuantity = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.Timer = new System.Windows.Forms.Timer(this.components);
@@ -68,17 +64,15 @@
             this.Messagem = new System.Windows.Forms.Panel();
             this.TxtMensagem = new System.Windows.Forms.TextBox();
             this.Grid_Users = new System.Windows.Forms.DataGridView();
+            this.Order = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Quantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ProductCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Image = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CycleTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TlPnlTop.SuspendLayout();
             this.PnlSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSearch)).BeginInit();
             this.ContainerPainel.SuspendLayout();
             this.panel4.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PicProduct)).BeginInit();
             this.PnlGrid.SuspendLayout();
             this.pnlDel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureDel)).BeginInit();
@@ -99,6 +93,7 @@
             this.TlPnlTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
             this.TlPnlTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.TlPnlTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.TlPnlTop.Controls.Add(this.btnProduct, 7, 1);
             this.TlPnlTop.Controls.Add(this.btnEdit, 3, 1);
             this.TlPnlTop.Controls.Add(this.PnlSearch, 9, 1);
             this.TlPnlTop.Controls.Add(this.BtnAdd, 1, 1);
@@ -110,8 +105,31 @@
             this.TlPnlTop.RowCount = 2;
             this.TlPnlTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.TlPnlTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.TlPnlTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.TlPnlTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.TlPnlTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.TlPnlTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.TlPnlTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.TlPnlTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.TlPnlTop.Size = new System.Drawing.Size(1714, 60);
             this.TlPnlTop.TabIndex = 8;
+            // 
+            // btnProduct
+            // 
+            this.btnProduct.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.btnProduct.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnProduct.BackgroundImage")));
+            this.btnProduct.Cursor = System.Windows.Forms.Cursors.No;
+            this.btnProduct.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnProduct.FlatAppearance.BorderSize = 0;
+            this.btnProduct.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.btnProduct.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnProduct.Location = new System.Drawing.Point(530, 20);
+            this.btnProduct.Margin = new System.Windows.Forms.Padding(0);
+            this.btnProduct.Name = "btnProduct";
+            this.btnProduct.Size = new System.Drawing.Size(140, 40);
+            this.btnProduct.TabIndex = 14;
+            this.btnProduct.UseVisualStyleBackColor = false;
+            this.btnProduct.Click += new System.EventHandler(this.btnProduct_Click);
             // 
             // btnEdit
             // 
@@ -162,7 +180,7 @@
             this.TxtSearch.Name = "TxtSearch";
             this.TxtSearch.Size = new System.Drawing.Size(395, 24);
             this.TxtSearch.TabIndex = 2;
-            this.TxtSearch.Text = "PesquisarP";
+            this.TxtSearch.Text = "Pesquisar";
             this.TxtSearch.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TxtSearch_MouseClick);
             this.TxtSearch.TextChanged += new System.EventHandler(this.TxtSearch_TextChanged);
             this.TxtSearch.Leave += new System.EventHandler(this.TxtSearch_Leave);
@@ -237,7 +255,7 @@
             this.BtnConfirmar.FlatAppearance.BorderSize = 0;
             this.BtnConfirmar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
             this.BtnConfirmar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnConfirmar.Location = new System.Drawing.Point(174, 774);
+            this.BtnConfirmar.Location = new System.Drawing.Point(184, 745);
             this.BtnConfirmar.Margin = new System.Windows.Forms.Padding(0);
             this.BtnConfirmar.Name = "BtnConfirmar";
             this.BtnConfirmar.Size = new System.Drawing.Size(140, 40);
@@ -293,7 +311,7 @@
             this.BtnCancelar.FlatAppearance.BorderSize = 0;
             this.BtnCancelar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.BtnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnCancelar.Location = new System.Drawing.Point(35, 774);
+            this.BtnCancelar.Location = new System.Drawing.Point(35, 745);
             this.BtnCancelar.Margin = new System.Windows.Forms.Padding(0);
             this.BtnCancelar.Name = "BtnCancelar";
             this.BtnCancelar.Size = new System.Drawing.Size(139, 40);
@@ -307,15 +325,10 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.99999F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.00001F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Controls.Add(this.PicProduct, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.TxtTimeCycle, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.TxtImge, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.textCycleTime, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.TxtDescriptionL, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.txtProductRelated, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.TxtDescription, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.ListProductCheck, 0, 8);
-            this.tableLayoutPanel1.Controls.Add(this.picOpen, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.ListProductCheck, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.TxtQuantity, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.LbProductCode, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.LbQuantity, 0, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(25, 157);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 12;
@@ -334,101 +347,8 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(299, 585);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(299, 451);
             this.tableLayoutPanel1.TabIndex = 18;
-            // 
-            // PicProduct
-            // 
-            this.PicProduct.BackColor = System.Drawing.Color.Transparent;
-            this.PicProduct.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.PicProduct.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.PicProduct.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PicProduct.ErrorImage = ((System.Drawing.Image)(resources.GetObject("PicProduct.ErrorImage")));
-            this.PicProduct.Image = ((System.Drawing.Image)(resources.GetObject("PicProduct.Image")));
-            this.PicProduct.Location = new System.Drawing.Point(3, 153);
-            this.PicProduct.Name = "PicProduct";
-            this.tableLayoutPanel1.SetRowSpan(this.PicProduct, 2);
-            this.PicProduct.Size = new System.Drawing.Size(143, 94);
-            this.PicProduct.TabIndex = 35;
-            this.PicProduct.TabStop = false;
-            this.PicProduct.Click += new System.EventHandler(this.PicProduct_Click);
-            // 
-            // TxtTimeCycle
-            // 
-            this.TxtTimeCycle.AutoSize = true;
-            this.TxtTimeCycle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TxtTimeCycle.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TxtTimeCycle.ForeColor = System.Drawing.Color.White;
-            this.TxtTimeCycle.Location = new System.Drawing.Point(0, 250);
-            this.TxtTimeCycle.Margin = new System.Windows.Forms.Padding(0);
-            this.TxtTimeCycle.Name = "TxtTimeCycle";
-            this.TxtTimeCycle.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.TxtTimeCycle.Size = new System.Drawing.Size(149, 50);
-            this.TxtTimeCycle.TabIndex = 34;
-            this.TxtTimeCycle.Text = "Tempo de Ciclo";
-            // 
-            // TxtImge
-            // 
-            this.TxtImge.AutoSize = true;
-            this.TxtImge.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TxtImge.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TxtImge.ForeColor = System.Drawing.Color.White;
-            this.TxtImge.Location = new System.Drawing.Point(0, 100);
-            this.TxtImge.Margin = new System.Windows.Forms.Padding(0);
-            this.TxtImge.Name = "TxtImge";
-            this.TxtImge.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.TxtImge.Size = new System.Drawing.Size(149, 50);
-            this.TxtImge.TabIndex = 33;
-            this.TxtImge.Text = "Image";
-            // 
-            // textCycleTime
-            // 
-            this.textCycleTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel1.SetColumnSpan(this.textCycleTime, 2);
-            this.textCycleTime.Location = new System.Drawing.Point(3, 303);
-            this.textCycleTime.Name = "textCycleTime";
-            this.textCycleTime.Size = new System.Drawing.Size(286, 26);
-            this.textCycleTime.TabIndex = 32;
-            this.textCycleTime.MouseClick += new System.Windows.Forms.MouseEventHandler(this.textCycleTime_MouseClick);
-            // 
-            // TxtDescriptionL
-            // 
-            this.TxtDescriptionL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel1.SetColumnSpan(this.TxtDescriptionL, 2);
-            this.TxtDescriptionL.Location = new System.Drawing.Point(3, 53);
-            this.TxtDescriptionL.Name = "TxtDescriptionL";
-            this.TxtDescriptionL.Size = new System.Drawing.Size(286, 26);
-            this.TxtDescriptionL.TabIndex = 30;
-            this.TxtDescriptionL.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TxtDescriptionL_MouseClick);
-            // 
-            // txtProductRelated
-            // 
-            this.txtProductRelated.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.txtProductRelated, 2);
-            this.txtProductRelated.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtProductRelated.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtProductRelated.ForeColor = System.Drawing.Color.White;
-            this.txtProductRelated.Location = new System.Drawing.Point(0, 350);
-            this.txtProductRelated.Margin = new System.Windows.Forms.Padding(0);
-            this.txtProductRelated.Name = "txtProductRelated";
-            this.txtProductRelated.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.txtProductRelated.Size = new System.Drawing.Size(299, 50);
-            this.txtProductRelated.TabIndex = 29;
-            this.txtProductRelated.Text = "Produtos Relacionado";
-            // 
-            // TxtDescription
-            // 
-            this.TxtDescription.AutoSize = true;
-            this.TxtDescription.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TxtDescription.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TxtDescription.ForeColor = System.Drawing.Color.White;
-            this.TxtDescription.Location = new System.Drawing.Point(0, 0);
-            this.TxtDescription.Margin = new System.Windows.Forms.Padding(0);
-            this.TxtDescription.Name = "TxtDescription";
-            this.TxtDescription.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.TxtDescription.Size = new System.Drawing.Size(149, 50);
-            this.TxtDescription.TabIndex = 20;
-            this.TxtDescription.Text = "Descrição";
             // 
             // ListProductCheck
             // 
@@ -440,28 +360,51 @@
             this.ListProductCheck.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F);
             this.ListProductCheck.ForeColor = System.Drawing.Color.White;
             this.ListProductCheck.FormattingEnabled = true;
-            this.ListProductCheck.Location = new System.Drawing.Point(3, 403);
+            this.ListProductCheck.Location = new System.Drawing.Point(3, 153);
             this.ListProductCheck.Name = "ListProductCheck";
             this.tableLayoutPanel1.SetRowSpan(this.ListProductCheck, 4);
             this.ListProductCheck.Size = new System.Drawing.Size(293, 180);
-            this.ListProductCheck.TabIndex = 14;
-            this.ListProductCheck.SelectedIndexChanged += new System.EventHandler(this.ListProductCheck_SelectedIndexChanged);
+            this.ListProductCheck.TabIndex = 36;
+            this.ListProductCheck.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ListProductCheck_ItemCheck);
+            this.ListProductCheck.SelectedIndexChanged += new System.EventHandler(this.ListProductCheck_SelectedIndexChanged_1);
             // 
-            // picOpen
+            // TxtQuantity
             // 
-            this.picOpen.BackColor = System.Drawing.Color.Transparent;
-            this.picOpen.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("picOpen.BackgroundImage")));
-            this.picOpen.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.picOpen.FlatAppearance.BorderSize = 0;
-            this.picOpen.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
-            this.picOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.picOpen.Location = new System.Drawing.Point(149, 150);
-            this.picOpen.Margin = new System.Windows.Forms.Padding(0);
-            this.picOpen.Name = "picOpen";
-            this.picOpen.Size = new System.Drawing.Size(46, 40);
-            this.picOpen.TabIndex = 36;
-            this.picOpen.UseVisualStyleBackColor = false;
-            this.picOpen.Click += new System.EventHandler(this.picOpen_Click);
+            this.TxtQuantity.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tableLayoutPanel1.SetColumnSpan(this.TxtQuantity, 2);
+            this.TxtQuantity.Location = new System.Drawing.Point(3, 53);
+            this.TxtQuantity.Name = "TxtQuantity";
+            this.TxtQuantity.Size = new System.Drawing.Size(286, 26);
+            this.TxtQuantity.TabIndex = 35;
+            this.TxtQuantity.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TxtQuantity_MouseClick);
+            // 
+            // LbProductCode
+            // 
+            this.LbProductCode.AutoSize = true;
+            this.LbProductCode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LbProductCode.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LbProductCode.ForeColor = System.Drawing.Color.White;
+            this.LbProductCode.Location = new System.Drawing.Point(0, 100);
+            this.LbProductCode.Margin = new System.Windows.Forms.Padding(0);
+            this.LbProductCode.Name = "LbProductCode";
+            this.LbProductCode.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.LbProductCode.Size = new System.Drawing.Size(149, 50);
+            this.LbProductCode.TabIndex = 34;
+            this.LbProductCode.Text = "Código Produto";
+            // 
+            // LbQuantity
+            // 
+            this.LbQuantity.AutoSize = true;
+            this.LbQuantity.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LbQuantity.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LbQuantity.ForeColor = System.Drawing.Color.White;
+            this.LbQuantity.Location = new System.Drawing.Point(0, 0);
+            this.LbQuantity.Margin = new System.Windows.Forms.Padding(0);
+            this.LbQuantity.Name = "LbQuantity";
+            this.LbQuantity.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.LbQuantity.Size = new System.Drawing.Size(149, 50);
+            this.LbQuantity.TabIndex = 33;
+            this.LbQuantity.Text = "Quantidade";
             // 
             // panel3
             // 
@@ -642,10 +585,9 @@
             this.Grid_Users.ColumnHeadersHeight = 54;
             this.Grid_Users.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.Grid_Users.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ProductCode,
-            this.Description,
-            this.Image,
-            this.CycleTime});
+            this.Order,
+            this.Quantity,
+            this.ProductCode});
             this.Grid_Users.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Grid_Users.EnableHeadersVisualStyles = false;
             this.Grid_Users.GridColor = System.Drawing.Color.White;
@@ -671,29 +613,23 @@
             this.Grid_Users.TabIndex = 0;
             this.Grid_Users.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Grid_Users_CellClick);
             // 
+            // Order
+            // 
+            this.Order.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Order.HeaderText = "Ordem";
+            this.Order.Name = "Order";
+            // 
+            // Quantity
+            // 
+            this.Quantity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Quantity.HeaderText = "Quantidade";
+            this.Quantity.Name = "Quantity";
+            // 
             // ProductCode
             // 
             this.ProductCode.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ProductCode.HeaderText = "Código";
+            this.ProductCode.HeaderText = "Código Produto";
             this.ProductCode.Name = "ProductCode";
-            // 
-            // Description
-            // 
-            this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Description.HeaderText = "Descrição";
-            this.Description.Name = "Description";
-            // 
-            // Image
-            // 
-            this.Image.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Image.HeaderText = "Imagem";
-            this.Image.Name = "Image";
-            // 
-            // CycleTime
-            // 
-            this.CycleTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.CycleTime.HeaderText = "Tempo de Ciclo";
-            this.CycleTime.Name = "CycleTime";
             // 
             // Frm_Order
             // 
@@ -720,7 +656,6 @@
             this.panel4.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PicProduct)).EndInit();
             this.PnlGrid.ResumeLayout(false);
             this.PnlGrid.PerformLayout();
             this.pnlDel.ResumeLayout(false);
@@ -747,7 +682,6 @@
         private System.Windows.Forms.Label TxtPainel;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button BtnExit;
-        private System.Windows.Forms.Label TxtDescription;
         private System.Windows.Forms.Label LineSearch;
         private System.Windows.Forms.Timer Timer;
         private System.Windows.Forms.Panel PnlGrid;
@@ -763,17 +697,13 @@
         private System.Windows.Forms.TextBox textDelInfo;
         private System.Windows.Forms.Button bntConfirmDel;
         private System.Windows.Forms.Button bntCancelDel;
+        private System.Windows.Forms.Label LbProductCode;
+        private System.Windows.Forms.Label LbQuantity;
+        private System.Windows.Forms.Button btnProduct;
+        private System.Windows.Forms.TextBox TxtQuantity;
         private System.Windows.Forms.CheckedListBox ListProductCheck;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Order;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Quantity;
         private System.Windows.Forms.DataGridViewTextBoxColumn ProductCode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Description;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Image;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CycleTime;
-        private System.Windows.Forms.TextBox textCycleTime;
-        private System.Windows.Forms.TextBox TxtDescriptionL;
-        private System.Windows.Forms.Label txtProductRelated;
-        private System.Windows.Forms.Label TxtTimeCycle;
-        private System.Windows.Forms.Label TxtImge;
-        private System.Windows.Forms.PictureBox PicProduct;
-        private System.Windows.Forms.Button picOpen;
     }
 }

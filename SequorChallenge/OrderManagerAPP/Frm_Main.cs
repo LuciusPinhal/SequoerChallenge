@@ -12,7 +12,8 @@ using System.Windows.Forms;
 namespace OrderManagerAPP
 {
     public partial class Frm_Main : Form
-    {
+    { 
+
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern bool ReleaseCapture();
 
@@ -29,8 +30,9 @@ namespace OrderManagerAPP
             TLPnlTop.MouseDown += TLPnlTop_MouseDown;
         }
 
-        private void SelectButton(Button selectedButton)
+        public void SelectButton(Button selectedButton)
         {
+            var i = selectedButton.Name;
             PnlPage.Controls.Clear();
 
             Color defaultColor = Color.FromArgb(83, 126, 235);
@@ -57,7 +59,7 @@ namespace OrderManagerAPP
             switch (selectedButton.Name)
             {
                 case "BtnOrder":
-                    selectedForm = new Frm_Order();
+                    selectedForm = new Frm_Order(this);
                     break;
                 case "BtnProduction":
                     selectedForm = new Frm_Production();
@@ -116,7 +118,6 @@ namespace OrderManagerAPP
         {
             SelectButton(BtnOrder);
         }
-
         private void BtnProduction_Click(object sender, EventArgs e)
         {
             SelectButton(BtnProduction);
@@ -135,6 +136,25 @@ namespace OrderManagerAPP
         private void BtnUser_Click(object sender, EventArgs e)
         {
             SelectButton(BtnUser);
+        }
+        public void NavigateToProduction()
+        {
+            SelectButton(BtnProduction);
+
+            var productionForm = PnlPage.Controls.OfType<Frm_Production>().FirstOrDefault();
+            if (productionForm != null)
+            {
+                // Aguarda um pouco para garantir que o botão foi renderizado
+                Task.Delay(100).ContinueWith(t =>
+                {
+                    productionForm.SimulateBtnAddClick();
+                });
+            }
+        }
+
+        public T GetActiveForm<T>() where T : Form
+        {
+            return PnlPage.Controls.OfType<T>().FirstOrDefault();
         }
 
         private void TLPnlTop_Paint(object sender, PaintEventArgs e)

@@ -3,7 +3,7 @@ using OrderManagerAPI.Models;
 using Microsoft.Extensions.Configuration;
 using OrderManagerAPI.DALOrderSQL;
 using OrderManagerAPI.DALProductSQL;
-
+using System.Data.SqlClient;
 
 namespace OrderManagerAPI.Controllers
 {
@@ -22,13 +22,30 @@ namespace OrderManagerAPI.Controllers
             _logger = logger;
         }
 
+        //[HttpGet]
+        //[Route("GetOrders")]
+        //public IEnumerable<Order> Get()
+        //{
+        //    try
+        //    {
+        //        List<Order> ListOrders = _sql.GetOrdersDB();
+        //        return ListOrders;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Erro ao obter a lista de Ordem: {ex.Message}");
+        //        return null;
+        //    }
+
+        //}
+
         [HttpGet]
-        [Route("GetOrders")]
-        public IEnumerable<Order> Get()
+        [Route("GetOrder")]
+        public IEnumerable<Order> GetOS()
         {
             try
             {
-                List<Order> ListOrders = _sql.GetOrdersDB();
+                List<Order> ListOrders = _sql.GetOSDB();
                 return ListOrders;
             }
             catch (Exception ex)
@@ -116,7 +133,17 @@ namespace OrderManagerAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro não esperado: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    
+                    if (ex.InnerException.Message.Contains("FK__Productio__Order__440B1D61"))
+                    {
+                        return StatusCode(400, "Não é possível excluir o registro, pois existem pendências na tabela Produção.");
+                    }
+                }
+
+                // Caso contrário, loga o erro e retorna uma mensagem genérica de erro interno
+                Console.WriteLine($"Erro não esperado: {ex.Message} {ex.InnerException}");
                 return StatusCode(500, "Erro interno do servidor");
             }
 

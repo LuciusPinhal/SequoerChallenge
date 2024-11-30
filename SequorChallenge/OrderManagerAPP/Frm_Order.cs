@@ -1,4 +1,5 @@
-﻿using OrderManagerAPP.Models;
+﻿using OrderManagerAPI.Models;
+using OrderManagerAPP.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,15 +25,16 @@ namespace OrderManagerAPP
 
 
         private string VarProductCode = null;
-        private string VarProductDescription = null;
-        private string VarImage = null;
-        private string VarCycleTime = null;
-        private List<Material> material = new List<Material>();
+        private string VarQuantity = null;
+        private string VarOrder = null;
 
-        public Frm_Order()
+        private string VarProductSelect = null;
+
+        private Frm_Main frmMain;
+        public Frm_Order(Frm_Main mainForm)
         {
             InitializeComponent();
-
+            frmMain = mainForm;
             btnEdit.Enabled = false;
             btnDelete.Enabled = false;
 
@@ -40,6 +42,19 @@ namespace OrderManagerAPP
             messageTimer.Interval = 5000;
             messageTimer.Tick += MessageTimer_Tick;
         }
+
+        private void btnProduct_Click(object sender, EventArgs e)
+        {
+            frmMain.NavigateToProduction();
+
+            var productionForm = frmMain.GetActiveForm<Frm_Production>();
+            if (productionForm != null)
+            {
+                string order = VarOrder;
+                productionForm.SetOrder(order);
+            }
+        }
+
         public string TitlePainel
         {
             get => TxtPainel.Text;
@@ -59,7 +74,7 @@ namespace OrderManagerAPP
             Color selectedColor = Color.FromArgb(185, 205, 255);
 
 
-            TextBox[] textBoxes = { TxtDescriptionL, textCycleTime };
+            TextBox[] textBoxes = { TxtQuantity };
 
 
             foreach (TextBox Txt in textBoxes)
@@ -102,13 +117,9 @@ namespace OrderManagerAPP
             Timer.Stop();
         }
 
-        private void TxtDescriptionL_MouseClick(object sender, MouseEventArgs e)
+        private void TxtQuantity_MouseClick(object sender, MouseEventArgs e)
         {
-            SelectTxt(TxtDescriptionL);
-        }
-        private void textCycleTime_MouseClick(object sender, MouseEventArgs e)
-        {
-            SelectTxt(textCycleTime);
+            SelectTxt(TxtQuantity);
         }
         private void BtnExit_Click(object sender, EventArgs e)
         {
@@ -146,34 +157,30 @@ namespace OrderManagerAPP
         private async void BtnAdd_Click(object sender, EventArgs e)
         {
             ClearText();
-            await LoadMaterialAsync();
+            await LoadProductAsync();
             AbrirPainel();
             TitlePainel = "Adicionar";
-            txtProductRelated.Visible = true;
             ListProductCheck.Visible = true;
+   
 
         }
-        private void btnEdit_Click(object sender, EventArgs e)
+        private async void btnEdit_Click(object sender, EventArgs e)
         {
+        
             AbrirPainel();
+            await LoadProductAsync();
+            TitlePainel = "Editar "+ VarOrder;
+            TxtQuantity.Text = VarQuantity;
 
-            TitlePainel = "Editar "+ VarProductCode;
-            TxtDescriptionL.Text = VarProductDescription;
-            textCycleTime.Text = VarCycleTime;
-
-            if (!string.IsNullOrEmpty(VarImage))
+     
+            for (int i = 0; i < ListProductCheck.Items.Count; i++)
             {
-                PicProduct.ImageLocation = VarImage;
+                if (ListProductCheck.Items[i].ToString() == VarProductSelect)
+                {
+                    ListProductCheck.SetItemChecked(i, true);
+                    break;
+                }
             }
-            else
-            {
-                PicProduct.Image = null;
-            }
-
-
-            ListProductCheck.Visible = false;
-            txtProductRelated.Visible = false;
-
         }
 
         private void Grid_Users_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -184,9 +191,9 @@ namespace OrderManagerAPP
                 DataGridViewRow row = Grid_Users.Rows[e.RowIndex];
 
                 VarProductCode = row.Cells["ProductCode"].Value?.ToString();
-                VarProductDescription = row.Cells["Description"].Value?.ToString();
-                VarImage = row.Cells["Image"].Value?.ToString();
-                VarCycleTime = row.Cells["CycleTime"].Value?.ToString();
+                VarOrder = row.Cells["Order"].Value?.ToString();
+                VarQuantity = row.Cells["Quantity"].Value?.ToString();
+                VarProductSelect = row.Cells["ProductCode"].Value?.ToString();
 
                 if (!string.IsNullOrEmpty(VarProductCode))
                 {
@@ -196,6 +203,7 @@ namespace OrderManagerAPP
                 {
                     btnEdit.Enabled = false;
                     btnDelete.Enabled = false;
+                    btnProduct.Enabled = false;
                 }
             }
         }
@@ -210,10 +218,16 @@ namespace OrderManagerAPP
             btnDelete.BackColor = Color.FromArgb(83, 126, 235);
             btnDelete.Cursor = Cursors.Hand;
 
-            TxtMensagem.Text = "Material Selecionado: " + VarProductCode;
+            btnProduct.Enabled = true;
+            btnProduct.BackColor = Color.FromArgb(83, 126, 235);
+            btnProduct.Cursor = Cursors.Hand;
+
+            TxtMensagem.Text = "Order Selecionada: " + VarProductCode;
             TxtMensagem.Visible = true;
             Messagem.Visible = true;
             messageTimer.Start();
+
+            
         }
         private void TxtSearch_TextChanged(object sender, EventArgs e)
         {
@@ -235,9 +249,9 @@ namespace OrderManagerAPP
                     continue;
 
                 bool visible = row.Cells["ProductCode"].Value?.ToString().ToLower().Contains(searchValue) == true ||
-                               row.Cells["Description"].Value?.ToString().ToLower().Contains(searchValue) == true ||
-                               row.Cells["Image"].Value?.ToString().ToLower().Contains(searchValue) == true ||
-                               row.Cells["CycleTime"].Value?.ToString().ToLower().Contains(searchValue) == true;
+                               row.Cells["Order"].Value?.ToString().ToLower().Contains(searchValue) == true ||
+                               row.Cells["Quantity"].Value?.ToString().ToLower().Contains(searchValue) == true ||
+                               row.Cells["ProductCode"].Value?.ToString().ToLower().Contains(searchValue) == true;
 
                 row.Visible = visible;
             }
@@ -245,7 +259,7 @@ namespace OrderManagerAPP
 
         private async Task LoadOrdersAsync()
         {
-            string apiUrl = "http://localhost:5178/api/Product/GetProduct";
+            string apiUrl = "http://localhost:5178/api/Order/GetOrder";
 
             try
             {
@@ -265,12 +279,12 @@ namespace OrderManagerAPP
                   
                         foreach (var product in Products)
                         {
-                            Grid_Users.Rows.Add(product.ProductCode, product.ProductDescription, product.Image, product.CycleTime);
+                            Grid_Users.Rows.Add(product.OS, product.Quantity, product.ProductCode);
                         }
                     }
                     else
                     {
-                        MessageBox.Show("Erro ao buscar os Produtos: " + response.ReasonPhrase);
+                        MessageBox.Show("Erro ao buscar as Ordens: " + response.ReasonPhrase);
                     }
                 }
             }
@@ -280,9 +294,9 @@ namespace OrderManagerAPP
             }
         }
 
-        private async Task LoadMaterialAsync()
+        private async Task LoadProductAsync()
         {
-            string apiUrl = "http://localhost:5178/api/Material/GetMaterial";
+            string apiUrl = "http://localhost:5178/api/Product/GetProduct";
 
             try
             {
@@ -295,16 +309,16 @@ namespace OrderManagerAPP
                         string jsonResponse = await response.Content.ReadAsStringAsync();
 
                         // Supondo que a resposta seja uma lista de objetos com "materialCode"
-                        var materials = JsonSerializer.Deserialize<List<Material>>(jsonResponse, new JsonSerializerOptions
+                        var Products = JsonSerializer.Deserialize<List<Order>>(jsonResponse, new JsonSerializerOptions
                         {
                             PropertyNameCaseInsensitive = true
                         });
 
                         ListProductCheck.Items.Clear();
 
-                        foreach (var material in materials)
+                        foreach (var product in Products)
                         {
-                            ListProductCheck.Items.Add(material.MaterialCode);
+                            ListProductCheck.Items.Add(product.ProductCode);
                         }
                     }
                     else
@@ -323,8 +337,8 @@ namespace OrderManagerAPP
         {
             if (TxtPainel.Text == "Adicionar")
             {
-                await AddUserAsync();
-                ClearText();
+               await AddUserAsync();
+               ClearText();
 
             } else if (TxtPainel.Text.Contains("Editar"))
             {
@@ -333,52 +347,34 @@ namespace OrderManagerAPP
 
             //fechar modal
             //Timer.Start();
-            material = new List<Material>();
+           // material = new List<Material>();
             UncheckAllItems();
             await LoadOrdersAsync();
         }
         private void ClearText()
         {
-            TxtDescriptionL.Text = "";
-            textCycleTime.Text = "";
-            PicProduct.Image = PicProduct.ErrorImage;
+            TxtQuantity.Text = "";
         }
 
         private async Task AddUserAsync()
         {
-            if (!int.TryParse(textCycleTime.Text, out int cycleTime))
+
+            if (!int.TryParse(TxtQuantity.Text, out int Qnt))
             {
                 MessageBox.Show("Por favor, insira um valor numérico válido para o ciclo de tempo.", "Valor Inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return; 
-            }
-
-            if (VarImage == null && VarImage == "")
-            {
-                MessageBox.Show("Por favor, insira uma imagem.", "Erro de Imagem", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (TxtDescriptionL.Text == null && TxtDescriptionL.Text == "")
-            {
-                MessageBox.Show("Por favor, insira uma Descrição.", "Erro de Descrição", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (material == null)
-            {
-                MessageBox.Show("Por favor, insira os Materias relacionado.", "Erro de Materiais", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
 
             Order order = new Order
             {
                 OS = "",
-                Quantity = 0,
-                ProductCode = "",
-                ProductDescription = TxtDescriptionL.Text,
-                Image = VarImage,
-                CycleTime = cycleTime,
-                Materials = new List<Material>(material)
+                Quantity = Qnt,
+                ProductCode = VarProductCode,
+                ProductDescription = "",
+                Image = "",
+                CycleTime = 00,
+                Materials = new List<Material>()
             };
 
             string jsonContent = JsonSerializer.Serialize(order);
@@ -389,13 +385,13 @@ namespace OrderManagerAPP
                 using (HttpClient client = new HttpClient())
                 {
 
-                    HttpResponseMessage response = await client.PostAsync("http://localhost:5178/api/Product/SetProduct", content);
+                    HttpResponseMessage response = await client.PostAsync("http://localhost:5178/api/Order/SetOrder", content);
                     if (response.IsSuccessStatusCode)
                     {
                         // Caso a resposta seja bem-sucedida, pode tratar a resposta aqui
                         string responseContent = await response.Content.ReadAsStringAsync();
-                    
-                        TxtMensagem.Text = "Produto Criado: " + TxtDescriptionL.Text;
+
+                        TxtMensagem.Text = "Ordem Criada ";
                         TxtMensagem.Visible = true;
                         Messagem.Visible = true;
                         messageTimer.Start();
@@ -404,10 +400,10 @@ namespace OrderManagerAPP
                     {
                         // Caso a resposta não seja bem-sucedida
                         string errorContent = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show($"Erro ao adicionar materiais: {errorContent}");
+                        MessageBox.Show($"Erro ao criar ordem: {errorContent}");
                     }
                 }
-                   
+
             }
             catch (Exception ex)
             {
@@ -417,39 +413,21 @@ namespace OrderManagerAPP
 
         private async Task EditUserAsync()
         {
-            if (!int.TryParse(textCycleTime.Text, out int cycleTime))
+            if (!int.TryParse(TxtQuantity.Text, out int Qnt))
             {
                 MessageBox.Show("Por favor, insira um valor numérico válido para o ciclo de tempo.", "Valor Inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (VarImage == null && VarImage == "")
-            {
-                MessageBox.Show("Por favor, insira uma imagem.", "Erro de Imagem", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (TxtDescriptionL.Text == null && TxtDescriptionL.Text == "")
-            {
-                MessageBox.Show("Por favor, insira uma Descrição.", "Erro de Descrição", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (material == null)
-            {
-                MessageBox.Show("Por favor, insira os Materias relacionado.", "Erro de Materiais", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             Order order = new Order
             {
-                OS = "",
-                Quantity = 0,
+                OS = VarOrder,
+                Quantity = Qnt,
                 ProductCode = VarProductCode,
-                ProductDescription = TxtDescriptionL.Text,
-                Image = VarImage,
-                CycleTime = cycleTime,
-                Materials = new List<Material>(material)
+                ProductDescription = "",
+                Image = "",
+                CycleTime = 00,
+                Materials = new List<Material>()
             };
 
             string jsonContent = JsonSerializer.Serialize(order);
@@ -459,13 +437,13 @@ namespace OrderManagerAPP
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    HttpResponseMessage response = await client.PutAsync("http://localhost:5178/api/Product/UpdateProduct", content);
+                    HttpResponseMessage response = await client.PutAsync("http://localhost:5178/api/Order/UpdateOrder", content);
                     if (response.IsSuccessStatusCode)
                     {
                         // Caso a resposta seja bem-sucedida, pode tratar a resposta aqui
                         string responseContent = await response.Content.ReadAsStringAsync();
 
-                        TxtMensagem.Text = "Produto Atualizado: " + TxtDescriptionL.Text;
+                        TxtMensagem.Text = "Produto Atualizado: " + VarProductCode;
                         TxtMensagem.Visible = true;
                         Messagem.Visible = true;
                         messageTimer.Start();
@@ -488,7 +466,7 @@ namespace OrderManagerAPP
         private void btnDelete_Click(object sender, EventArgs e)
         {
             ModalCancel(true);
-            textDelInfo.Text = VarProductCode;
+            textDelInfo.Text = VarOrder;
 
         }
 
@@ -509,7 +487,7 @@ namespace OrderManagerAPP
         private async void bntConfirmDel_Click(object sender, EventArgs e)
         {
 
-            string apiUrl = $"http://localhost:5178/api/Product/Delete/{VarProductCode}";
+            string apiUrl = $"http://localhost:5178/api/Order/Delete/{VarOrder}";
 
             try
             {
@@ -519,7 +497,7 @@ namespace OrderManagerAPP
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TxtMensagem.Text = "produto deletado com sucesso: " + VarProductCode;
+                        TxtMensagem.Text = "Order deletada com sucesso: " + VarOrder;
                         TxtMensagem.Visible = true;
                         Messagem.Visible = true;
                         messageTimer.Start();
@@ -541,31 +519,6 @@ namespace OrderManagerAPP
             ModalCancel(false);
         }
 
-        private void ListProductCheck_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            GetSelectedMaterial();
-        }
-
-        private void GetSelectedMaterial()
-        {
-            foreach (var item in ListProductCheck.CheckedItems)
-            {
-                string code = item.ToString();        
-                bool MaterialExists = material.Any(o => o.MaterialCode == code);
-                
-                if (!MaterialExists)
-                {
-                    Material newMaterial = new Material()
-                    {
-                        MaterialCode= code,
-                        MaterialDescription = "",
-                    };
-
-                    material.Add(newMaterial);
-                }
-            }
-        }
-
         private void UncheckAllItems()
         {
             for (int i = 0; i < ListProductCheck.Items.Count; i++)
@@ -574,28 +527,35 @@ namespace OrderManagerAPP
             }
         }
 
-        private void picOpen_Click(object sender, EventArgs e)
+        private void ListProductCheck_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp|All Files|*.*"; 
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            if (e.NewValue == CheckState.Checked)
             {
-                PicProduct.ImageLocation = openFileDialog.FileName; 
-                VarImage = openFileDialog.FileName; 
+
+                for (int i = 0; i < ListProductCheck.Items.Count; i++)
+                {
+                    if (i != e.Index)
+                    {
+                        ListProductCheck.SetItemChecked(i, false);
+                    }
+                }
             }
         }
 
-        private void PicProduct_Click(object sender, EventArgs e)
+        private void ListProductCheck_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp|All Files|*.*";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            if (ListProductCheck.CheckedItems.Count > 0)
             {
-                PicProduct.ImageLocation = openFileDialog.FileName;
-                VarImage = openFileDialog.FileName;
+                var selectedItem = ListProductCheck.CheckedItems[0];
+                VarProductCode = selectedItem.ToString();
+
+                TxtMensagem.Text = "Material selecionado: " + VarProductCode;
+                TxtMensagem.Visible = true;
+                Messagem.Visible = true;
+                messageTimer.Start();
+
             }
         }
-
-    
+     
     }
 }

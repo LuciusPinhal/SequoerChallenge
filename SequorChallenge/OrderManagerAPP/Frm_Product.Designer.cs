@@ -237,7 +237,7 @@
             this.BtnConfirmar.FlatAppearance.BorderSize = 0;
             this.BtnConfirmar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
             this.BtnConfirmar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnConfirmar.Location = new System.Drawing.Point(174, 774);
+            this.BtnConfirmar.Location = new System.Drawing.Point(181, 765);
             this.BtnConfirmar.Margin = new System.Windows.Forms.Padding(0);
             this.BtnConfirmar.Name = "BtnConfirmar";
             this.BtnConfirmar.Size = new System.Drawing.Size(140, 40);
@@ -293,7 +293,7 @@
             this.BtnCancelar.FlatAppearance.BorderSize = 0;
             this.BtnCancelar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.BtnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnCancelar.Location = new System.Drawing.Point(35, 774);
+            this.BtnCancelar.Location = new System.Drawing.Point(35, 765);
             this.BtnCancelar.Margin = new System.Windows.Forms.Padding(0);
             this.BtnCancelar.Name = "BtnCancelar";
             this.BtnCancelar.Size = new System.Drawing.Size(139, 40);
