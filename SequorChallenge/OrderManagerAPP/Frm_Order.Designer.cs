@@ -1,6 +1,6 @@
 ﻿namespace OrderManagerAPP
 {
-    partial class Frm_Production
+    partial class Frm_Order
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm_Production));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Frm_Order));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.TlPnlTop = new System.Windows.Forms.TableLayoutPanel();
             this.btnEdit = new System.Windows.Forms.Button();
@@ -40,25 +40,21 @@
             this.BtnAdd = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.ContainerPainel = new System.Windows.Forms.Panel();
-            this.TextInfo = new System.Windows.Forms.RichTextBox();
             this.BtnConfirmar = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
             this.BtnExit = new System.Windows.Forms.Button();
             this.TxtPainel = new System.Windows.Forms.Label();
             this.BtnCancelar = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.label4 = new System.Windows.Forms.Label();
-            this.Hour = new System.Windows.Forms.DateTimePicker();
-            this.ListMaterial = new System.Windows.Forms.CheckedListBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.TxtQuant = new System.Windows.Forms.TextBox();
-            this.Date = new System.Windows.Forms.DateTimePicker();
-            this.Quantidade = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textEmail = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.TxtOrder = new System.Windows.Forms.Label();
-            this.TxtOrdem = new System.Windows.Forms.TextBox();
+            this.PicProduct = new System.Windows.Forms.PictureBox();
+            this.TxtTimeCycle = new System.Windows.Forms.Label();
+            this.TxtImge = new System.Windows.Forms.Label();
+            this.textCycleTime = new System.Windows.Forms.TextBox();
+            this.TxtDescriptionL = new System.Windows.Forms.TextBox();
+            this.txtProductRelated = new System.Windows.Forms.Label();
+            this.TxtDescription = new System.Windows.Forms.Label();
+            this.ListProductCheck = new System.Windows.Forms.CheckedListBox();
+            this.picOpen = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.Timer = new System.Windows.Forms.Timer(this.components);
@@ -72,20 +68,17 @@
             this.Messagem = new System.Windows.Forms.Panel();
             this.TxtMensagem = new System.Windows.Forms.TextBox();
             this.Grid_Users = new System.Windows.Forms.DataGridView();
-            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Email = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Order = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DateProduct = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TableHour = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Quantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MaterialCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CycleTimeProduction = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProductCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Image = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CycleTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TlPnlTop.SuspendLayout();
             this.PnlSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSearch)).BeginInit();
             this.ContainerPainel.SuspendLayout();
             this.panel4.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PicProduct)).BeginInit();
             this.PnlGrid.SuspendLayout();
             this.pnlDel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureDel)).BeginInit();
@@ -169,7 +162,7 @@
             this.TxtSearch.Name = "TxtSearch";
             this.TxtSearch.Size = new System.Drawing.Size(395, 24);
             this.TxtSearch.TabIndex = 2;
-            this.TxtSearch.Text = "Pesquisar";
+            this.TxtSearch.Text = "PesquisarP";
             this.TxtSearch.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TxtSearch_MouseClick);
             this.TxtSearch.TextChanged += new System.EventHandler(this.TxtSearch_TextChanged);
             this.TxtSearch.Leave += new System.EventHandler(this.TxtSearch_Leave);
@@ -223,7 +216,6 @@
             // ContainerPainel
             // 
             this.ContainerPainel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(126)))), ((int)(((byte)(235)))));
-            this.ContainerPainel.Controls.Add(this.TextInfo);
             this.ContainerPainel.Controls.Add(this.BtnConfirmar);
             this.ContainerPainel.Controls.Add(this.panel4);
             this.ContainerPainel.Controls.Add(this.BtnCancelar);
@@ -237,19 +229,6 @@
             this.ContainerPainel.Size = new System.Drawing.Size(350, 831);
             this.ContainerPainel.TabIndex = 9;
             // 
-            // TextInfo
-            // 
-            this.TextInfo.BackColor = System.Drawing.Color.Red;
-            this.TextInfo.ForeColor = System.Drawing.SystemColors.Info;
-            this.TextInfo.Location = new System.Drawing.Point(26, 614);
-            this.TextInfo.Margin = new System.Windows.Forms.Padding(0, 3, 10, 3);
-            this.TextInfo.Name = "TextInfo";
-            this.TextInfo.ReadOnly = true;
-            this.TextInfo.Size = new System.Drawing.Size(298, 135);
-            this.TextInfo.TabIndex = 12;
-            this.TextInfo.Text = "";
-            this.TextInfo.Visible = false;
-            // 
             // BtnConfirmar
             // 
             this.BtnConfirmar.BackColor = System.Drawing.Color.LimeGreen;
@@ -258,7 +237,7 @@
             this.BtnConfirmar.FlatAppearance.BorderSize = 0;
             this.BtnConfirmar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
             this.BtnConfirmar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnConfirmar.Location = new System.Drawing.Point(174, 760);
+            this.BtnConfirmar.Location = new System.Drawing.Point(174, 774);
             this.BtnConfirmar.Margin = new System.Windows.Forms.Padding(0);
             this.BtnConfirmar.Name = "BtnConfirmar";
             this.BtnConfirmar.Size = new System.Drawing.Size(140, 40);
@@ -295,7 +274,7 @@
             // TxtPainel
             // 
             this.TxtPainel.AutoSize = true;
-            this.TxtPainel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.TxtPainel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TxtPainel.Font = new System.Drawing.Font("Sans Serif Collection", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TxtPainel.ForeColor = System.Drawing.Color.White;
             this.TxtPainel.Location = new System.Drawing.Point(0, 0);
@@ -314,7 +293,7 @@
             this.BtnCancelar.FlatAppearance.BorderSize = 0;
             this.BtnCancelar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.BtnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnCancelar.Location = new System.Drawing.Point(35, 760);
+            this.BtnCancelar.Location = new System.Drawing.Point(35, 774);
             this.BtnCancelar.Margin = new System.Windows.Forms.Padding(0);
             this.BtnCancelar.Name = "BtnCancelar";
             this.BtnCancelar.Size = new System.Drawing.Size(139, 40);
@@ -324,31 +303,22 @@
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.AutoScroll = true;
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.99999F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.00001F));
-            this.tableLayoutPanel1.Controls.Add(this.label4, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.Hour, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.ListMaterial, 0, 11);
-            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 10);
-            this.tableLayoutPanel1.Controls.Add(this.TxtQuant, 0, 9);
-            this.tableLayoutPanel1.Controls.Add(this.Date, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.Quantidade, 0, 8);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.textEmail, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.TxtOrder, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.TxtOrdem, 0, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(26, 157);
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Controls.Add(this.PicProduct, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.TxtTimeCycle, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.TxtImge, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.textCycleTime, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.TxtDescriptionL, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.txtProductRelated, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.TxtDescription, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.ListProductCheck, 0, 8);
+            this.tableLayoutPanel1.Controls.Add(this.picOpen, 1, 3);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(25, 157);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 21;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.RowCount = 12;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
@@ -364,160 +334,134 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(321, 451);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(299, 585);
             this.tableLayoutPanel1.TabIndex = 18;
             // 
-            // label4
+            // PicProduct
             // 
-            this.label4.AutoSize = true;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(0, 300);
-            this.label4.Margin = new System.Windows.Forms.Padding(0);
-            this.label4.Name = "label4";
-            this.label4.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.label4.Size = new System.Drawing.Size(160, 50);
-            this.label4.TabIndex = 34;
-            this.label4.Text = "Hora";
+            this.PicProduct.BackColor = System.Drawing.Color.Transparent;
+            this.PicProduct.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.PicProduct.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.PicProduct.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PicProduct.ErrorImage = ((System.Drawing.Image)(resources.GetObject("PicProduct.ErrorImage")));
+            this.PicProduct.Image = ((System.Drawing.Image)(resources.GetObject("PicProduct.Image")));
+            this.PicProduct.Location = new System.Drawing.Point(3, 153);
+            this.PicProduct.Name = "PicProduct";
+            this.tableLayoutPanel1.SetRowSpan(this.PicProduct, 2);
+            this.PicProduct.Size = new System.Drawing.Size(143, 94);
+            this.PicProduct.TabIndex = 35;
+            this.PicProduct.TabStop = false;
+            this.PicProduct.Click += new System.EventHandler(this.PicProduct_Click);
             // 
-            // Hour
+            // TxtTimeCycle
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.Hour, 2);
-            this.Hour.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Hour.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.Hour.Location = new System.Drawing.Point(3, 353);
-            this.Hour.Name = "Hour";
-            this.Hour.Size = new System.Drawing.Size(286, 26);
-            this.Hour.TabIndex = 33;
+            this.TxtTimeCycle.AutoSize = true;
+            this.TxtTimeCycle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TxtTimeCycle.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TxtTimeCycle.ForeColor = System.Drawing.Color.White;
+            this.TxtTimeCycle.Location = new System.Drawing.Point(0, 250);
+            this.TxtTimeCycle.Margin = new System.Windows.Forms.Padding(0);
+            this.TxtTimeCycle.Name = "TxtTimeCycle";
+            this.TxtTimeCycle.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.TxtTimeCycle.Size = new System.Drawing.Size(149, 50);
+            this.TxtTimeCycle.TabIndex = 34;
+            this.TxtTimeCycle.Text = "Tempo de Ciclo";
             // 
-            // ListMaterial
+            // TxtImge
             // 
-            this.ListMaterial.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(126)))), ((int)(((byte)(235)))));
-            this.ListMaterial.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tableLayoutPanel1.SetColumnSpan(this.ListMaterial, 2);
-            this.ListMaterial.ColumnWidth = 4;
-            this.ListMaterial.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ListMaterial.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F);
-            this.ListMaterial.ForeColor = System.Drawing.Color.White;
-            this.ListMaterial.FormattingEnabled = true;
-            this.ListMaterial.Location = new System.Drawing.Point(3, 553);
-            this.ListMaterial.Name = "ListMaterial";
-            this.tableLayoutPanel1.SetRowSpan(this.ListMaterial, 4);
-            this.ListMaterial.Size = new System.Drawing.Size(293, 150);
-            this.ListMaterial.TabIndex = 32;
-            this.ListMaterial.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ListMaterial_ItemCheck);
-            this.ListMaterial.SelectedIndexChanged += new System.EventHandler(this.ListMaterial_SelectedIndexChanged);
+            this.TxtImge.AutoSize = true;
+            this.TxtImge.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TxtImge.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TxtImge.ForeColor = System.Drawing.Color.White;
+            this.TxtImge.Location = new System.Drawing.Point(0, 100);
+            this.TxtImge.Margin = new System.Windows.Forms.Padding(0);
+            this.TxtImge.Name = "TxtImge";
+            this.TxtImge.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.TxtImge.Size = new System.Drawing.Size(149, 50);
+            this.TxtImge.TabIndex = 33;
+            this.TxtImge.Text = "Image";
             // 
-            // label3
+            // textCycleTime
             // 
-            this.label3.AutoSize = true;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(0, 500);
-            this.label3.Margin = new System.Windows.Forms.Padding(0);
-            this.label3.Name = "label3";
-            this.label3.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.label3.Size = new System.Drawing.Size(160, 50);
-            this.label3.TabIndex = 30;
-            this.label3.Text = "Codigo Material";
+            this.textCycleTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tableLayoutPanel1.SetColumnSpan(this.textCycleTime, 2);
+            this.textCycleTime.Location = new System.Drawing.Point(3, 303);
+            this.textCycleTime.Name = "textCycleTime";
+            this.textCycleTime.Size = new System.Drawing.Size(286, 26);
+            this.textCycleTime.TabIndex = 32;
+            this.textCycleTime.MouseClick += new System.Windows.Forms.MouseEventHandler(this.textCycleTime_MouseClick);
             // 
-            // TxtQuant
+            // TxtDescriptionL
             // 
-            this.TxtQuant.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel1.SetColumnSpan(this.TxtQuant, 2);
-            this.TxtQuant.Location = new System.Drawing.Point(3, 453);
-            this.TxtQuant.Name = "TxtQuant";
-            this.TxtQuant.Size = new System.Drawing.Size(286, 26);
-            this.TxtQuant.TabIndex = 29;
-            this.TxtQuant.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TxtQuant_MouseClick);
+            this.TxtDescriptionL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tableLayoutPanel1.SetColumnSpan(this.TxtDescriptionL, 2);
+            this.TxtDescriptionL.Location = new System.Drawing.Point(3, 53);
+            this.TxtDescriptionL.Name = "TxtDescriptionL";
+            this.TxtDescriptionL.Size = new System.Drawing.Size(286, 26);
+            this.TxtDescriptionL.TabIndex = 30;
+            this.TxtDescriptionL.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TxtDescriptionL_MouseClick);
             // 
-            // Date
+            // txtProductRelated
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.Date, 2);
-            this.Date.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Date.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.Date.Location = new System.Drawing.Point(3, 253);
-            this.Date.Name = "Date";
-            this.Date.Size = new System.Drawing.Size(286, 26);
-            this.Date.TabIndex = 27;
+            this.txtProductRelated.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.txtProductRelated, 2);
+            this.txtProductRelated.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtProductRelated.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtProductRelated.ForeColor = System.Drawing.Color.White;
+            this.txtProductRelated.Location = new System.Drawing.Point(0, 350);
+            this.txtProductRelated.Margin = new System.Windows.Forms.Padding(0);
+            this.txtProductRelated.Name = "txtProductRelated";
+            this.txtProductRelated.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.txtProductRelated.Size = new System.Drawing.Size(299, 50);
+            this.txtProductRelated.TabIndex = 29;
+            this.txtProductRelated.Text = "Produtos Relacionado";
             // 
-            // Quantidade
+            // TxtDescription
             // 
-            this.Quantidade.AutoSize = true;
-            this.Quantidade.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Quantidade.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Quantidade.ForeColor = System.Drawing.Color.White;
-            this.Quantidade.Location = new System.Drawing.Point(0, 400);
-            this.Quantidade.Margin = new System.Windows.Forms.Padding(0);
-            this.Quantidade.Name = "Quantidade";
-            this.Quantidade.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.Quantidade.Size = new System.Drawing.Size(160, 50);
-            this.Quantidade.TabIndex = 26;
-            this.Quantidade.Text = "Quantidade";
+            this.TxtDescription.AutoSize = true;
+            this.TxtDescription.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TxtDescription.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TxtDescription.ForeColor = System.Drawing.Color.White;
+            this.TxtDescription.Location = new System.Drawing.Point(0, 0);
+            this.TxtDescription.Margin = new System.Windows.Forms.Padding(0);
+            this.TxtDescription.Name = "TxtDescription";
+            this.TxtDescription.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.TxtDescription.Size = new System.Drawing.Size(149, 50);
+            this.TxtDescription.TabIndex = 20;
+            this.TxtDescription.Text = "Descrição";
             // 
-            // label2
+            // ListProductCheck
             // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(0, 200);
-            this.label2.Margin = new System.Windows.Forms.Padding(0);
-            this.label2.Name = "label2";
-            this.label2.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.label2.Size = new System.Drawing.Size(160, 50);
-            this.label2.TabIndex = 24;
-            this.label2.Text = "Data ";
+            this.ListProductCheck.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(126)))), ((int)(((byte)(235)))));
+            this.ListProductCheck.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tableLayoutPanel1.SetColumnSpan(this.ListProductCheck, 2);
+            this.ListProductCheck.ColumnWidth = 4;
+            this.ListProductCheck.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ListProductCheck.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F);
+            this.ListProductCheck.ForeColor = System.Drawing.Color.White;
+            this.ListProductCheck.FormattingEnabled = true;
+            this.ListProductCheck.Location = new System.Drawing.Point(3, 403);
+            this.ListProductCheck.Name = "ListProductCheck";
+            this.tableLayoutPanel1.SetRowSpan(this.ListProductCheck, 4);
+            this.ListProductCheck.Size = new System.Drawing.Size(293, 180);
+            this.ListProductCheck.TabIndex = 14;
+            this.ListProductCheck.SelectedIndexChanged += new System.EventHandler(this.ListProductCheck_SelectedIndexChanged);
             // 
-            // textEmail
+            // picOpen
             // 
-            this.textEmail.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel1.SetColumnSpan(this.textEmail, 2);
-            this.textEmail.Location = new System.Drawing.Point(3, 153);
-            this.textEmail.Name = "textEmail";
-            this.textEmail.Size = new System.Drawing.Size(286, 26);
-            this.textEmail.TabIndex = 23;
-            this.textEmail.MouseClick += new System.Windows.Forms.MouseEventHandler(this.textEmail_MouseClick);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(0, 100);
-            this.label1.Margin = new System.Windows.Forms.Padding(0);
-            this.label1.Name = "label1";
-            this.label1.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.label1.Size = new System.Drawing.Size(160, 50);
-            this.label1.TabIndex = 21;
-            this.label1.Text = "Email";
-            // 
-            // TxtOrder
-            // 
-            this.TxtOrder.AutoSize = true;
-            this.TxtOrder.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TxtOrder.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TxtOrder.ForeColor = System.Drawing.Color.White;
-            this.TxtOrder.Location = new System.Drawing.Point(0, 0);
-            this.TxtOrder.Margin = new System.Windows.Forms.Padding(0);
-            this.TxtOrder.Name = "TxtOrder";
-            this.TxtOrder.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.TxtOrder.Size = new System.Drawing.Size(160, 50);
-            this.TxtOrder.TabIndex = 20;
-            this.TxtOrder.Text = "Order";
-            // 
-            // TxtOrdem
-            // 
-            this.TxtOrdem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel1.SetColumnSpan(this.TxtOrdem, 2);
-            this.TxtOrdem.Location = new System.Drawing.Point(3, 53);
-            this.TxtOrdem.Name = "TxtOrdem";
-            this.TxtOrdem.Size = new System.Drawing.Size(286, 26);
-            this.TxtOrdem.TabIndex = 28;
-            this.TxtOrdem.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TxtNameUser_MouseClick);
+            this.picOpen.BackColor = System.Drawing.Color.Transparent;
+            this.picOpen.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("picOpen.BackgroundImage")));
+            this.picOpen.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.picOpen.FlatAppearance.BorderSize = 0;
+            this.picOpen.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.picOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.picOpen.Location = new System.Drawing.Point(149, 150);
+            this.picOpen.Margin = new System.Windows.Forms.Padding(0);
+            this.picOpen.Name = "picOpen";
+            this.picOpen.Size = new System.Drawing.Size(46, 40);
+            this.picOpen.TabIndex = 36;
+            this.picOpen.UseVisualStyleBackColor = false;
+            this.picOpen.Click += new System.EventHandler(this.picOpen_Click);
             // 
             // panel3
             // 
@@ -698,14 +642,10 @@
             this.Grid_Users.ColumnHeadersHeight = 54;
             this.Grid_Users.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.Grid_Users.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ID,
-            this.Email,
-            this.Order,
-            this.DateProduct,
-            this.TableHour,
-            this.Quantity,
-            this.MaterialCode,
-            this.CycleTimeProduction});
+            this.ProductCode,
+            this.Description,
+            this.Image,
+            this.CycleTime});
             this.Grid_Users.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Grid_Users.EnableHeadersVisualStyles = false;
             this.Grid_Users.GridColor = System.Drawing.Color.White;
@@ -731,55 +671,31 @@
             this.Grid_Users.TabIndex = 0;
             this.Grid_Users.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Grid_Users_CellClick);
             // 
-            // ID
+            // ProductCode
             // 
-            this.ID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ID.HeaderText = "ID";
-            this.ID.Name = "ID";
+            this.ProductCode.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ProductCode.HeaderText = "Código";
+            this.ProductCode.Name = "ProductCode";
             // 
-            // Email
+            // Description
             // 
-            this.Email.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Email.HeaderText = "E-mail";
-            this.Email.Name = "Email";
+            this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Description.HeaderText = "Descrição";
+            this.Description.Name = "Description";
             // 
-            // Order
+            // Image
             // 
-            this.Order.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Order.HeaderText = "Ordem";
-            this.Order.Name = "Order";
+            this.Image.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Image.HeaderText = "Imagem";
+            this.Image.Name = "Image";
             // 
-            // DateProduct
+            // CycleTime
             // 
-            this.DateProduct.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.DateProduct.HeaderText = "Data ";
-            this.DateProduct.Name = "DateProduct";
+            this.CycleTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.CycleTime.HeaderText = "Tempo de Ciclo";
+            this.CycleTime.Name = "CycleTime";
             // 
-            // TableHour
-            // 
-            this.TableHour.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.TableHour.HeaderText = "Hora";
-            this.TableHour.Name = "TableHour";
-            // 
-            // Quantity
-            // 
-            this.Quantity.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Quantity.HeaderText = "Quantidade";
-            this.Quantity.Name = "Quantity";
-            // 
-            // MaterialCode
-            // 
-            this.MaterialCode.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.MaterialCode.HeaderText = "Código Material";
-            this.MaterialCode.Name = "MaterialCode";
-            // 
-            // CycleTimeProduction
-            // 
-            this.CycleTimeProduction.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.CycleTimeProduction.HeaderText = "Tempo";
-            this.CycleTimeProduction.Name = "CycleTimeProduction";
-            // 
-            // Frm_Production
+            // Frm_Order
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
@@ -789,7 +705,7 @@
             this.Controls.Add(this.TlPnlTop);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "Frm_Production";
+            this.Name = "Frm_Order";
             this.Padding = new System.Windows.Forms.Padding(2);
             this.Load += new System.EventHandler(this.Frm_User_Load);
             this.Controls.SetChildIndex(this.TlPnlTop, 0);
@@ -804,6 +720,7 @@
             this.panel4.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PicProduct)).EndInit();
             this.PnlGrid.ResumeLayout(false);
             this.PnlGrid.PerformLayout();
             this.pnlDel.ResumeLayout(false);
@@ -830,12 +747,7 @@
         private System.Windows.Forms.Label TxtPainel;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button BtnExit;
-        private System.Windows.Forms.Label TxtOrder;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label Quantidade;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textEmail;
-        private System.Windows.Forms.DateTimePicker Date;
+        private System.Windows.Forms.Label TxtDescription;
         private System.Windows.Forms.Label LineSearch;
         private System.Windows.Forms.Timer Timer;
         private System.Windows.Forms.Panel PnlGrid;
@@ -845,26 +757,23 @@
         private System.Windows.Forms.Panel Messagem;
         private System.Windows.Forms.TextBox TxtMensagem;
         private System.Windows.Forms.Button btnEdit;
-        private System.Windows.Forms.RichTextBox TextInfo;
-        private System.Windows.Forms.TextBox TxtOrdem;
         private System.Windows.Forms.Panel pnlDel;
         private System.Windows.Forms.TextBox textDel;
         private System.Windows.Forms.PictureBox pictureDel;
         private System.Windows.Forms.TextBox textDelInfo;
         private System.Windows.Forms.Button bntConfirmDel;
         private System.Windows.Forms.Button bntCancelDel;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox TxtQuant;
-        private System.Windows.Forms.CheckedListBox ListMaterial;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.DateTimePicker Hour;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Email;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Order;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DateProduct;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TableHour;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Quantity;
-        private System.Windows.Forms.DataGridViewTextBoxColumn MaterialCode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CycleTimeProduction;
+        private System.Windows.Forms.CheckedListBox ListProductCheck;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProductCode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Description;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Image;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CycleTime;
+        private System.Windows.Forms.TextBox textCycleTime;
+        private System.Windows.Forms.TextBox TxtDescriptionL;
+        private System.Windows.Forms.Label txtProductRelated;
+        private System.Windows.Forms.Label TxtTimeCycle;
+        private System.Windows.Forms.Label TxtImge;
+        private System.Windows.Forms.PictureBox PicProduct;
+        private System.Windows.Forms.Button picOpen;
     }
 }

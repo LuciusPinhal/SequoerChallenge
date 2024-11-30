@@ -56,9 +56,9 @@ namespace OrderManagerAPP
             Form selectedForm = null;
             switch (selectedButton.Name)
             {
-                //case "BtnOrder":
-                //    selectedForm = new Frm_Order();
-                //    break;
+                case "BtnOrder":
+                    selectedForm = new Frm_Order();
+                    break;
                 case "BtnProduction":
                     selectedForm = new Frm_Production();
                     break;

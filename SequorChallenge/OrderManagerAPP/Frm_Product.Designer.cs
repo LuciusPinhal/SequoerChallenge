@@ -162,7 +162,7 @@
             this.TxtSearch.Name = "TxtSearch";
             this.TxtSearch.Size = new System.Drawing.Size(395, 24);
             this.TxtSearch.TabIndex = 2;
-            this.TxtSearch.Text = "PesquisarP";
+            this.TxtSearch.Text = "Pesquisar";
             this.TxtSearch.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TxtSearch_MouseClick);
             this.TxtSearch.TextChanged += new System.EventHandler(this.TxtSearch_TextChanged);
             this.TxtSearch.Leave += new System.EventHandler(this.TxtSearch_Leave);

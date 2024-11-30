@@ -33,7 +33,7 @@ namespace OrderManagerAPP
         private string QuantitySelect = null;
         private int CycleTime = 0;
         private string MaterialSelect = null;
-        private List<Material> material = new List<Material>();
+
         public Frm_Production()
         {
             InitializeComponent();
@@ -181,9 +181,11 @@ namespace OrderManagerAPP
             TxtOrdem.Text = OrderSelect;       
             TxtQuant.Text = QuantitySelect;
 
-            DateTime dateTime = DateTime.Parse(Dateselect); 
+            DateTime dateTime = DateTime.Parse(Dateselect);
+            DateTime DateHour = DateTime.Parse(Hourselect);
+            
             Date.Text = dateTime.ToShortDateString(); 
-            Hour.Text = dateTime.ToShortTimeString(); 
+            Hour.Text = DateHour.ToShortTimeString(); 
 
 
             for (int i = 0; i < ListMaterial.Items.Count; i++)
@@ -206,9 +208,17 @@ namespace OrderManagerAPP
                 IDProduction = Convert.ToInt64(row.Cells["ID"].Value);
                 EmailSelect = row.Cells["Email"].Value?.ToString();
                 OrderSelect = row.Cells["Order"].Value?.ToString();
-                Dateselect = row.Cells["DateProduct"].Value?.ToString();
                 QuantitySelect = row.Cells["Quantity"].Value?.ToString();
-                MaterialSelect = row.Cells["MaterialCode"].Value?.ToString();            
+                MaterialSelect = row.Cells["MaterialCode"].Value?.ToString();
+
+                string datePart = row.Cells["DateProduct"].Value?.ToString();
+                string hourPart = row.Cells["TableHour"].Value?.ToString();
+
+                if (DateTime.TryParse($"{datePart} {hourPart}", out DateTime fullDateTime))
+                {
+                    Dateselect = fullDateTime.ToString("yyyy-MM-dd");
+                    Hourselect = fullDateTime.ToString("HH:mm:ss.fff");
+                }
 
                 if (!string.IsNullOrEmpty(EmailSelect))
                 {
@@ -264,6 +274,7 @@ namespace OrderManagerAPP
                                row.Cells["Email"].Value?.ToString().ToLower().Contains(searchValue) == true ||
                                row.Cells["Order"].Value?.ToString().ToLower().Contains(searchValue) == true ||
                                row.Cells["DateProduct"].Value?.ToString().ToLower().Contains(searchValue) == true ||
+                               row.Cells["TableHour"].Value?.ToString().ToLower().Contains(searchValue) == true ||                              
                                row.Cells["Quantity"].Value?.ToString().ToLower().Contains(searchValue) == true ||
                                row.Cells["MaterialCode"].Value?.ToString().ToLower().Contains(searchValue) == true;
 
@@ -297,7 +308,7 @@ namespace OrderManagerAPP
                   
                         foreach (var product in productions)
                         {
-                            Grid_Users.Rows.Add(product.Id, product.Email, product.Order, product.ProductionDate, product.Quantity, product.materialCode, product.CycleTime);
+                            Grid_Users.Rows.Add(product.Id, product.Email, product.Order, product.ProductionDate, product.ProductionTime,product.Quantity, product.materialCode, product.CycleTime);
                         }
                     }
                     else
@@ -355,25 +366,37 @@ namespace OrderManagerAPP
             string userTime = Hour.Text;
 
 
-
             Production production = new Production();
-            if (DateTime.TryParse($"{userDate} {userTime}", out DateTime parsedDateTime))
+
+            if (DateTime.TryParse(userDate, out DateTime parsedDate) &&
+                DateTime.TryParse(userTime, out DateTime parsedTime))
             {
+                // Combina a data e a hora em um único DateTime
+                DateTime parsedDateTime = new DateTime(
+                    parsedDate.Year,
+                    parsedDate.Month,
+                    parsedDate.Day,
+                    parsedTime.Hour,
+                    parsedTime.Minute,
+                    parsedTime.Second,
+                    parsedTime.Millisecond
+                );
+
                 production = new Production()
                 {
                     Id = 0,
                     Email = textEmail.Text,
                     Order = TxtOrdem.Text,
-                    ProductionDate = parsedDateTime.ToString("yyyy-MM-dd"), 
-                    ProductionTime = parsedDateTime.ToString("HH:mm:ss.fff"), 
+                    ProductionDate = parsedDateTime.ToString("yyyy-MM-dd"),
+                    ProductionTime = parsedDateTime.ToString("HH:mm:ss.fff"),
                     Quantity = quantity,
-                    materialCode = material[0].MaterialCode,
+                    materialCode = MaterialSelect,
                     CycleTime = CycleTime,
                 };
             }
             else
-            {
-                MessageBox.Show("Data ou hora inválida. Por favor, insira os valores corretamente.", "Erro de Formatação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            {             
+                  MessageBox.Show("Data ou hora inválida. Verifique os valores inseridos.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
 
@@ -437,11 +460,22 @@ namespace OrderManagerAPP
             CycleTime = (int)stopwatch.Elapsed.TotalSeconds;         
 
             string userDate = Date.Text;
-            string userTime = Hour.Text;
-
+            string userTime = Hour.Text;      
             Production production = new Production();
-            if (DateTime.TryParse($"{userDate} {userTime}", out DateTime parsedDateTime))
+
+            if (DateTime.TryParse(userDate, out DateTime parsedDate) &&
+                DateTime.TryParse(userTime, out DateTime parsedTime))
             {
+                DateTime parsedDateTime = new DateTime(
+                    parsedDate.Year,
+                    parsedDate.Month,
+                    parsedDate.Day,
+                    parsedTime.Hour,
+                    parsedTime.Minute,
+                    parsedTime.Second,
+                    parsedTime.Millisecond
+                );
+
                 production = new Production()
                 {
                     Id = IDProduction,
@@ -450,15 +484,15 @@ namespace OrderManagerAPP
                     ProductionDate = parsedDateTime.ToString("yyyy-MM-dd"),
                     ProductionTime = parsedDateTime.ToString("HH:mm:ss.fff"),
                     Quantity = quantity,
-                    materialCode = material[1].MaterialCode,
+                    materialCode = MaterialSelect,
                     CycleTime = CycleTime,
                 };
             }
             else
             {
-                MessageBox.Show("Data ou hora inválida. Por favor, insira os valores corretamente.", "Erro de Formatação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Data ou hora inválida. Verifique os valores inseridos.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            material = new List<Material>();
+
             string jsonContent = JsonSerializer.Serialize(production);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
@@ -650,33 +684,18 @@ namespace OrderManagerAPP
         }
 
         private void ListMaterial_SelectedIndexChanged(object sender, EventArgs e)
-        {       
-            // Crie uma lista temporária para armazenar os materiais a serem adicionados
-            List<string> materialsToAdd = new List<string>();
+        {
 
-            foreach (var item in ListMaterial.CheckedItems)
+            if (ListMaterial.CheckedItems.Count > 0)
             {
-                string code = item.ToString();
-                bool MaterialExists = material.Any(o => o.MaterialCode == code);
-
-                if (!MaterialExists)
-                {
-                    // Armazena o material que deve ser adicionado
-                    materialsToAdd.Add(code);
-                    MaterialSelect = code;
-                }
+                var selectedItem = ListMaterial.CheckedItems[0];
+                TxtMensagem.Text = "Material selecionado: " + selectedItem.ToString();
+                TxtMensagem.Visible = true;
+                Messagem.Visible = true;
+                messageTimer.Start();
+                MaterialSelect = selectedItem.ToString();
             }
-
-            // Agora, fora do foreach, adicione os materiais
-            foreach (var code in materialsToAdd)
-            {
-                material.Add(new Material()
-                {
-                    MaterialCode = code,
-                    MaterialDescription = "",
-                });
-            }
-            
+             
         }
     }
 }
