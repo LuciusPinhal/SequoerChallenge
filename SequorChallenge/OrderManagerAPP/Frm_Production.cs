@@ -689,11 +689,13 @@ namespace OrderManagerAPP
             if (ListMaterial.CheckedItems.Count > 0)
             {
                 var selectedItem = ListMaterial.CheckedItems[0];
-                TxtMensagem.Text = "Material selecionado: " + selectedItem.ToString();
+                MaterialSelect = selectedItem.ToString();
+
+                TxtMensagem.Text = "Material selecionado: " + MaterialSelect;
                 TxtMensagem.Visible = true;
                 Messagem.Visible = true;
                 messageTimer.Start();
-                MaterialSelect = selectedItem.ToString();
+
             }
              
         }
