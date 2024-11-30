@@ -32,3 +32,4 @@ C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\Ord
 C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.Base.resources
 C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.Frm_Material.resources
 C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.Frm_Product.resources
+C:\Lubilus2\Program\Programação\1 - Sequor\SequorChallenge\SequorChallenge\OrderManagerAPP\obj\Debug\OrderManagerAPP.Frm_Production.resources
