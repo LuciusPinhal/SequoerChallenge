@@ -159,6 +159,7 @@ namespace OrderManagerAPP
         private async void BtnAdd_Click(object sender, EventArgs e)
         {
             ClearText();
+            VarProductCode = null;
             await LoadProductAsync();
             AbrirPainel();
             TitlePainel = "Adicionar";
@@ -168,7 +169,7 @@ namespace OrderManagerAPP
         }
         private async void btnEdit_Click(object sender, EventArgs e)
         {
-        
+            VarProductCode = null;
             AbrirPainel();
             await LoadProductAsync();
             TitlePainel = "Editar "+ VarOrder;
@@ -365,6 +366,7 @@ namespace OrderManagerAPP
         private void ClearText()
         {
             TxtQuantity.Text = "";
+            UncheckAllItems();
         }
 
         private async Task AddUserAsync()
@@ -381,6 +383,13 @@ namespace OrderManagerAPP
                 MessageBox.Show("Por favor, insira ao menos um Código de produto.", "Erro de Descrição", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            if (ListProduct == null)
+            {
+                MessageBox.Show("Selecione ao menos um Produto.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+        
             await LoadProductAsync();
 
             Order order = new Order
@@ -433,6 +442,12 @@ namespace OrderManagerAPP
             if (!int.TryParse(TxtQuantity.Text, out int Qnt))
             {
                 MessageBox.Show("Por favor, insira um valor numérico válido para o ciclo de tempo.", "Valor Inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (ListProduct == null)
+            {
+                MessageBox.Show("Selecione ao menos um Produto.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

@@ -422,7 +422,7 @@
             this.label3.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
             this.label3.Size = new System.Drawing.Size(160, 50);
             this.label3.TabIndex = 30;
-            this.label3.Text = "Codigo Material";
+            this.label3.Text = "Relacionado Material";
             // 
             // TxtQuant
             // 

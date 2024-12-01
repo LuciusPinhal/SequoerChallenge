@@ -382,6 +382,7 @@
             // LbProductCode
             // 
             this.LbProductCode.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.LbProductCode, 2);
             this.LbProductCode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LbProductCode.Font = new System.Drawing.Font("Sans Serif Collection", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LbProductCode.ForeColor = System.Drawing.Color.White;
@@ -389,9 +390,9 @@
             this.LbProductCode.Margin = new System.Windows.Forms.Padding(0);
             this.LbProductCode.Name = "LbProductCode";
             this.LbProductCode.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.LbProductCode.Size = new System.Drawing.Size(149, 50);
+            this.LbProductCode.Size = new System.Drawing.Size(299, 50);
             this.LbProductCode.TabIndex = 34;
-            this.LbProductCode.Text = "Código Produto";
+            this.LbProductCode.Text = "Produto Relacionado";
             // 
             // LbQuantity
             // 
