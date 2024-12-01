@@ -89,16 +89,35 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                                 transaction))
                             {
                                 cmdOrder.Parameters.AddWithValue("@NEW_PRODUCTCODE", order.ProductCode);
+
                                 foreach (var material in order.Materials)
                                 {
                                     cmdOrder.Parameters.AddWithValue("@MATERIALCODE", material.MaterialCode);
-                                    linhasAfetadas += cmdOrder.ExecuteNonQuery();
+
+                                    try
+                                    {
+                                        linhasAfetadas += cmdOrder.ExecuteNonQuery();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                        
+                                        if (ex.Message.Contains("Viola")) 
+                                        {
+                                    
+                                            Console.WriteLine($"Chave duplicada encontrada para o material {material.MaterialCode}. Ignorando este erro.");
+                                            continue; 
+                                        }
+                                        else
+                                        {
+                                            // Caso seja outro erro, lança a exceção
+                                            throw new Exception("Erro ao editar o código do produto em ProductMaterial. Verifique os dados.", ex);
+                                        }
+                                    }
                                 }
                             }
                         }
 
                         transaction.Commit();
-
                         return linhasAfetadas > 0;
                     }
                     catch
@@ -120,6 +139,7 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                 }
             }
         }
+
         public bool EditMaterialProduct(List<Order> orders)
         {
             int linhasAfetadas = 0;
@@ -148,13 +168,27 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                                     // Código do produto usado como critério
                                     cmdOrder.Parameters.AddWithValue("@PRODUCTCODE", order.ProductCode);
 
-                                    linhasAfetadas += cmdOrder.ExecuteNonQuery();
+                                    try
+                                    {
+                                        linhasAfetadas += cmdOrder.ExecuteNonQuery();
+                                    }
+                                    catch (Exception ex)
+                                    {                            
+                                        if (ex.Message.Contains("Viola"))  
+                                        {                                 
+                                            Console.WriteLine($"Chave duplicada encontrada para o material {material.MaterialCode}. Ignorando este erro.");
+                                            continue; 
+                                        }
+                                        else
+                                        {
+                                            throw new Exception("Erro ao editar o código do material em ProductMaterial. Verifique os dados.", ex);
+                                        }
+                                    }
                                 }
                             }
                         }
 
                         transaction.Commit();
-
                         return linhasAfetadas > 0;
                     }
                     catch
@@ -176,6 +210,7 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                 }
             }
         }
+
 
         public bool DeleteProductMaterial(string? MaterialCode = null, string? ProductCode = null)
         {
