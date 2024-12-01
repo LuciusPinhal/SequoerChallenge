@@ -393,18 +393,22 @@ namespace OrderManagerAPP
 
             if (order == null || !order.Any())
             {
-                Order newOrder = new Order()
-                {
-                    OS = "",
-                    Quantity = 0,
-                    ProductCode = "",
-                    ProductDescription = "",
-                    Image = "",
-                    CycleTime = 0,
-                    Materials = new List<Material>()
-                };
-                newOrder.Materials.Add(material);
-                order.Add(newOrder);
+
+                MessageBox.Show("Por favor, insira ao menos um produto.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+
+                //Order newOrder = new Order()
+                //{
+                //    OS = "",
+                //    Quantity = 0,
+                //    ProductCode = "",
+                //    ProductDescription = "",
+                //    Image = "",
+                //    CycleTime = 0,
+                //    Materials = new List<Material>()
+                //};
+                //newOrder.Materials.Add(material);
+                //order.Add(newOrder);
             }
             else
             {
@@ -467,18 +471,21 @@ namespace OrderManagerAPP
 
             if (order == null || !order.Any())
             {
-                Order newOrder = new Order()
-                {
-                    OS = "",
-                    Quantity = 0,
-                    ProductCode = "",
-                    ProductDescription = "",
-                    Image = "",
-                    CycleTime = 0,
-                    Materials = new List<Material>()
-                };         
-                newOrder.Materials.Add(material);
-                order.Add(newOrder);
+
+                MessageBox.Show("Por favor, insira ao menos um produto.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+                //Order newOrder = new Order()
+                //{
+                //    OS = "",
+                //    Quantity = 0,
+                //    ProductCode = "",
+                //    ProductDescription = "",
+                //    Image = "",
+                //    CycleTime = 0,
+                //    Materials = new List<Material>()
+                //};         
+                //newOrder.Materials.Add(material);
+                //order.Add(newOrder);
             }
             else
             {
