@@ -139,8 +139,16 @@ namespace OrderManagerAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro não esperado: {ex.Message}");
-                return StatusCode(500, "Erro interno do servidor");
+                var errorMessage = ex.InnerException?.Message ?? ex.Message;
+                if (errorMessage.Contains("FK__")) 
+                {
+                    return BadRequest("Não é possível excluir o material porque ele está associado a outros Produtos.");
+                }
+                else
+                {
+                    Console.WriteLine($"Erro inesperado: {ex.Message}");
+                    return StatusCode(500, "Erro interno do servidor.");
+                }
             }
 
         }

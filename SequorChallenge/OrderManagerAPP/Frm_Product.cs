@@ -1,4 +1,5 @@
-﻿using OrderManagerAPP.Models;
+﻿using OrderManagerAPI.Models;
+using OrderManagerAPP.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,6 +29,8 @@ namespace OrderManagerAPP
         private string VarImage = null;
         private string VarCycleTime = null;
         private List<Material> material = new List<Material>();
+        private List<Material> Listmaterial = new List<Material>();
+        private List<MaterialProduct> ListProductMaterial = new List<MaterialProduct>();
 
         public Frm_Product()
         {
@@ -156,6 +159,7 @@ namespace OrderManagerAPP
         {
             AbrirPainel();
             await LoadMaterialAsync();
+            await LoadProductMaterial(VarProductCode);
             TitlePainel = "Editar "+ VarProductCode;
             TxtDescriptionL.Text = VarProductDescription;
             textCycleTime.Text = VarCycleTime;
@@ -302,8 +306,68 @@ namespace OrderManagerAPP
 
                         foreach (var material in materials)
                         {
-                            ListProductCheck.Items.Add(material.MaterialCode);
+                            ListProductCheck.Items.Add(material.MaterialDescription);
                         }
+
+                        Listmaterial = materials;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Erro ao carregar materiais: " + response.ReasonPhrase);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+
+        private async Task LoadProductMaterial(string code)
+        {
+            // / api / MaterialProduct / GetProductInMaterial
+
+            string apiUrl = $"http://localhost:5178/api/MaterialProduct/GetMaterialInProduct?ProductCode={code}";
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = await response.Content.ReadAsStringAsync();
+
+                        // Supondo que a resposta seja uma lista de objetos com "materialCode"
+                        var materialProduct = JsonSerializer.Deserialize<List<MaterialProduct>>(jsonResponse, new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        });
+
+                        ListProductMaterial = materialProduct;
+
+                        foreach (var order in ListProductMaterial)
+                        {
+                          
+                            var matchingProduct = Listmaterial.FirstOrDefault(p => p.MaterialCode == order.MaterialCode);
+
+                            if (matchingProduct != null)
+                            {
+                                for (int i = 0; i < ListProductCheck.Items.Count; i++)
+                                {
+                               
+                                    if (ListProductCheck.Items[i].ToString() == matchingProduct.MaterialDescription)
+                                    {
+                                      
+                                        ListProductCheck.SetItemChecked(i, true);
+                                    }
+                                }
+
+                            }
+                        }
+
                     }
                     else
                     {
@@ -541,18 +605,23 @@ namespace OrderManagerAPP
         }
 
         private void GetSelectedMaterial()
-        {
+        {      
             foreach (var item in ListProductCheck.CheckedItems)
             {
-                string code = item.ToString();        
-                bool MaterialExists = material.Any(o => o.MaterialCode == code);
-                
+                string description = item.ToString();        
+                bool MaterialExists = material.Any(o => o.MaterialDescription == description);
+
+
+
+                Material MaterialFind = Listmaterial.FirstOrDefault(o => o.MaterialDescription == description);
+
+
                 if (!MaterialExists)
                 {
                     Material newMaterial = new Material()
                     {
-                        MaterialCode= code,
-                        MaterialDescription = "",
+                        MaterialCode= MaterialFind.MaterialCode,
+                        MaterialDescription = MaterialFind.MaterialDescription,
                     };
 
                     material.Add(newMaterial);

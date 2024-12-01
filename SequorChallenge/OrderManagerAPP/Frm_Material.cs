@@ -1,4 +1,5 @@
-﻿using OrderManagerAPP.Models;
+﻿using OrderManagerAPI.Models;
+using OrderManagerAPP.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,6 +27,8 @@ namespace OrderManagerAPP
         private string VarCodeMaterial = null;
         private string VarDescription = null;
         private List<Order> order = new List<Order>();
+        private List<Order> Listorder = new List<Order>();
+        private List<MaterialProduct> ListProductMaterial = new List<MaterialProduct>();
 
         public Frm_Material()
         {
@@ -151,6 +154,7 @@ namespace OrderManagerAPP
         {
             AbrirPainel();
             await LoadProductAsync();
+            await LoadProductMaterial(VarCodeMaterial);
             TitlePainel = "Editar "+ VarCodeMaterial;
             TxtDescriptionL.Text = VarDescription;
       
@@ -272,17 +276,19 @@ namespace OrderManagerAPP
                     {
                         string jsonResponse = await response.Content.ReadAsStringAsync();
 
-                        // Supondo que a resposta seja uma lista de objetos com "materialCode"
+                   
                         var orders = JsonSerializer.Deserialize<List<Order>>(jsonResponse, new JsonSerializerOptions
                         {
                             PropertyNameCaseInsensitive = true
                         });
 
+                        Listorder = orders;
+
                         ListProductCheck.Items.Clear();
 
                         foreach (var os in orders)
                         {
-                            ListProductCheck.Items.Add(os.ProductCode);
+                            ListProductCheck.Items.Add(os.ProductDescription);
                         }
                     }
                     else
@@ -297,6 +303,58 @@ namespace OrderManagerAPP
             }
         }
 
+        private async Task LoadProductMaterial(string code)
+        {
+            // / api / MaterialProduct / GetProductInMaterial
+
+            string apiUrl = $"http://localhost:5178/api/MaterialProduct/GetProductInMaterial?MaterialCode={code}";
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = await response.Content.ReadAsStringAsync();
+             
+                        var materialProduct = JsonSerializer.Deserialize<List<MaterialProduct>>(jsonResponse, new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        });
+
+                        ListProductMaterial = materialProduct;
+
+                        foreach (var order in ListProductMaterial)
+                        {           
+                            var matchingProduct = Listorder.FirstOrDefault(p => p.ProductCode == order.ProductCode);
+
+                            if (matchingProduct != null)
+                            {
+                                for (int i = 0; i < ListProductCheck.Items.Count; i++)
+                                {                              
+                                    if (ListProductCheck.Items[i].ToString() == matchingProduct.ProductDescription)
+                                    {                                      
+                                        ListProductCheck.SetItemChecked(i, true);
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Erro ao carregar materiais: " + response.ReasonPhrase);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
         private async void BtnConfirmar_Click(object sender, EventArgs e)
         {
             if (TxtPainel.Text == "Adicionar")
@@ -319,7 +377,6 @@ namespace OrderManagerAPP
         {       
             TxtDescriptionL.Text = "";         
         }
-
         private async Task AddUserAsync()
         {
             if (string.IsNullOrWhiteSpace(TxtDescriptionL.Text))
@@ -551,17 +608,20 @@ namespace OrderManagerAPP
         {
             foreach (var item in ListProductCheck.CheckedItems)
             {
-                string productCode = item.ToString();        
-                bool productExists = order.Any(o => o.ProductCode == productCode);
-                
+                string productName = item.ToString();
+
+                Order orderL = Listorder.FirstOrDefault(o => o.ProductDescription == productName);
+
+                bool productExists = order.Any(o => o.ProductDescription == productName);      
+
                 if (!productExists)
                 {
                     Order newOrder = new Order()
                     {
                         OS = "",
                         Quantity = 0,
-                        ProductCode = productCode,
-                        ProductDescription = "",
+                        ProductCode = orderL.ProductCode,
+                        ProductDescription = orderL.ProductDescription,
                         Image = "",
                         CycleTime = 0,
                         Materials = new List<Material>()

@@ -3,10 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
@@ -96,6 +98,12 @@ namespace OrderManagerAPP
                             {
                                 EmailUsuario = email
                             };
+
+
+                        
+                            string iconPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..",  "Icon.ico");
+
+                            frmMain.Icon = new Icon(iconPath);
 
                             frmMain.Show();
 

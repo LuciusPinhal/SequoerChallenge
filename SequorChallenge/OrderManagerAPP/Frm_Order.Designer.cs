@@ -120,6 +120,7 @@
             this.btnProduct.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnProduct.BackgroundImage")));
             this.btnProduct.Cursor = System.Windows.Forms.Cursors.No;
             this.btnProduct.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnProduct.Enabled = false;
             this.btnProduct.FlatAppearance.BorderSize = 0;
             this.btnProduct.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
             this.btnProduct.FlatStyle = System.Windows.Forms.FlatStyle.Flat;

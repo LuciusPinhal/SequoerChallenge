@@ -217,5 +217,63 @@ namespace OrderManagerAPI.DALProductMaterialSQL
 
         }
 
+        public List<MaterialProduct> GetListMaterial(string? MaterialCode = null, string? ProductCode = null)
+        {
+            var listProduct = new List<MaterialProduct>();
+
+            try
+            {
+                Connection.Open();
+
+               string query = ProductCode == null
+                   ? "SELECT * FROM [ProductMaterial] WHERE MaterialCode = @MATERIALCODE"
+                   : "SELECT * FROM [ProductMaterial] WHERE ProductCode = @PRODUCTCODE"; 
+
+                using (var cmd = new SqlCommand(query, Connection))
+                {
+   
+                    if (!string.IsNullOrEmpty(MaterialCode))
+                    {
+                        cmd.Parameters.AddWithValue("@MATERIALCODE", MaterialCode);
+                    }
+
+                    if (!string.IsNullOrEmpty(ProductCode))
+                    {
+                        cmd.Parameters.AddWithValue("@PRODUCTCODE", ProductCode);
+                    }
+
+                    // Executar o comando e ler os resultados
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var listMaterial = new MaterialProduct
+                            {
+                                ProductCode = reader.GetString(0),  // Ajuste o índice se necessário
+                                MaterialCode = reader.GetString(1), // Ajuste o índice se necessário
+                            };
+
+                            listProduct.Add(listMaterial);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar Materiais e Produtos relacionados. Verifique o cadastro no banco de dados", ex);
+            }
+            finally
+            {
+                if (Connection.State == System.Data.ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+            }
+
+            return listProduct;
+        }
+
+
+
     }
 }

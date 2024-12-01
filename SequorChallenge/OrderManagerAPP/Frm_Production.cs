@@ -34,6 +34,9 @@ namespace OrderManagerAPP
         private int CycleTime = 0;
         private string MaterialSelect = null;
 
+        private List<Material> Materials = new List<Material>();
+        private string FindMaterial = null;
+
         public Frm_Production()
         {
             InitializeComponent();
@@ -134,7 +137,8 @@ namespace OrderManagerAPP
 
             if (!string.IsNullOrEmpty(EmailUsuario))
             {
-                EmailSelect = EmailUsuario; 
+                EmailSelect = EmailUsuario;
+                textEmail.Text = EmailUsuario;
             }
             await LoadOrdersAsync();
         }
@@ -165,12 +169,13 @@ namespace OrderManagerAPP
         {
             stopwatch.Reset();
             stopwatch.Start();
+   
             ClearText();
 
-            if(OrderSelect != null)
-            {
-                TxtOrdem.Text = OrderSelect;
-            }
+            //if(OrderSelect != null)
+            //{
+            //    TxtOrdem.Text = OrderSelect;
+            //}
 
             AbrirPainel();
             TitlePainel = "Adicionar";
@@ -195,17 +200,22 @@ namespace OrderManagerAPP
             DateTime DateHour = DateTime.Parse(Hourselect);
             
             Date.Text = dateTime.ToShortDateString(); 
-            Hour.Text = DateHour.ToShortTimeString(); 
+            Hour.Text = DateHour.ToShortTimeString();
+            //aq
 
-
-            for (int i = 0; i < ListMaterial.Items.Count; i++)
-            {            
-                if (ListMaterial.Items[i].ToString() == MaterialSelect)
-                {
-                    ListMaterial.SetItemChecked(i, true);
-                    break;
+            var selectedProduct = Materials.FirstOrDefault(p => p.MaterialCode == FindMaterial);
+            if(selectedProduct != null)
+            {
+                for (int i = 0; i < ListMaterial.Items.Count; i++)
+                {            
+                    if (ListMaterial.Items[i].ToString() == selectedProduct.MaterialDescription)
+                    {
+                        ListMaterial.SetItemChecked(i, true);
+                        break;
+                    }
                 }
             }
+
         }
 
         private void Grid_Users_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -219,7 +229,7 @@ namespace OrderManagerAPP
                 EmailSelect = row.Cells["Email"].Value?.ToString();
                 OrderSelect = row.Cells["Order"].Value?.ToString();
                 QuantitySelect = row.Cells["Quantity"].Value?.ToString();
-                MaterialSelect = row.Cells["MaterialCode"].Value?.ToString();
+                FindMaterial = row.Cells["MaterialCode"].Value?.ToString();
 
                 string datePart = row.Cells["DateProduct"].Value?.ToString();
                 string hourPart = row.Cells["TableHour"].Value?.ToString();
@@ -346,7 +356,7 @@ namespace OrderManagerAPP
         {
             TxtOrdem.Text = "";
             TxtQuant.Text = "";
-            textEmail.Text = "";
+            textEmail.Text = EmailUsuario;
             TxtOrdem.Text = "";
 
             Date.Value = DateTime.Now;
@@ -383,6 +393,7 @@ namespace OrderManagerAPP
             string userDate = Date.Text; 
             string userTime = Hour.Text;
 
+            await LoadMaterialAsync();
 
             Production production = new Production();
 
@@ -408,7 +419,7 @@ namespace OrderManagerAPP
                     ProductionDate = parsedDateTime.ToString("yyyy-MM-dd"),
                     ProductionTime = parsedDateTime.ToString("HH:mm:ss.fff"),
                     Quantity = quantity,
-                    materialCode = MaterialSelect,
+                    materialCode = FindMaterial,
                     CycleTime = CycleTime,
                 };
             }
@@ -491,6 +502,7 @@ namespace OrderManagerAPP
                 return;
             }
 
+            await LoadMaterialAsync();
             CycleTime = (int)stopwatch.Elapsed.TotalSeconds;         
 
             string userDate = Date.Text;
@@ -518,7 +530,7 @@ namespace OrderManagerAPP
                     ProductionDate = parsedDateTime.ToString("yyyy-MM-dd"),
                     ProductionTime = parsedDateTime.ToString("HH:mm:ss.fff"),
                     Quantity = quantity,
-                    materialCode = MaterialSelect,
+                    materialCode = FindMaterial,
                     CycleTime = CycleTime,
                 };
             }
@@ -681,7 +693,7 @@ namespace OrderManagerAPP
         private async Task LoadMaterialAsync()
         {
             string apiUrl = "http://localhost:5178/api/Material/GetMaterial";
-
+            //aq
             try
             {
                 using (HttpClient client = new HttpClient())
@@ -698,11 +710,18 @@ namespace OrderManagerAPP
                             PropertyNameCaseInsensitive = true
                         });
 
+                        Materials = materials;
                         ListMaterial.Items.Clear();
 
                         foreach (var material in materials)
                         {
-                            ListMaterial.Items.Add(material.MaterialCode);
+                            ListMaterial.Items.Add(material.MaterialDescription);
+                        }
+
+                        var selectedProduct = Materials.FirstOrDefault(p => p.MaterialDescription == MaterialSelect);
+                        if (selectedProduct != null)
+                        {
+                            FindMaterial = selectedProduct.MaterialCode;
                         }
                     }
                     else
@@ -716,6 +735,7 @@ namespace OrderManagerAPP
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
+  
 
         private void ListMaterial_SelectedIndexChanged(object sender, EventArgs e)
         {

@@ -29,6 +29,8 @@ namespace OrderManagerAPP
         private string VarOrder = null;
 
         private string VarProductSelect = null;
+        private string ProductFind = null;
+        private List<Order> ListProduct = new List<Order>();
 
         private Frm_Main frmMain;
         public Frm_Order(Frm_Main mainForm)
@@ -172,13 +174,17 @@ namespace OrderManagerAPP
             TitlePainel = "Editar "+ VarOrder;
             TxtQuantity.Text = VarQuantity;
 
-     
-            for (int i = 0; i < ListProductCheck.Items.Count; i++)
+
+            var selectedProduct = ListProduct.FirstOrDefault(p => p.ProductCode == ProductFind);
+            if (selectedProduct != null)
             {
-                if (ListProductCheck.Items[i].ToString() == VarProductSelect)
+                for (int i = 0; i < ListProductCheck.Items.Count; i++)
                 {
-                    ListProductCheck.SetItemChecked(i, true);
-                    break;
+                    if (ListProductCheck.Items[i].ToString() == selectedProduct.ProductDescription)
+                    {
+                        ListProductCheck.SetItemChecked(i, true);
+                        break;
+                    }
                 }
             }
         }
@@ -193,7 +199,7 @@ namespace OrderManagerAPP
                 VarProductCode = row.Cells["ProductCode"].Value?.ToString();
                 VarOrder = row.Cells["Order"].Value?.ToString();
                 VarQuantity = row.Cells["Quantity"].Value?.ToString();
-                VarProductSelect = row.Cells["ProductCode"].Value?.ToString();
+                ProductFind = row.Cells["ProductCode"].Value?.ToString();
 
                 if (!string.IsNullOrEmpty(VarProductCode))
                 {
@@ -308,22 +314,29 @@ namespace OrderManagerAPP
                     {
                         string jsonResponse = await response.Content.ReadAsStringAsync();
 
-                        // Supondo que a resposta seja uma lista de objetos com "materialCode"
                         var Products = JsonSerializer.Deserialize<List<Order>>(jsonResponse, new JsonSerializerOptions
                         {
                             PropertyNameCaseInsensitive = true
                         });
 
                         ListProductCheck.Items.Clear();
+                        //aq
+                        ListProduct = Products;
 
                         foreach (var product in Products)
                         {
-                            ListProductCheck.Items.Add(product.ProductCode);
+                            ListProductCheck.Items.Add(product.ProductDescription);
                         }
                     }
                     else
                     {
                         MessageBox.Show("Erro ao carregar materiais: " + response.ReasonPhrase);
+                    }
+
+                    var selectedProduct = ListProduct.FirstOrDefault(p => p.ProductDescription == VarProductCode);
+                    if (selectedProduct != null)
+                    {
+                        ProductFind = selectedProduct.ProductCode;
                     }
                 }
             }
@@ -345,9 +358,7 @@ namespace OrderManagerAPP
                 await EditUserAsync();
             }
 
-            //fechar modal
-            //Timer.Start();
-           // material = new List<Material>();
+
             UncheckAllItems();
             await LoadOrdersAsync();
         }
@@ -370,12 +381,13 @@ namespace OrderManagerAPP
                 MessageBox.Show("Por favor, insira ao menos um Código de produto.", "Erro de Descrição", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            await LoadProductAsync();
 
             Order order = new Order
             {
                 OS = "",
                 Quantity = Qnt,
-                ProductCode = VarProductCode,
+                ProductCode = ProductFind,
                 ProductDescription = "",
                 Image = "",
                 CycleTime = 00,
@@ -393,7 +405,7 @@ namespace OrderManagerAPP
                     HttpResponseMessage response = await client.PostAsync("http://localhost:5178/api/Order/SetOrder", content);
                     if (response.IsSuccessStatusCode)
                     {
-                        // Caso a resposta seja bem-sucedida, pode tratar a resposta aqui
+   
                         string responseContent = await response.Content.ReadAsStringAsync();
 
                         TxtMensagem.Text = "Ordem Criada ";
@@ -403,7 +415,7 @@ namespace OrderManagerAPP
                     }
                     else
                     {
-                        // Caso a resposta não seja bem-sucedida
+                      
                         string errorContent = await response.Content.ReadAsStringAsync();
                         MessageBox.Show($"Erro ao criar ordem: {errorContent}");
                     }
@@ -424,11 +436,13 @@ namespace OrderManagerAPP
                 return;
             }
 
+            await LoadProductAsync();
+
             Order order = new Order
             {
                 OS = VarOrder,
                 Quantity = Qnt,
-                ProductCode = VarProductCode,
+                ProductCode = ProductFind,
                 ProductDescription = "",
                 Image = "",
                 CycleTime = 00,
@@ -445,7 +459,7 @@ namespace OrderManagerAPP
                     HttpResponseMessage response = await client.PutAsync("http://localhost:5178/api/Order/UpdateOrder", content);
                     if (response.IsSuccessStatusCode)
                     {
-                        // Caso a resposta seja bem-sucedida, pode tratar a resposta aqui
+                        
                         string responseContent = await response.Content.ReadAsStringAsync();
 
                         TxtMensagem.Text = "Produto Atualizado: " + VarProductCode;
@@ -455,7 +469,7 @@ namespace OrderManagerAPP
                     }
                     else
                     {
-                        // Caso a resposta não seja bem-sucedida
+               
                         string errorContent = await response.Content.ReadAsStringAsync();
                         MessageBox.Show($"Erro ao Editar Produto: {errorContent}");
                     }
@@ -552,8 +566,8 @@ namespace OrderManagerAPP
             if (ListProductCheck.CheckedItems.Count > 0)
             {
                 var selectedItem = ListProductCheck.CheckedItems[0];
-                VarProductCode = selectedItem.ToString();
-
+                VarProductCode = selectedItem.ToString();          
+           
                 TxtMensagem.Text = "Material selecionado: " + VarProductCode;
                 TxtMensagem.Visible = true;
                 Messagem.Visible = true;
