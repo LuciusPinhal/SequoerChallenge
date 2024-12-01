@@ -129,6 +129,7 @@ namespace OrderManagerAPP
         private void BtnExit_Click(object sender, EventArgs e)
         {
             Timer.Start();
+            OrderSelect = "";
             ClearText();
         }
         private async void Frm_User_Load(object sender, EventArgs e)
@@ -162,6 +163,7 @@ namespace OrderManagerAPP
         private void BtnCancelar_Click(object sender, EventArgs e)
         {
             Timer.Start();
+            OrderSelect = "";
             ClearText();
         }
 
@@ -170,12 +172,13 @@ namespace OrderManagerAPP
             stopwatch.Reset();
             stopwatch.Start();
    
-            ClearText();
 
-            //if(OrderSelect != null)
-            //{
-            //    TxtOrdem.Text = OrderSelect;
-            //}
+            ClearText();
+            if (OrderSelect != null)
+            {
+                TxtOrdem.Text = OrderSelect;
+            }
+
 
             AbrirPainel();
             TitlePainel = "Adicionar";
@@ -343,10 +346,12 @@ namespace OrderManagerAPP
             {              
                 await AddUserAsync();
                 ClearText();
+                OrderSelect = "";
 
             } else if (TxtPainel.Text == "Editar")
             {
                 await EditUserAsync();
+                OrderSelect = "";
             }
 
             CycleTime = 0;
@@ -360,7 +365,7 @@ namespace OrderManagerAPP
             TxtOrdem.Text = "";
 
             Date.Value = DateTime.Now;
-            Hour.Value = DateTime.Now;
+            Hour.Value = DateTime.Now;      
         }
 
         private async Task AddUserAsync()
