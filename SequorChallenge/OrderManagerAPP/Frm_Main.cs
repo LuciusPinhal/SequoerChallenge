@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Net.Http;
 using System.Text.Json;
 using OrderManagerAPP.Models;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace OrderManagerAPP
 {
@@ -99,7 +100,30 @@ namespace OrderManagerAPP
 
         private void BtnExit_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            ModalClose(true);
+        }
+
+        private void bntCancelDel_Click(object sender, EventArgs e)
+        {
+            ModalClose(false);
+        }
+
+        private void bntConfirmDel_Click(object sender, EventArgs e)
+        {
+            Frm_Login loginOpen = new Frm_Login();
+
+            loginOpen.Show();
+
+            this.Hide();
+        }
+
+        private void ModalClose(bool Active)
+        {
+            pnlDel.Visible = Active;
+            pictureDel.Visible = Active;
+            textDelInfo.Visible = Active;
+            bntCancelDel.Visible = Active;
+            bntConfirmDel.Visible = Active;
         }
 
         private void BtnMaximize_Click(object sender, EventArgs e)
@@ -228,7 +252,5 @@ namespace OrderManagerAPP
                 MessageBox.Show("Erro ao se conectar ao servidor: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
     }
 }

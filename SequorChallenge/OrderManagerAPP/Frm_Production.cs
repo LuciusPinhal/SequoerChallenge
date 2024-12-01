@@ -261,25 +261,22 @@ namespace OrderManagerAPP
         {
             string searchValue = TxtSearch.Text.Trim().ToLower();
 
-            // Verifica se o campo está vazio ou contém apenas "pesquisar"
             if (string.IsNullOrEmpty(searchValue) || searchValue == "pesquisar")
             {
-                // Torna todas as linhas visíveis
+             
                 foreach (DataGridViewRow row in Grid_Users.Rows)
                 {
-                    if (!row.IsNewRow) // Ignorar a nova linha não confirmada
+                    if (!row.IsNewRow) 
                         row.Visible = true;
                 }
-                return; // Finaliza o método para evitar aplicar o filtro
+                return; 
             }
 
-            // Aplica o filtro caso contrário
             foreach (DataGridViewRow row in Grid_Users.Rows)
             {
                 if (row.IsNewRow)
                     continue;
 
-                // Verifica se alguma célula contém o texto buscado
                 bool visible = row.Cells["ID"].Value?.ToString().ToLower().Contains(searchValue) == true ||
                                row.Cells["Email"].Value?.ToString().ToLower().Contains(searchValue) == true ||
                                row.Cells["Order"].Value?.ToString().ToLower().Contains(searchValue) == true ||
@@ -287,8 +284,6 @@ namespace OrderManagerAPP
                                row.Cells["TableHour"].Value?.ToString().ToLower().Contains(searchValue) == true ||                              
                                row.Cells["Quantity"].Value?.ToString().ToLower().Contains(searchValue) == true ||
                                row.Cells["MaterialCode"].Value?.ToString().ToLower().Contains(searchValue) == true;
-
-                // Define a visibilidade da linha com base na busca
                 row.Visible = visible;
             }
         }
@@ -364,6 +359,22 @@ namespace OrderManagerAPP
             if (!int.TryParse(TxtQuant.Text, out int quantity))
             {
                 MessageBox.Show("Por favor, insira um valor numérico válido para o ciclo de tempo.", "Valor Inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(textEmail.Text))
+            {
+                MessageBox.Show("O campo 'Email' não pode estar vazio.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(TxtOrdem.Text))
+            {
+                MessageBox.Show("O campo 'Email' não pode estar vazio.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if(MaterialSelect == null)
+            {
+                MessageBox.Show("Selecione ao menos um material.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -461,6 +472,22 @@ namespace OrderManagerAPP
             if (!int.TryParse(TxtQuant.Text, out int quantity))
             {
                 MessageBox.Show("Por favor, insira um valor numérico válido para o ciclo de tempo.", "Valor Inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(textEmail.Text))
+            {
+                MessageBox.Show("O campo 'Email' não pode estar vazio.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(TxtOrdem.Text))
+            {
+                MessageBox.Show("O campo 'Email' não pode estar vazio.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (MaterialSelect == null)
+            {
+                MessageBox.Show("Selecione ao menos um material.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

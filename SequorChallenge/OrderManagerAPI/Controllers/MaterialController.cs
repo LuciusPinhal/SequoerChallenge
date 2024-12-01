@@ -61,7 +61,7 @@ namespace OrderManagerAPI.Controllers
                     }
                 }
                              
-                var material = new Material
+                 var material = new Material
                 {
                     MaterialCode        = newMaterial[0].Materials[0].MaterialCode,
                     MaterialDescription = newMaterial[0].Materials[0].MaterialDescription
@@ -69,7 +69,7 @@ namespace OrderManagerAPI.Controllers
 
                 _sql.CreateMaterialDB(material);
 
-                if (newMaterial[0].ProductCode != null)
+                if (newMaterial[0].ProductCode != null && newMaterial[0].ProductCode != "")
                 {
                     _sqlProductMaterial.CreateProductMaterial(newMaterial);
                 }
@@ -84,21 +84,33 @@ namespace OrderManagerAPI.Controllers
         }
 
         [HttpPut("UpdateMaterial")]
-        public IActionResult PutProduct([FromBody] Material Material)
+        public IActionResult PutProduct([FromBody] List<Order> newMaterial)
         {
             try
             {
-                if (Material == null)
+                if (newMaterial == null)
                 {
                     return BadRequest("Dados inválidos para criação do Material.");
                 }
 
-                if (!_sql.validateMaterialCode(Material.MaterialCode))
+                if (!_sql.validateMaterialCode(newMaterial[0].Materials[0].MaterialCode))
                 {
                     return NotFound("Erro ao validar o código do Material. Verifique o código fornecido.");
                 }
 
-                _sql.EditeMaterial(Material);
+                var material = new Material
+                {
+                    MaterialCode = newMaterial[0].Materials[0].MaterialCode,
+                    MaterialDescription = newMaterial[0].Materials[0].MaterialDescription
+                };
+
+
+                _sql.EditeMaterial(material);
+
+                if (newMaterial[0].ProductCode != null && newMaterial[0].ProductCode != "")
+                {
+                    _sqlProductMaterial.EditProductMaterial(newMaterial);
+                }
                 return Ok("Material alterado com sucesso!");
             }
             catch (Exception ex)

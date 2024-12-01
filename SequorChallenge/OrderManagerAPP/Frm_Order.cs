@@ -160,7 +160,7 @@ namespace OrderManagerAPP
             await LoadProductAsync();
             AbrirPainel();
             TitlePainel = "Adicionar";
-            ListProductCheck.Visible = true;
+     
    
 
         }
@@ -222,7 +222,7 @@ namespace OrderManagerAPP
             btnProduct.BackColor = Color.FromArgb(83, 126, 235);
             btnProduct.Cursor = Cursors.Hand;
 
-            TxtMensagem.Text = "Order Selecionada: " + VarProductCode;
+            TxtMensagem.Text = "Ordem Selecionada: " + VarProductCode;
             TxtMensagem.Visible = true;
             Messagem.Visible = true;
             messageTimer.Start();
@@ -365,6 +365,11 @@ namespace OrderManagerAPP
                 return;
             }
 
+            if (VarProductCode == null)
+            {
+                MessageBox.Show("Por favor, insira ao menos um Código de produto.", "Erro de Descrição", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             Order order = new Order
             {

@@ -149,14 +149,13 @@ namespace OrderManagerAPP
             await LoadMaterialAsync();
             AbrirPainel();
             TitlePainel = "Adicionar";
-            txtProductRelated.Visible = true;
-            ListProductCheck.Visible = true;
+          
 
         }
-        private void btnEdit_Click(object sender, EventArgs e)
+        private async void btnEdit_Click(object sender, EventArgs e)
         {
             AbrirPainel();
-
+            await LoadMaterialAsync();
             TitlePainel = "Editar "+ VarProductCode;
             TxtDescriptionL.Text = VarProductDescription;
             textCycleTime.Text = VarCycleTime;
@@ -171,8 +170,7 @@ namespace OrderManagerAPP
             }
 
 
-            ListProductCheck.Visible = false;
-            txtProductRelated.Visible = false;
+        
 
         }
 
@@ -358,18 +356,19 @@ namespace OrderManagerAPP
                 return;
             }
 
-            if (TxtDescriptionL.Text == null && TxtDescriptionL.Text == "")
+            if (string.IsNullOrWhiteSpace(TxtDescriptionL.Text))
             {
                 MessageBox.Show("Por favor, insira uma Descrição.", "Erro de Descrição", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (material == null)
-            {
-                MessageBox.Show("Por favor, insira os Materias relacionado.", "Erro de Materiais", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
 
+            if (material == null || material.Count == 0)
+            {
+                material = new List<Material>();
+               
+            }
+      
             Order order = new Order
             {
                 OS = "",
@@ -392,7 +391,6 @@ namespace OrderManagerAPP
                     HttpResponseMessage response = await client.PostAsync("http://localhost:5178/api/Product/SetProduct", content);
                     if (response.IsSuccessStatusCode)
                     {
-                        // Caso a resposta seja bem-sucedida, pode tratar a resposta aqui
                         string responseContent = await response.Content.ReadAsStringAsync();
                     
                         TxtMensagem.Text = "Produto Criado: " + TxtDescriptionL.Text;
@@ -401,8 +399,7 @@ namespace OrderManagerAPP
                         messageTimer.Start();
                     }
                     else
-                    {
-                        // Caso a resposta não seja bem-sucedida
+                    {                    
                         string errorContent = await response.Content.ReadAsStringAsync();
                         MessageBox.Show($"Erro ao adicionar materiais: {errorContent}");
                     }
@@ -429,16 +426,15 @@ namespace OrderManagerAPP
                 return;
             }
 
-            if (TxtDescriptionL.Text == null && TxtDescriptionL.Text == "")
+            if (string.IsNullOrWhiteSpace(TxtDescriptionL.Text))
             {
                 MessageBox.Show("Por favor, insira uma Descrição.", "Erro de Descrição", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (material == null)
+            if (material == null || material.Count == 0)
             {
-                MessageBox.Show("Por favor, insira os Materias relacionado.", "Erro de Materiais", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                material = new List<Material>();
             }
 
             Order order = new Order
@@ -462,7 +458,6 @@ namespace OrderManagerAPP
                     HttpResponseMessage response = await client.PutAsync("http://localhost:5178/api/Product/UpdateProduct", content);
                     if (response.IsSuccessStatusCode)
                     {
-                        // Caso a resposta seja bem-sucedida, pode tratar a resposta aqui
                         string responseContent = await response.Content.ReadAsStringAsync();
 
                         TxtMensagem.Text = "Produto Atualizado: " + TxtDescriptionL.Text;
@@ -472,7 +467,6 @@ namespace OrderManagerAPP
                     }
                     else
                     {
-                        // Caso a resposta não seja bem-sucedida
                         string errorContent = await response.Content.ReadAsStringAsync();
                         MessageBox.Show($"Erro ao Editar Produto: {errorContent}");
                     }
@@ -488,7 +482,7 @@ namespace OrderManagerAPP
         private void btnDelete_Click(object sender, EventArgs e)
         {
             ModalCancel(true);
-            textDelInfo.Text = VarProductCode;
+            textDelInfo.Text = VarProductDescription;
 
         }
 
@@ -519,7 +513,7 @@ namespace OrderManagerAPP
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TxtMensagem.Text = "produto deletado com sucesso: " + VarProductCode;
+                        TxtMensagem.Text = "Produto deletado com sucesso: " + VarProductDescription;
                         TxtMensagem.Visible = true;
                         Messagem.Visible = true;
                         messageTimer.Start();
@@ -598,6 +592,9 @@ namespace OrderManagerAPP
             }
         }
 
-    
+        private void txtProductRelated_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

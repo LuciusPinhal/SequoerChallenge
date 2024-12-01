@@ -140,6 +140,15 @@ namespace OrderManagerAPI.Controllers
             }
             catch (Exception ex)
             {
+
+                if (ex.InnerException != null)
+                {
+
+                    return StatusCode(400, "Não é possível excluir o E-mail, pois existem apontamentos na tabela Produção.");
+                    
+                }
+
+
                 Console.WriteLine($"Erro não esperado: {ex.Message}");
                 return StatusCode(500, "Erro interno do servidor");
             }

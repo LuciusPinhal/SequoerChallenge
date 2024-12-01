@@ -103,6 +103,12 @@ namespace OrderManagerAPI.Controllers
                 }
 
                 _sql.EditeProduct(order);
+
+                if (order?.Materials != null && order.Materials.Any())
+                {
+                    _sqlProductMaterial.EditMaterialProduct(new List<Order> { order });
+                }
+
                 return Ok("Produto alterado com sucesso!");
             }
             catch (Exception ex)

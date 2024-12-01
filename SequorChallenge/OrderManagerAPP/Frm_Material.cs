@@ -144,18 +144,16 @@ namespace OrderManagerAPP
             await LoadProductAsync();
             AbrirPainel();
             TitlePainel = "Adicionar";
-            txtProductRelated.Visible = true;
-            ListProductCheck.Visible = true;
+       
 
         }
-        private void btnEdit_Click(object sender, EventArgs e)
+        private async void btnEdit_Click(object sender, EventArgs e)
         {
             AbrirPainel();
+            await LoadProductAsync();
             TitlePainel = "Editar "+ VarCodeMaterial;
             TxtDescriptionL.Text = VarDescription;
-            ListProductCheck.Visible = false;
-            txtProductRelated.Visible = false;
-
+      
         }
 
         private void Grid_Users_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -324,17 +322,43 @@ namespace OrderManagerAPP
 
         private async Task AddUserAsync()
         {
+            if (string.IsNullOrWhiteSpace(TxtDescriptionL.Text))
+            {
+                MessageBox.Show("Por favor, insira uma Descrição.", "Erro de Descrição", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             Material material = new Material
             {
                 MaterialCode = "",
                 MaterialDescription = TxtDescriptionL.Text
             };
 
-           foreach(var existingOrder in order)
-           {
-               existingOrder.Materials.Add(material);
-           }
- 
+            if (order == null || !order.Any())
+            {
+                Order newOrder = new Order()
+                {
+                    OS = "",
+                    Quantity = 0,
+                    ProductCode = "",
+                    ProductDescription = "",
+                    Image = "",
+                    CycleTime = 0,
+                    Materials = new List<Material>()
+                };
+                newOrder.Materials.Add(material);
+                order.Add(newOrder);
+            }
+            else
+            {
+
+                foreach (var existingOrder in order)
+                {
+                    existingOrder.Materials.Add(material);
+                }
+            }
+
+
 
             string jsonContent = JsonSerializer.Serialize(order);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
@@ -372,13 +396,44 @@ namespace OrderManagerAPP
 
         private async Task EditUserAsync()
         {
+            if (string.IsNullOrWhiteSpace(TxtDescriptionL.Text))
+            {
+                MessageBox.Show("Por favor, insira uma Descrição.", "Erro de Descrição", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             Material material = new Material
             {
                 MaterialCode = VarCodeMaterial,
                 MaterialDescription = TxtDescriptionL.Text
             };
 
-            string jsonContent = JsonSerializer.Serialize(material);
+            if (order == null || !order.Any())
+            {
+                Order newOrder = new Order()
+                {
+                    OS = "",
+                    Quantity = 0,
+                    ProductCode = "",
+                    ProductDescription = "",
+                    Image = "",
+                    CycleTime = 0,
+                    Materials = new List<Material>()
+                };         
+                newOrder.Materials.Add(material);
+                order.Add(newOrder);
+            }
+            else
+            {
+ 
+                foreach (var existingOrder in order)
+                {
+                    existingOrder.Materials.Add(material);
+                }
+            }
+
+
+            string jsonContent = JsonSerializer.Serialize(order);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
             try
@@ -434,7 +489,7 @@ namespace OrderManagerAPP
         private void btnDelete_Click(object sender, EventArgs e)
         {
             ModalCancel(true);
-            textDelInfo.Text = VarCodeMaterial;
+            textDelInfo.Text = VarDescription;
 
         }
 
@@ -465,7 +520,7 @@ namespace OrderManagerAPP
 
                     if (response.IsSuccessStatusCode)
                     {
-                        TxtMensagem.Text = "Material deletado com sucesso: " + VarCodeMaterial;
+                        TxtMensagem.Text = "Material deletado com sucesso: " + VarDescription;
                         TxtMensagem.Visible = true;
                         Messagem.Visible = true;
                         messageTimer.Start();

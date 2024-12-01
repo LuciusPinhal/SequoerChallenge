@@ -16,17 +16,15 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace OrderManagerAPP
 {
-    public partial class Frm_User : Base
+    public partial class Frm_CreateUser : Form
     {
         private bool painelAberto = false;
         private Timer messageTimer;
 
-        public Frm_User()
+        public Frm_CreateUser()
         {
             InitializeComponent();
 
-            btnEdit.Enabled = false;
-            btnDelete.Enabled = false;
 
             messageTimer = new Timer();
             messageTimer.Interval = 5000;
@@ -149,85 +147,29 @@ namespace OrderManagerAPP
             TitlePainel = "Adicionar";
 
         }
+
         private string EmailSelect = null;
         private string NameSelect = null;
         private string DateInitSelect = null;
         private string EndDateSelect = null;
 
 
-        private void btnEdit_Click(object sender, EventArgs e)
-        {
-            DateInitial.Format = DateTimePickerFormat.Custom;
-            DateInitial.CustomFormat = "dd/MM/yyyy HH:mm:ss";
-
-            EndDate.Format = DateTimePickerFormat.Custom;
-            EndDate.CustomFormat = "dd/MM/yyyy HH:mm:ss";
-
-            AbrirPainel();
-            TitlePainel = "Editar";
-            textEmail.Text = EmailSelect;
-            TxtNameUser.Text = NameSelect;
-            DateInitial.Text = DateInitSelect;
-            EndDate.Text = EndDateSelect;
-        }
-
-        private void Grid_Users_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
-            {
-
-                DataGridViewRow row = Grid_Users.Rows[e.RowIndex];
-
-                EmailSelect = row.Cells["Email"].Value?.ToString();
-                NameSelect = row.Cells["NameUser"].Value?.ToString();
-                DateInitSelect = row.Cells["InitialDate"].Value?.ToString();
-                EndDateSelect = row.Cells["DateEnd"].Value?.ToString();
-
-
-                if (!string.IsNullOrEmpty(EmailSelect))
-                {
-                    ReadyButtons();
-                }
-                else
-                {
-                    btnEdit.Enabled = false;
-                    btnDelete.Enabled = false;
-                }
-            }
-        }
-
-        private void ReadyButtons()
-        {
-            btnEdit.Enabled = true;
-            btnEdit.BackColor = Color.FromArgb(83, 126, 235);
-            btnEdit.Cursor = Cursors.Hand;
-
-            btnDelete.Enabled = true;
-            btnDelete.BackColor = Color.FromArgb(83, 126, 235);
-            btnDelete.Cursor = Cursors.Hand;
-
-            TxtMensagem.Text = "Usuário Selecionado: " + NameSelect;
-            TxtMensagem.Visible = true;
-            Messagem.Visible = true;
-            messageTimer.Start();
-        }
         private void TxtSearch_TextChanged(object sender, EventArgs e)
         {
             string searchValue = TxtSearch.Text.Trim().ToLower();
 
-            // Verifica se o campo está vazio ou contém apenas "pesquisar"
             if (string.IsNullOrEmpty(searchValue) || searchValue == "pesquisar")
             {
-                // Torna todas as linhas visíveis
+          
                 foreach (DataGridViewRow row in Grid_Users.Rows)
                 {
-                    if (!row.IsNewRow) // Ignorar a nova linha não confirmada
+                    if (!row.IsNewRow) 
                         row.Visible = true;
                 }
-                return; // Finaliza o método para evitar aplicar o filtro
+                return; 
             }
 
-            // Aplica o filtro caso contrário
+         
             foreach (DataGridViewRow row in Grid_Users.Rows)
             {
                 if (row.IsNewRow)
@@ -239,10 +181,10 @@ namespace OrderManagerAPP
                                row.Cells["InitialDate"].Value?.ToString().ToLower().Contains(searchValue) == true ||
                                row.Cells["DateEnd"].Value?.ToString().ToLower().Contains(searchValue) == true;
 
-                // Define a visibilidade da linha com base na busca
                 row.Visible = visible;
             }
         }
+
         private async Task LoadOrdersAsync()
         {
             string apiUrl = "http://localhost:5178/api/User/GetUser";
@@ -287,13 +229,7 @@ namespace OrderManagerAPP
                 await AddUserAsync();
                 ClearText();
 
-            } else if (TxtPainel.Text == "Editar")
-            {
-                await EditUserAsync();
-            }
-
-            //fechar modal
-            //Timer.Start();
+            } 
            
             await LoadOrdersAsync();
         }
@@ -307,11 +243,6 @@ namespace OrderManagerAPP
 
         private async Task AddUserAsync()
         {
-            if (!Validatefields())
-            {
-                return;
-            }
-
             User user = new User
             {
                 Email = textEmail.Text,
@@ -368,97 +299,7 @@ namespace OrderManagerAPP
             }
 
         }
-        private bool Validatefields()
-        {
-            if (string.IsNullOrWhiteSpace(textEmail.Text))
-            {
-                MessageBox.Show("O campo 'Email' não pode estar vazio.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(TxtNameUser.Text))
-            {
-                MessageBox.Show("O campo 'Nome' não pode estar vazio.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            if (DateInitial.Value > EndDate.Value)
-            {
-                MessageBox.Show("A data inicial não pode ser maior que a data final.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            if (DateInitial.Value == null || EndDate.Value == null)
-            {
-                MessageBox.Show("As datas não podem ser nulas.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            return true;
-        }
-
-
-        private async Task EditUserAsync()
-        {
-            if (!Validatefields())
-            {
-                return;
-            }
-            User user = new User
-            {
-                Email = textEmail.Text,
-                Name = TxtNameUser.Text,
-                InitialDate = DateInitial.Value,
-                EndDate = EndDate.Value
-            };
-
-            string jsonContent = JsonSerializer.Serialize(user);
-            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    HttpResponseMessage response = await client.PutAsync("http://localhost:5178/api/User/UpdateUser", content);
-                    string responseContent = await response.Content.ReadAsStringAsync();
-
-                    string errorMessages = "";
-                    string infoMessages = "";
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var responseObject = JsonSerializer.Deserialize<JsonElement>(responseContent);
-                        if (responseObject.TryGetProperty("message", out JsonElement messageElement))
-                        {
-                            string message = messageElement.GetString();
-                            if (message != "usuário atualizado com sucesso." && message != "usuário validado com sucesso.")
-                            {
-                                ProcessResponseMessages(responseObject, ref errorMessages, ref infoMessages);
-                                UpdateMessageLabel(errorMessages, infoMessages);
-                            }
-                        }
-
-                        TxtMensagem.Text = "Usuário Atualizado: " + user.Name;
-                        TxtMensagem.Visible = true;
-                        Messagem.Visible = true;
-                        messageTimer.Start();
-                    }
-                    else
-                    {
-                        var responseObject = JsonSerializer.Deserialize<JsonElement>(responseContent);
-                        ProcessResponseMessages(responseObject, ref errorMessages, ref infoMessages);
-
-                        UpdateMessageLabel(errorMessages, infoMessages);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                UpdateMessageLabel($"Ocorreu um erro: {ex.Message}", "");
-            }
-        }
-
-
+      
         private void ProcessResponseMessages(JsonElement responseObject, ref string errorMessages, ref string infoMessages)
         {
             if (responseObject.TryGetProperty("errors", out JsonElement errors) && errors.GetArrayLength() > 0)
@@ -491,63 +332,6 @@ namespace OrderManagerAPP
             TextInfo.Visible = true;
             messageTimer.Start();
         }
-
-        private void btnDelete_Click(object sender, EventArgs e)
-        {
-            ModalCancel(true);
-            textDelInfo.Text = NameSelect;
-
-        }
-
-        private void bntCancelDel_Click(object sender, EventArgs e)
-        {
-            ModalCancel(false);
-        }
-
-        private void ModalCancel(bool Active)
-        {
-            pnlDel.Visible = Active;
-            pictureDel.Visible = Active;
-            textDel.Visible = Active;
-            textDelInfo.Visible = Active;
-            bntCancelDel.Visible = Active;
-            bntConfirmDel.Visible = Active;
-        }
-        private async void bntConfirmDel_Click(object sender, EventArgs e)
-        {
-
-            string apiUrl = $"http://localhost:5178/api/User/Delete/{EmailSelect}";
-
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    HttpResponseMessage response = await client.DeleteAsync(apiUrl);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        TxtMensagem.Text = "Usuário deletado com sucesso: " + NameSelect;
-                        TxtMensagem.Visible = true;
-                        Messagem.Visible = true;
-                        messageTimer.Start();                    
-                    }
-                    else
-                    {
-                        string responseContent = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show($"Erro ao deletar o usuário: {responseContent}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro: {ex.Message}");
-            }
-
-            await LoadOrdersAsync();
-
-            ModalCancel(false);
-        }
-
 
     }
 }

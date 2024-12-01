@@ -226,7 +226,7 @@
             // TextInfo
             // 
             this.TextInfo.BackColor = System.Drawing.Color.Red;
-            this.TextInfo.ForeColor = System.Drawing.SystemColors.Info;
+            this.TextInfo.ForeColor = System.Drawing.Color.Black;
             this.TextInfo.Location = new System.Drawing.Point(25, 580);
             this.TextInfo.Margin = new System.Windows.Forms.Padding(0, 3, 10, 3);
             this.TextInfo.Name = "TextInfo";
@@ -349,7 +349,7 @@
             this.txtProductRelated.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
             this.txtProductRelated.Size = new System.Drawing.Size(299, 50);
             this.txtProductRelated.TabIndex = 29;
-            this.txtProductRelated.Text = "Produtos Relacionado";
+            this.txtProductRelated.Text = "Produtos Relacionados";
             // 
             // TxtDescription
             // 

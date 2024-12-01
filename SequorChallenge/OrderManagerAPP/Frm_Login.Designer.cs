@@ -34,12 +34,15 @@
             this.TxtEmail = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnLogin = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.TxtCriar = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnClose = new System.Windows.Forms.Button();
+            this.Messagem = new System.Windows.Forms.Panel();
+            this.TxtMensagem = new System.Windows.Forms.TextBox();
             this.GBEmail.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.Messagem.SuspendLayout();
             this.SuspendLayout();
             // 
             // GBEmail
@@ -81,6 +84,7 @@
             this.TxtEmail.Size = new System.Drawing.Size(382, 19);
             this.TxtEmail.TabIndex = 0;
             this.TxtEmail.Text = "E-mail";
+            this.TxtEmail.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TxtEmail_MouseClick);
             // 
             // label1
             // 
@@ -111,16 +115,17 @@
             this.btnLogin.UseVisualStyleBackColor = false;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
-            // label2
+            // TxtCriar
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
-            this.label2.Location = new System.Drawing.Point(1008, 501);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(90, 20);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Criar E-mail";
+            this.TxtCriar.AutoSize = true;
+            this.TxtCriar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TxtCriar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(126)))), ((int)(((byte)(235)))));
+            this.TxtCriar.Location = new System.Drawing.Point(1008, 501);
+            this.TxtCriar.Name = "TxtCriar";
+            this.TxtCriar.Size = new System.Drawing.Size(101, 20);
+            this.TxtCriar.TabIndex = 4;
+            this.TxtCriar.Text = "Cadastrar-se";
+            this.TxtCriar.Click += new System.EventHandler(this.TxtCriar_Click);
             // 
             // pictureBox1
             // 
@@ -134,6 +139,7 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
             // 
             // btnClose
             // 
@@ -151,14 +157,43 @@
             this.btnClose.UseVisualStyleBackColor = false;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
+            // Messagem
+            // 
+            this.Messagem.AutoSize = true;
+            this.Messagem.BackColor = System.Drawing.Color.LimeGreen;
+            this.Messagem.Controls.Add(this.TxtMensagem);
+            this.Messagem.Location = new System.Drawing.Point(481, 69);
+            this.Messagem.Margin = new System.Windows.Forms.Padding(0);
+            this.Messagem.Name = "Messagem";
+            this.Messagem.Size = new System.Drawing.Size(476, 40);
+            this.Messagem.TabIndex = 12;
+            this.Messagem.Visible = false;
+            // 
+            // TxtMensagem
+            // 
+            this.TxtMensagem.BackColor = System.Drawing.Color.LimeGreen;
+            this.TxtMensagem.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.TxtMensagem.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TxtMensagem.ForeColor = System.Drawing.Color.White;
+            this.TxtMensagem.Location = new System.Drawing.Point(10, 8);
+            this.TxtMensagem.Margin = new System.Windows.Forms.Padding(10);
+            this.TxtMensagem.Name = "TxtMensagem";
+            this.TxtMensagem.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.TxtMensagem.Size = new System.Drawing.Size(456, 22);
+            this.TxtMensagem.TabIndex = 2;
+            this.TxtMensagem.Text = "Defaut Mensagem";
+            this.TxtMensagem.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.TxtMensagem.Visible = false;
+            // 
             // Frm_Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1409, 676);
+            this.Controls.Add(this.Messagem);
             this.Controls.Add(this.btnClose);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.TxtCriar);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.GBEmail);
@@ -168,10 +203,13 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Frm_Login";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Frm_Login_MouseDown);
             this.GBEmail.ResumeLayout(false);
             this.GBEmail.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.Messagem.ResumeLayout(false);
+            this.Messagem.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -185,7 +223,9 @@
         private System.Windows.Forms.TextBox TxtEmail;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button btnLogin;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label TxtCriar;
         private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.Panel Messagem;
+        private System.Windows.Forms.TextBox TxtMensagem;
     }
 }
