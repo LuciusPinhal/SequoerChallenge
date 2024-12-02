@@ -386,13 +386,13 @@ namespace OrderManagerAPP
             if (TxtPainel.Text == "Adicionar")
             {
                 await AddUserAsync();
-                ClearText();
 
             } else if (TxtPainel.Text.Contains("Editar"))
             {
                 await EditUserAsync();
             }
 
+             ClearText();
             //fechar modal
             //Timer.Start();
             material = new List<Material>();
@@ -430,7 +430,6 @@ namespace OrderManagerAPP
             if (material == null || material.Count == 0)
             {
                 material = new List<Material>();
-
             }
       
             Order order = new Order
@@ -605,29 +604,41 @@ namespace OrderManagerAPP
         }
 
         private void GetSelectedMaterial()
-        {      
-            foreach (var item in ListProductCheck.CheckedItems)
+        {
+            for (int i = 0; i < ListProductCheck.Items.Count; i++)
             {
-                string description = item.ToString();        
-                bool MaterialExists = material.Any(o => o.MaterialDescription == description);
+                string description = ListProductCheck.Items[i].ToString();
+                bool isChecked = ListProductCheck.GetItemChecked(i);
 
+                Material existingMaterial = material.FirstOrDefault(o => o.MaterialDescription == description);
 
-
-                Material MaterialFind = Listmaterial.FirstOrDefault(o => o.MaterialDescription == description);
-
-
-                if (!MaterialExists)
+                if (isChecked)
                 {
-                    Material newMaterial = new Material()
+                    if (existingMaterial == null)
                     {
-                        MaterialCode= MaterialFind.MaterialCode,
-                        MaterialDescription = MaterialFind.MaterialDescription,
-                    };
+                        Material MaterialFind = Listmaterial.FirstOrDefault(o => o.MaterialDescription == description);
+                        if (MaterialFind != null)
+                        {
+                            Material newMaterial = new Material()
+                            {
+                                MaterialCode = MaterialFind.MaterialCode,
+                                MaterialDescription = MaterialFind.MaterialDescription,
+                            };
 
-                    material.Add(newMaterial);
+                            material.Add(newMaterial);
+                        }
+                    }
+                }
+                else
+                {
+                    if (existingMaterial != null)
+                    {
+                        material.Remove(existingMaterial);
+                    }
                 }
             }
         }
+
 
         private void UncheckAllItems()
         {

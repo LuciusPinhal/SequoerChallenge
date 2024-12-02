@@ -675,6 +675,7 @@
             // ProductCode
             // 
             this.ProductCode.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ProductCode.FillWeight = 40F;
             this.ProductCode.HeaderText = "Código";
             this.ProductCode.Name = "ProductCode";
             // 
@@ -693,6 +694,7 @@
             // CycleTime
             // 
             this.CycleTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.CycleTime.FillWeight = 40F;
             this.CycleTime.HeaderText = "Tempo de Ciclo";
             this.CycleTime.Name = "CycleTime";
             // 
@@ -765,10 +767,6 @@
         private System.Windows.Forms.Button bntConfirmDel;
         private System.Windows.Forms.Button bntCancelDel;
         private System.Windows.Forms.CheckedListBox ListProductCheck;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ProductCode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Description;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Image;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CycleTime;
         private System.Windows.Forms.TextBox textCycleTime;
         private System.Windows.Forms.TextBox TxtDescriptionL;
         private System.Windows.Forms.Label txtProductRelated;
@@ -776,5 +774,9 @@
         private System.Windows.Forms.Label TxtImge;
         private System.Windows.Forms.PictureBox PicProduct;
         private System.Windows.Forms.Button picOpen;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProductCode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Description;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Image;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CycleTime;
     }
 }

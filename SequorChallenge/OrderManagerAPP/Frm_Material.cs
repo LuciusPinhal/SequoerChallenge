@@ -156,8 +156,7 @@ namespace OrderManagerAPP
             await LoadProductAsync();
             await LoadProductMaterial(VarCodeMaterial);
             TitlePainel = "Editar "+ VarCodeMaterial;
-            TxtDescriptionL.Text = VarDescription;
-      
+            TxtDescriptionL.Text = VarDescription;          
         }
 
         private void Grid_Users_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -360,13 +359,13 @@ namespace OrderManagerAPP
             if (TxtPainel.Text == "Adicionar")
             {
                 await AddUserAsync();
-                ClearText();
 
             } else if (TxtPainel.Text.Contains("Editar"))
             {
                 await EditUserAsync();
             }
 
+             ClearText();
             //fechar modal
             //Timer.Start();
             order = new List<Order>();
@@ -606,32 +605,43 @@ namespace OrderManagerAPP
 
         private void GetSelectedProduct()
         {
-            foreach (var item in ListProductCheck.CheckedItems)
+            for (int i = 0; i < ListProductCheck.Items.Count; i++)
             {
-                string productName = item.ToString();
+                string productName = ListProductCheck.Items[i].ToString();
+                bool isChecked = ListProductCheck.GetItemChecked(i);
+                Order existingOrder = order.FirstOrDefault(o => o.ProductDescription == productName);
 
-                Order orderL = Listorder.FirstOrDefault(o => o.ProductDescription == productName);
-
-                bool productExists = order.Any(o => o.ProductDescription == productName);      
-
-                if (!productExists)
+                if (isChecked)
                 {
-                    Order newOrder = new Order()
+                    if (existingOrder == null)
                     {
-                        OS = "",
-                        Quantity = 0,
-                        ProductCode = orderL.ProductCode,
-                        ProductDescription = orderL.ProductDescription,
-                        Image = "",
-                        CycleTime = 0,
-                        Materials = new List<Material>()
-                    };
-
-                   
-                    order.Add(newOrder);
+                        Order orderL = Listorder.FirstOrDefault(o => o.ProductDescription == productName);
+                        if (orderL != null)
+                        {
+                            Order newOrder = new Order()
+                            {
+                                OS = "",
+                                Quantity = 0,
+                                ProductCode = orderL.ProductCode,
+                                ProductDescription = orderL.ProductDescription,
+                                Image = "",
+                                CycleTime = 0,
+                                Materials = new List<Material>()
+                            };
+                            order.Add(newOrder);
+                        }
+                    }
+                }
+                else
+                {
+                    if (existingOrder != null)
+                    {
+                        order.Remove(existingOrder);
+                    }
                 }
             }
         }
+
 
         private void UncheckAllItems()
         {

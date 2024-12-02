@@ -272,10 +272,6 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                     }                                
                 }
             }
-            else
-            {
-                throw new Exception("Erro ao editar o código do material em ProductMaterial. Verifique os dados.");
-            }
         }
 
 
@@ -309,8 +305,7 @@ namespace OrderManagerAPI.DALProductMaterialSQL
             //Alter table Normal
             if (result == 0)
             {
-                EditProductMaterial(ProdutosParaAlterar, Materialcode);
-              
+                EditProductMaterial(ProdutosParaAlterar, Materialcode);             
             }
             //alter table + delete                   
             if (result < 0)
@@ -431,10 +426,7 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                     }
                 }
             }
-            else
-            {
-                throw new Exception("Erro ao editar o código do material em ProductMaterial. Verifique os dados.");
-            }
+           
         }
 
         private bool EditMaterialProduct(List<Material> Materials, string ProductCode)
