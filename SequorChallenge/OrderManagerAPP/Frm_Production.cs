@@ -345,7 +345,6 @@ namespace OrderManagerAPP
             if (TxtPainel.Text == "Adicionar")
             {              
                 await AddUserAsync();
-                ClearText();
                 OrderSelect = "";
 
             } else if (TxtPainel.Text == "Editar")
@@ -354,6 +353,7 @@ namespace OrderManagerAPP
                 OrderSelect = "";
             }
 
+            ClearText();
             CycleTime = 0;
             await LoadOrdersAsync();
         }

@@ -352,13 +352,13 @@ namespace OrderManagerAPP
             if (TxtPainel.Text == "Adicionar")
             {
                await AddUserAsync();
-               ClearText();
 
             } else if (TxtPainel.Text.Contains("Editar"))
             {
                 await EditUserAsync();
             }
 
+            ClearText();
 
             UncheckAllItems();
             await LoadOrdersAsync();
