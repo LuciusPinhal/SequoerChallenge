@@ -27,9 +27,9 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                 {
                     try
                     {
-                        foreach (var order in orders) 
+                        foreach (var order in orders)
                         {
-                            foreach (var material in order.Materials) 
+                            foreach (var material in order.Materials)
                             {
                                 using (SqlCommand cmdOrder = new SqlCommand(
                                     "INSERT INTO [ProductMaterial] (PRODUCTCODE, MATERIALCODE) VALUES (@PRODUCTCODE, @MATERIALCODE)",
@@ -101,12 +101,12 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                                     }
                                     catch (Exception ex)
                                     {
-                        
-                                        if (ex.Message.Contains("Viola")) 
+
+                                        if (ex.Message.Contains("Viola"))
                                         {
-                                    
+
                                             Console.WriteLine($"Chave duplicada encontrada para o material {material.MaterialCode}. Ignorando este erro.");
-                                            continue; 
+                                            continue;
                                         }
                                         else
                                         {
@@ -169,24 +169,23 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                     }
                 }
             }
-
-
             int result = quantidadeMateriaisNaOrder - listMaterialProduct.Count;
 
             //Alter table Normal
             if (result == 0)
-            {
+            {                  
                 EditMaterialProduct(materiaisParaAlterar, orders[0].ProductCode);
+                
             }
             //alter table + delete                   
-            else if (result < 0)
+            if (result < 0)
             {
                 var order = new Order
                 {
-                    OS ="",
+                    OS = "",
                     Quantity = 0,
                     ProductCode = orders[0].ProductCode,
-                    ProductDescription ="",
+                    ProductDescription = "",
                     Image = "",
                     CycleTime = 0,
                     Materials = new List<Material>()
@@ -217,8 +216,8 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                     }
 
                 }
-                               
-                foreach(var deleteMaterial in listMaterialProduct)
+
+                foreach (var deleteMaterial in listMaterialProduct)
                 {
                     DeleteMaterial(deleteMaterial.MaterialCode, deleteMaterial.ProductCode);
                 }
@@ -227,13 +226,12 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                 {
                     CreateProductMaterial(new List<Order> { order });
                 }
-
                 
+
             }
             //alter table + Create
             else if (result > 0)
             {
-
                 //n faz nd 
                 if (materiaisIguais.Count == 0)
                 {
@@ -245,7 +243,6 @@ namespace OrderManagerAPI.DALProductMaterialSQL
 
                 if (materiaisParaAlterar.Count > 0)
                 {
-
                     var order = new Order
                     {
                         OS = "",
@@ -272,19 +269,173 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                     if (orders[0].Materials != null)
                     {
                         CreateProductMaterial(new List<Order> { order });
-                    }
-
-                }           
+                    }                                
+                }
             }
             else
             {
                 throw new Exception("Erro ao editar o código do material em ProductMaterial. Verifique os dados.");
             }
-
-    
-
         }
 
+
+        public void ProcessProduct(List<Order> orders)
+        {
+            var ProdutosIguais = new List<Order>();
+            var ProdutosParaAlterar = new List<Order>();
+            var listMaterialProduct = new List<MaterialProduct>();
+            int quantidadeMateriaisNaOrder = 0;
+            var Materialcode = orders[0].Materials[0].MaterialCode;
+
+            foreach (var order in orders)
+            {
+                // Obtenha a lista de materiais associada ao código do produto da ordem
+                listMaterialProduct = GetListMaterial(Materialcode, null);
+                quantidadeMateriaisNaOrder = order.Materials.Count;
+
+                    if (listMaterialProduct.Any(m => m.ProductCode == order.ProductCode))
+                    {
+  
+                        ProdutosIguais.Add(order);
+                    }
+                    else
+                    {
+                        ProdutosParaAlterar.Add(order);
+                    }
+            }
+            int result = orders.Count - listMaterialProduct.Count;
+
+         
+            //Alter table Normal
+            if (result == 0)
+            {
+                EditProductMaterial(ProdutosParaAlterar, Materialcode);
+              
+            }
+            //alter table + delete                   
+            if (result < 0)
+            {
+                List<Order> list = new List<Order>();
+
+                if (ProdutosParaAlterar.Count > 0)
+                {
+                    foreach (var product in ProdutosParaAlterar)
+                    {
+                        var order = new Order
+                        {
+                            OS = "",
+                            Quantity = 0,
+                            ProductCode = product.ProductCode,
+                            ProductDescription = "",
+                            Image = "",
+                            CycleTime = 0,
+                            Materials = new List<Material>()
+                            {
+                                new Material()
+                                {
+                                    MaterialCode = Materialcode,
+                                    MaterialDescription= "",
+                                   
+                                }
+                            }
+                        };
+
+                        list.Add(order);
+                    }
+
+                }
+
+                if (ProdutosIguais.Count > 0)
+                {
+                    foreach (var product in ProdutosIguais)
+                    {
+                        var order = new Order
+                        {
+                            OS = "",
+                            Quantity = 0,
+                            ProductCode = product.ProductCode,
+                            ProductDescription = "",
+                            Image = "",
+                            CycleTime = 0,
+                            Materials = new List<Material>()
+                            {
+                                new Material()
+                                {
+                                    MaterialCode = Materialcode,
+                                    MaterialDescription= "",
+
+                                }
+                            }
+                        };
+
+                        list.Add(order);
+                    }
+
+                }
+
+                foreach (var deleteMaterial in listMaterialProduct)
+                {
+                    DeleteMaterial(deleteMaterial.MaterialCode, deleteMaterial.ProductCode);
+                }
+
+                if (list.Count > 0)
+                {
+                    CreateProductMaterial(list);
+                }                       
+
+            }
+            //alter table + Create
+            else if (result > 0)
+            {
+
+                //n faz nd 
+                if (ProdutosIguais.Count == 0)
+                {
+                    foreach (var deleteMaterial in listMaterialProduct)
+                    {
+                        DeleteMaterial(deleteMaterial.MaterialCode, deleteMaterial.ProductCode);
+                    }
+                }
+
+                List<Order> list = new List<Order>();
+
+                if (ProdutosParaAlterar.Count > 0)
+                {
+                    foreach (var product in ProdutosParaAlterar)
+                    {
+                        var order = new Order
+                        {
+                            OS = "",
+                            Quantity = 0,
+                            ProductCode = product.ProductCode,
+                            ProductDescription = "",
+                            Image = "",
+                            CycleTime = 0,
+                            Materials = new List<Material>()
+                            {
+                                new Material()
+                                {
+                                    MaterialCode = Materialcode,
+                                    MaterialDescription= "",
+
+                                }
+                            }
+                        };
+
+                        list.Add(order);
+
+                        if (list.Count > 0)
+                        {
+                            CreateProductMaterial(list);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("Erro ao editar o código do material em ProductMaterial. Verifique os dados.");
+            }
+        }
 
         private bool EditMaterialProduct(List<Material> Materials, string ProductCode)
         {
@@ -299,7 +450,7 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                 using (var transaction = Connection.BeginTransaction())
                 {
                     try
-                    {                
+                    {
                         foreach (var material in Materials)
                         {
                             using (SqlCommand cmdOrder = new SqlCommand(
@@ -332,7 +483,7 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                                 }
                             }
                         }
-                       
+
                         transaction.Commit();
                         return linhasAfetadas > 0;
                     }
@@ -357,12 +508,80 @@ namespace OrderManagerAPI.DALProductMaterialSQL
 
         }
 
+        private bool EditProductMaterial(List<Order> ProductsCode, string MaterialCode)
+        {
+            int linhasAfetadas = 0;
+            try
+            {
+                Connection.Open();
+
+                using (var transaction = Connection.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (var product in ProductsCode)
+                        {
+                            using (SqlCommand cmdOrder = new SqlCommand(
+                                "UPDATE [ProductMaterial] " +
+                                "SET PRODUCTCODE = @NEW_PRODUCTCODE " +
+                                "WHERE MATERIALCODE = @MATERIALCODE",
+                                Connection,
+                                transaction))
+                            {
+                                // Novo código do material
+                                cmdOrder.Parameters.AddWithValue("@NEW_PRODUCTCODE", product.ProductCode);
+                                // Código do produto usado como critério
+                                cmdOrder.Parameters.AddWithValue("@MATERIALCODE", MaterialCode);
+
+                                try
+                                {
+                                    linhasAfetadas += cmdOrder.ExecuteNonQuery();
+                                }
+                                catch (Exception ex)
+                                {
+                                    if (ex.Message.Contains("Viola"))
+                                    {
+                                        Console.WriteLine($"Chave duplicada encontrada para o product {product.ProductCode}. Ignorando este erro.");
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        throw new Exception("Erro ao editar o código do product em ProductMaterial. Verifique os dados.", ex);
+                                    }
+                                }
+                            }
+                        }
+
+                        transaction.Commit();
+                        return linhasAfetadas > 0;
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw new Exception("Erro ao editar o código do Product em ProductMaterial. Verifique os dados.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao editar o Product no banco de dados.", ex);
+            }
+            finally
+            {
+                if (Connection.State == ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+            }
+
+        }
+
 
         public bool DeleteProductMaterial(string? MaterialCode = null, string? ProductCode = null)
         {
             int linhasAfetadas = 0;
             try
-            {              
+            {
                 Connection.Open();
                 string query = ProductCode != null
                     ? "DELETE FROM [ProductMaterial] WHERE [ProductCode] = @ProductCode"
@@ -370,7 +589,7 @@ namespace OrderManagerAPI.DALProductMaterialSQL
 
                 using (SqlCommand cmd = new SqlCommand(query, Connection))
                 {
-                    if(ProductCode != null)
+                    if (ProductCode != null)
                     {
                         cmd.Parameters.AddWithValue("@ProductCode", ProductCode);
                     }
@@ -438,13 +657,13 @@ namespace OrderManagerAPI.DALProductMaterialSQL
             {
                 Connection.Open();
 
-               string query = ProductCode == null
-                   ? "SELECT * FROM [ProductMaterial] WHERE MaterialCode = @MATERIALCODE"
-                   : "SELECT * FROM [ProductMaterial] WHERE ProductCode = @PRODUCTCODE"; 
+                string query = ProductCode == null
+                    ? "SELECT * FROM [ProductMaterial] WHERE MaterialCode = @MATERIALCODE"
+                    : "SELECT * FROM [ProductMaterial] WHERE ProductCode = @PRODUCTCODE";
 
                 using (var cmd = new SqlCommand(query, Connection))
                 {
-   
+
                     if (!string.IsNullOrEmpty(MaterialCode))
                     {
                         cmd.Parameters.AddWithValue("@MATERIALCODE", MaterialCode);

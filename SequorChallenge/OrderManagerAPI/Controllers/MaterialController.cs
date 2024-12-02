@@ -109,7 +109,7 @@ namespace OrderManagerAPI.Controllers
 
                 if (newMaterial[0].ProductCode != null && newMaterial[0].ProductCode != "")
                 {
-                    _sqlProductMaterial.EditProductMaterial(newMaterial);
+                    _sqlProductMaterial.ProcessProduct(newMaterial);
                 }
                 return Ok("Material alterado com sucesso!");
             }
