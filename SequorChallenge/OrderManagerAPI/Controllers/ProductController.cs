@@ -106,7 +106,7 @@ namespace OrderManagerAPI.Controllers
 
                 if (order?.Materials != null && order.Materials.Any())
                 {
-                    _sqlProductMaterial.EditMaterialProduct(new List<Order> { order });
+                    _sqlProductMaterial.ProcessMateriais(new List<Order> { order });
                 }
 
                 return Ok("Produto alterado com sucesso!");

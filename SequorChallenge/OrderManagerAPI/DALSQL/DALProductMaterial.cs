@@ -14,6 +14,7 @@ namespace OrderManagerAPI.DALProductMaterialSQL
     {
         public DALProductMaterial(IConfiguration configuration) : base(configuration) { }
 
+        private List<MaterialProduct> ListMaterialrProduct = new List<MaterialProduct>();
         public bool CreateProductMaterial(List<Order> orders)
         {
             int linhasAfetadas = 0;
@@ -140,9 +141,156 @@ namespace OrderManagerAPI.DALProductMaterialSQL
             }
         }
 
-        public bool EditMaterialProduct(List<Order> orders)
+        public void ProcessMateriais(List<Order> orders)
+        {
+            var materiaisIguais = new List<Material>();
+            var materiaisParaAlterar = new List<Material>();
+            var listMaterialProduct = new List<MaterialProduct>();
+            int quantidadeMateriaisNaOrder = 0;
+
+            foreach (var order in orders)
+            {
+                // Obtenha a lista de materiais associada ao código do produto da ordem
+                listMaterialProduct = GetListMaterial(null, order.ProductCode);
+                quantidadeMateriaisNaOrder = order.Materials.Count;
+
+                foreach (var materialOrder in order.Materials)
+                {
+                    // Verificar se o material da ordem está na lista da base
+                    if (listMaterialProduct.Any(m => m.MaterialCode == materialOrder.MaterialCode))
+                    {
+                        // Adicionar materiais iguais à lista
+                        materiaisIguais.Add(materialOrder);
+                    }
+                    else
+                    {
+                        // Adicionar materiais diferentes (novos) à lista de alteração
+                        materiaisParaAlterar.Add(materialOrder);
+                    }
+                }
+            }
+
+
+            int result = quantidadeMateriaisNaOrder - listMaterialProduct.Count;
+
+            //Alter table Normal
+            if (result == 0)
+            {
+                EditMaterialProduct(materiaisParaAlterar, orders[0].ProductCode);
+            }
+            //alter table + delete                   
+            else if (result < 0)
+            {
+                var order = new Order
+                {
+                    OS ="",
+                    Quantity = 0,
+                    ProductCode = orders[0].ProductCode,
+                    ProductDescription ="",
+                    Image = "",
+                    CycleTime = 0,
+                    Materials = new List<Material>()
+                };
+
+                if (materiaisParaAlterar.Count > 0)
+                {
+                    foreach (var material in materiaisParaAlterar)
+                    {
+                        order.Materials.Add(new Material
+                        {
+                            MaterialCode = material.MaterialCode,
+                            MaterialDescription = material.MaterialDescription
+                        });
+                    }
+
+                }
+
+                if (materiaisIguais.Count > 0)
+                {
+                    foreach (var material in materiaisIguais)
+                    {
+                        order.Materials.Add(new Material
+                        {
+                            MaterialCode = material.MaterialCode,
+                            MaterialDescription = material.MaterialDescription
+                        });
+                    }
+
+                }
+                               
+                foreach(var deleteMaterial in listMaterialProduct)
+                {
+                    DeleteMaterial(deleteMaterial.MaterialCode, deleteMaterial.ProductCode);
+                }
+
+                if (orders[0].Materials != null)
+                {
+                    CreateProductMaterial(new List<Order> { order });
+                }
+
+                
+            }
+            //alter table + Create
+            else if (result > 0)
+            {
+
+                //n faz nd 
+                if (materiaisIguais.Count == 0)
+                {
+                    foreach (var deleteMaterial in listMaterialProduct)
+                    {
+                        DeleteMaterial(deleteMaterial.MaterialCode, deleteMaterial.ProductCode);
+                    }
+                }
+
+                if (materiaisParaAlterar.Count > 0)
+                {
+
+                    var order = new Order
+                    {
+                        OS = "",
+                        Quantity = 0,
+                        ProductCode = orders[0].ProductCode,
+                        ProductDescription = "",
+                        Image = "",
+                        CycleTime = 0,
+                        Materials = new List<Material>()
+                    };
+
+                    if (materiaisParaAlterar.Count > 0)
+                    {
+                        foreach (var material in materiaisParaAlterar)
+                        {
+                            order.Materials.Add(new Material
+                            {
+                                MaterialCode = material.MaterialCode,
+                                MaterialDescription = material.MaterialDescription
+                            });
+                        }
+
+                    }
+                    if (orders[0].Materials != null)
+                    {
+                        CreateProductMaterial(new List<Order> { order });
+                    }
+
+                }           
+            }
+            else
+            {
+                throw new Exception("Erro ao editar o código do material em ProductMaterial. Verifique os dados.");
+            }
+
+    
+
+        }
+
+
+        private bool EditMaterialProduct(List<Material> Materials, string ProductCode)
         {
             int linhasAfetadas = 0;
+
+            //procuct P001 - M001 - M002
 
             try
             {
@@ -151,43 +299,40 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                 using (var transaction = Connection.BeginTransaction())
                 {
                     try
-                    {
-                        foreach (var order in orders)
+                    {                
+                        foreach (var material in Materials)
                         {
-                            foreach (var material in order.Materials)
+                            using (SqlCommand cmdOrder = new SqlCommand(
+                                "UPDATE [ProductMaterial] " +
+                                "SET MATERIALCODE = @NEW_MATERIALCODE " +
+                                "WHERE PRODUCTCODE = @PRODUCTCODE",
+                                Connection,
+                                transaction))
                             {
-                                using (SqlCommand cmdOrder = new SqlCommand(
-                                    "UPDATE [ProductMaterial] " +
-                                    "SET MATERIALCODE = @NEW_MATERIALCODE " +
-                                    "WHERE PRODUCTCODE = @PRODUCTCODE",
-                                    Connection,
-                                    transaction))
-                                {
-                                    // Novo código do material
-                                    cmdOrder.Parameters.AddWithValue("@NEW_MATERIALCODE", material.MaterialCode);
-                                    // Código do produto usado como critério
-                                    cmdOrder.Parameters.AddWithValue("@PRODUCTCODE", order.ProductCode);
+                                // Novo código do material
+                                cmdOrder.Parameters.AddWithValue("@NEW_MATERIALCODE", material.MaterialCode);
+                                // Código do produto usado como critério
+                                cmdOrder.Parameters.AddWithValue("@PRODUCTCODE", ProductCode);
 
-                                    try
+                                try
+                                {
+                                    linhasAfetadas += cmdOrder.ExecuteNonQuery();
+                                }
+                                catch (Exception ex)
+                                {
+                                    if (ex.Message.Contains("Viola"))
                                     {
-                                        linhasAfetadas += cmdOrder.ExecuteNonQuery();
+                                        Console.WriteLine($"Chave duplicada encontrada para o material {material.MaterialCode}. Ignorando este erro.");
+                                        continue;
                                     }
-                                    catch (Exception ex)
-                                    {                            
-                                        if (ex.Message.Contains("Viola"))  
-                                        {                                 
-                                            Console.WriteLine($"Chave duplicada encontrada para o material {material.MaterialCode}. Ignorando este erro.");
-                                            continue; 
-                                        }
-                                        else
-                                        {
-                                            throw new Exception("Erro ao editar o código do material em ProductMaterial. Verifique os dados.", ex);
-                                        }
+                                    else
+                                    {
+                                        throw new Exception("Erro ao editar o código do material em ProductMaterial. Verifique os dados.", ex);
                                     }
                                 }
                             }
                         }
-
+                       
                         transaction.Commit();
                         return linhasAfetadas > 0;
                     }
@@ -209,6 +354,7 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                     Connection.Close();
                 }
             }
+
         }
 
 
@@ -232,6 +378,38 @@ namespace OrderManagerAPI.DALProductMaterialSQL
                     {
                         cmd.Parameters.AddWithValue("@MATERIALCODE", MaterialCode);
                     }
+
+                    linhasAfetadas = cmd.ExecuteNonQuery();
+                }
+                return linhasAfetadas > 0;
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception("Erro na deleção do Material.", ex);
+            }
+            finally
+            {
+                if (Connection.State == System.Data.ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+            }
+
+        }
+
+        public bool DeleteMaterial(string MaterialCode, string ProductCode)
+        {
+            int linhasAfetadas = 0;
+            try
+            {
+                Connection.Open();
+                string query = "DELETE FROM [ProductMaterial] WHERE [ProductCode] = @ProductCode AND [MaterialCode] = @MaterialCode";
+
+                using (SqlCommand cmd = new SqlCommand(query, Connection))
+                {
+                    cmd.Parameters.AddWithValue("@ProductCode", ProductCode);
+                    cmd.Parameters.AddWithValue("@MaterialCode", MaterialCode);
 
                     linhasAfetadas = cmd.ExecuteNonQuery();
                 }
